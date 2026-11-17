@@ -1,0 +1,200 @@
+{
+  "name": {
+    "en": "Love letter",
+    "de": "Liebesbrief"
+  },
+  "description": {
+    "en": "A handwritten-style note with hearts, perfect for the lunch box.",
+    "de": "Ein handgeschriebener Zettel mit Herzen, perfekt für die Brotdose."
+  },
+  "category": "love",
+  "tags": [
+    "herz",
+    "letter",
+    "liebe",
+    "love",
+    "note"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "To",
+        "de": "An"
+      },
+      "default": {
+        "en": "my love",
+        "de": "mein Schatz"
+      }
+    },
+    {
+      "key": "message",
+      "type": "multiline",
+      "label": {
+        "en": "Message",
+        "de": "Nachricht"
+      },
+      "default": {
+        "en": "I think of you every day.\nYou make my world brighter.",
+        "de": "Ich denke jeden Tag an dich.\nDu machst meine Welt heller."
+      }
+    },
+    {
+      "key": "signature",
+      "type": "text",
+      "label": {
+        "en": "From",
+        "de": "Von"
+      },
+      "default": {
+        "en": "Yours",
+        "de": "Dein"
+      }
+    }
+  ],
+  "document": {
+    "frame": {
+      "style": "double",
+      "padding": 12
+    },
+    "elements": [
+      {
+        "type": "sticker",
+        "emoji": "💌",
+        "size": 80,
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "For ",
+            "font": "script",
+            "size": 34
+          },
+          {
+            "text": "{{ vars.name }}",
+            "font": "script",
+            "size": 40
+          }
+        ],
+        "align": "center",
+        "margin_bottom": 6
+      },
+      {
+        "type": "divider",
+        "style": "hearts"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.message }}",
+            "font": "handwriting",
+            "size": 36
+          }
+        ],
+        "align": "center",
+        "line_spacing": 1.1,
+        "margin_top": 4,
+        "margin_bottom": 8
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.signature }} ",
+            "font": "script",
+            "size": 30
+          },
+          {
+            "text": "❤️",
+            "size": 34
+          }
+        ],
+        "align": "right"
+      },
+      {
+        "type": "datetime",
+        "format": "%d. %B %Y",
+        "align": "right",
+        "font": "handwriting",
+        "size": 26
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "frame": {
+        "style": "double",
+        "padding": 12
+      },
+      "elements": [
+        {
+          "type": "sticker",
+          "emoji": "💌",
+          "size": 80,
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Für ",
+              "font": "script",
+              "size": 34
+            },
+            {
+              "text": "{{ vars.name }}",
+              "font": "script",
+              "size": 40
+            }
+          ],
+          "align": "center",
+          "margin_bottom": 6
+        },
+        {
+          "type": "divider",
+          "style": "hearts"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.message }}",
+              "font": "handwriting",
+              "size": 36
+            }
+          ],
+          "align": "center",
+          "line_spacing": 1.1,
+          "margin_top": 4,
+          "margin_bottom": 8
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.signature }} ",
+              "font": "script",
+              "size": 30
+            },
+            {
+              "text": "❤️",
+              "size": 34
+            }
+          ],
+          "align": "right"
+        },
+        {
+          "type": "datetime",
+          "format": "%d. %B %Y",
+          "align": "right",
+          "font": "handwriting",
+          "size": 26
+        }
+      ]
+    }
+  }
+}

@@ -12,6 +12,7 @@ from homeassistant.helpers import config_validation as cv
 
 from .const import DOMAIN
 from .printing import async_print_design
+from .templates import document_for, variable_defaults
 
 if TYPE_CHECKING:
     from .runtime import DesignerData
@@ -47,7 +48,7 @@ def _data(hass: HomeAssistant) -> DesignerData:
     raise ServiceValidationError(translation_domain=DOMAIN, translation_key="not_set_up")
 
 
-def _template_document(data: DesignerData, template_id: str) -> dict[str, Any]:
+def _template(data: DesignerData, template_id: str) -> dict[str, Any]:
     record = data.find(template_id)
     if record is None:
         raise ServiceValidationError(
@@ -55,7 +56,7 @@ def _template_document(data: DesignerData, template_id: str) -> dict[str, Any]:
             translation_key="template_not_found",
             translation_placeholders={"template_id": template_id},
         )
-    return record["document"]  # type: ignore[no-any-return]
+    return record
 
 
 def bind_todo_list(
@@ -87,14 +88,13 @@ def async_register_services(hass: HomeAssistant) -> None:
     async def print_template(call: ServiceCall) -> None:
         data = _data(hass)
         template_id = call.data["template_id"]
-        record = data.find(template_id)
-        document = _template_document(data, template_id)
-        defaults = {v["key"]: v["default"] for v in (record or {}).get("variables", [])}
+        record = _template(data, template_id)
+        language = hass.config.language
         await async_print_design(
             hass,
             data.renderer,
-            document,
-            variables={**defaults, **call.data["variables"]},
+            document_for(record, language),
+            variables={**variable_defaults(record, language), **call.data["variables"]},
             device_ids=call.data.get("device_id"),
             copies=call.data["copies"],
         )
@@ -104,7 +104,7 @@ def async_register_services(hass: HomeAssistant) -> None:
         data = _data(hass)
         template_id = call.data["template_id"]
         document = bind_todo_list(
-            _template_document(data, template_id),
+            document_for(_template(data, template_id), hass.config.language),
             call.data["entity_id"],
             call.data["include_completed"],
         )

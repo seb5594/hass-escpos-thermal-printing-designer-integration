@@ -1,0 +1,57 @@
+{
+  "name": {
+    "en": "Love label",
+    "de": "Liebes-Etikett"
+  },
+  "description": {
+    "en": "A small label with a heart for presents and lunch boxes.",
+    "de": "Ein kleines Etikett mit Herz für Geschenke und Brotdosen."
+  },
+  "category": "love",
+  "tags": [
+    "etikett",
+    "heart",
+    "label",
+    "love"
+  ],
+  "variables": [
+    {
+      "key": "text",
+      "type": "text",
+      "label": "Text",
+      "default": {
+        "en": "For you",
+        "de": "Für dich"
+      }
+    }
+  ],
+  "document": {
+    "paper": {
+      "width": 320,
+      "height": 240
+    },
+    "frame": {
+      "style": "rounded",
+      "padding": 8
+    },
+    "elements": [
+      {
+        "type": "sticker",
+        "emoji": "❤️",
+        "size": 90,
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.text }}",
+            "font": "script",
+            "size": 44
+          }
+        ],
+        "align": "center"
+      }
+    ]
+  }
+}

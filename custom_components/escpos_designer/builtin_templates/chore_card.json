@@ -1,0 +1,169 @@
+{
+  "name": {
+    "en": "Chore card",
+    "de": "Aufgabenkarte"
+  },
+  "description": {
+    "en": "A card for a chore with a name, a due date and a tick box.",
+    "de": "Eine Karte für eine Aufgabe mit Name, Fälligkeitsdatum und Haken."
+  },
+  "category": "todo",
+  "tags": [
+    "chores",
+    "haushalt",
+    "kids",
+    "kinder"
+  ],
+  "variables": [
+    {
+      "key": "task",
+      "type": "text",
+      "label": {
+        "en": "Chore",
+        "de": "Aufgabe"
+      },
+      "default": {
+        "en": "Take out the trash",
+        "de": "Müll rausbringen"
+      }
+    },
+    {
+      "key": "person",
+      "type": "text",
+      "label": {
+        "en": "For",
+        "de": "Für"
+      },
+      "default": "Alex"
+    },
+    {
+      "key": "days",
+      "type": "number",
+      "label": {
+        "en": "Due in days",
+        "de": "Fällig in Tagen"
+      },
+      "default": 1
+    }
+  ],
+  "document": {
+    "frame": {
+      "style": "rounded"
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🧹",
+            "size": 64
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.task }}",
+            "font": "display",
+            "size": 44
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "for {{ vars.person }}",
+            "font": "handwriting",
+            "size": 36
+          }
+        ],
+        "align": "center",
+        "margin_bottom": 6
+      },
+      {
+        "type": "divider",
+        "style": "dashed"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "☐ ",
+            "size": 34
+          },
+          {
+            "text": "Due: {{ (now() + timedelta(days=vars.days | int(0))).strftime('%d.%m.%Y') }}",
+            "size": 26
+          }
+        ],
+        "align": "center",
+        "margin_top": 4
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "frame": {
+        "style": "rounded"
+      },
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🧹",
+              "size": 64
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.task }}",
+              "font": "display",
+              "size": 44
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "für {{ vars.person }}",
+              "font": "handwriting",
+              "size": 36
+            }
+          ],
+          "align": "center",
+          "margin_bottom": 6
+        },
+        {
+          "type": "divider",
+          "style": "dashed"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "☐ ",
+              "size": 34
+            },
+            {
+              "text": "Fällig: {{ (now() + timedelta(days=vars.days | int(0))).strftime('%d.%m.%Y') }}",
+              "size": 26
+            }
+          ],
+          "align": "center",
+          "margin_top": 4
+        }
+      ]
+    }
+  }
+}

@@ -11,13 +11,13 @@ and hinted 1-bit text stays crisp where a thresholded gray rendering frays.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING, Any
 
 from PIL import Image, ImageChops, ImageDraw
 
 from .emoji import render_form, split_runs
-from .fonts import load_emoji_font, load_font
+from .fonts import DEFAULT_FONT, glyph_is_drawn, has_glyph, load_emoji_font, load_font
 
 if TYPE_CHECKING:
     from PIL.ImageFont import FreeTypeFont
@@ -126,17 +126,44 @@ def _tokenize(runs: list[dict[str, Any]]) -> list[_Word | Fragment | None]:
             buffer: list[str] = []
             for char in piece.text:
                 if char in " \t\n":
-                    if buffer:
-                        word.append(Fragment("".join(buffer), style))
-                        buffer.clear()
+                    word.extend(_glyph_fragments("".join(buffer), style))
+                    buffer.clear()
                     end_word()
                     tokens.append(None if char == "\n" else Fragment(" ", style))
                 else:
                     buffer.append(char)
-            if buffer:
-                word.append(Fragment("".join(buffer), style))
+            word.extend(_glyph_fragments("".join(buffer), style))
     end_word()
     return tokens
+
+
+def _glyph_fragments(text: str, style: Style) -> list[Fragment]:
+    """Fragments for ``text``; characters the font lacks are drawn with a fallback font."""
+    fragments: list[Fragment] = []
+    for char in text:
+        fallback = _fallback_for(char, style)
+        if (
+            fragments
+            and fragments[-1].style == fallback.style
+            and fragments[-1].emoji == fallback.emoji
+        ):
+            fragments[-1] = replace(fragments[-1], text=fragments[-1].text + char)
+        else:
+            fragments.append(replace(fallback, text=char))
+    return fragments
+
+
+def _fallback_for(char: str, style: Style) -> Fragment:
+    """An (empty) fragment in the first font that can draw ``char``."""
+    if has_glyph(style.font, char):
+        return Fragment("", style)
+    if style.font != DEFAULT_FONT and has_glyph(DEFAULT_FONT, char):
+        return Fragment("", replace(style, font=DEFAULT_FONT))
+    return Fragment("", style, emoji=True) if _emoji_font_has(char) else Fragment("", style)
+
+
+def _emoji_font_has(char: str) -> bool:
+    return glyph_is_drawn(load_emoji_font(32), char)
 
 
 def _emoji_glyphs(cluster_run: str) -> list[str]:

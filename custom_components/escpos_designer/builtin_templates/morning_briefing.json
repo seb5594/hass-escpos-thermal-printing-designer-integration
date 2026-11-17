@@ -1,0 +1,167 @@
+{
+  "name": {
+    "en": "Good morning",
+    "de": "Guten Morgen"
+  },
+  "description": {
+    "en": "The date, the weather and a thought for the day.",
+    "de": "Datum, Wetter und ein Gedanke für den Tag."
+  },
+  "category": "fun",
+  "tags": [
+    "briefing",
+    "morgen",
+    "morning",
+    "weather",
+    "wetter"
+  ],
+  "variables": [
+    {
+      "key": "weather",
+      "type": "text",
+      "label": {
+        "en": "Weather entity",
+        "de": "Wetter-Entität"
+      },
+      "default": "weather.home"
+    },
+    {
+      "key": "quote",
+      "type": "multiline",
+      "label": {
+        "en": "Thought of the day",
+        "de": "Gedanke des Tages"
+      },
+      "default": {
+        "en": "Today is a good day to have a good day.",
+        "de": "Heute ist ein guter Tag für einen guten Tag."
+      }
+    }
+  ],
+  "document": {
+    "frame": {
+      "style": "dotted",
+      "padding": 10
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "☀ ",
+            "size": 44
+          },
+          {
+            "text": "Good morning!",
+            "font": "script",
+            "size": 40
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "datetime",
+        "format": "%A, %d. %B",
+        "align": "center",
+        "font": "elegant",
+        "size": 26
+      },
+      {
+        "type": "divider",
+        "style": "wave",
+        "margin_top": 4
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Weather: {{ states(vars.weather) }}  {{ state_attr(vars.weather, 'temperature') or '–' }} °",
+            "size": 22
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "dotted"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.quote }}",
+            "font": "handwriting",
+            "size": 32
+          }
+        ],
+        "align": "center",
+        "line_spacing": 1.1,
+        "margin_top": 4
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "frame": {
+        "style": "dotted",
+        "padding": 10
+      },
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "☀ ",
+              "size": 44
+            },
+            {
+              "text": "Guten Morgen!",
+              "font": "script",
+              "size": 40
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "datetime",
+          "format": "%A, %d. %B",
+          "align": "center",
+          "font": "elegant",
+          "size": 26
+        },
+        {
+          "type": "divider",
+          "style": "wave",
+          "margin_top": 4
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Wetter: {{ states(vars.weather) }}  {{ state_attr(vars.weather, 'temperature') or '–' }} °",
+              "size": 22
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "dotted"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.quote }}",
+              "font": "handwriting",
+              "size": 32
+            }
+          ],
+          "align": "center",
+          "line_spacing": 1.1,
+          "margin_top": 4
+        }
+      ]
+    }
+  }
+}

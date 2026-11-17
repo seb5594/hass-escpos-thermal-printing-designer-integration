@@ -35,7 +35,10 @@ _VARIABLE = vol.Schema(
         vol.Required("key"): vol.All(vol.Coerce(str), vol.Match(r"^[a-z][a-z0-9_]{0,31}$")),
         vol.Optional("type", default="text"): vol.In(VARIABLE_TYPES),
         vol.Optional("label", default=""): _LOCALIZED,
-        vol.Optional("default", default=""): vol.Any(str, int, float, bool),
+        # A default may differ per language, e.g. the example product of a label.
+        vol.Optional("default", default=""): vol.Any(
+            vol.Schema({vol.Coerce(str): vol.Any(str, int, float, bool)}), str, int, float, bool
+        ),
         vol.Optional("options", default=list): [vol.All(vol.Coerce(str), vol.Length(max=80))],
     },
     extra=vol.REMOVE_EXTRA,
@@ -51,6 +54,8 @@ _TEMPLATE = vol.Schema(
         ),
         vol.Optional("variables", default=list): vol.All([_VARIABLE], vol.Length(max=12)),
         vol.Required("document"): dict,
+        # Built-in templates ship a document per language; ``document`` is the fallback.
+        vol.Optional("documents", default=dict): {vol.Coerce(str): dict},
     },
     extra=vol.REMOVE_EXTRA,
 )
@@ -67,6 +72,10 @@ def normalize_template(raw: Any) -> dict[str, Any]:
     try:
         record = _TEMPLATE(raw)
         record["document"] = normalize_document(record["document"])
+        record["documents"] = {
+            language: normalize_document(document)
+            for language, document in record["documents"].items()
+        }
     except vol.Invalid as err:
         path = ".".join(str(part) for part in err.path)
         raise TemplateError(f"{path}: {err.error_message}" if path else err.error_message) from err
@@ -95,6 +104,26 @@ def localize(value: Any, language: str) -> str:
         if key in value:
             return str(value[key])
     return str(next(iter(value.values())))
+
+
+def document_for(record: dict[str, Any], language: str) -> dict[str, Any]:
+    """The design to use for ``language`` (the template's own, or its default)."""
+    documents = record.get("documents") or {}
+    for key in (language, language.split("-", maxsplit=1)[0].lower()):
+        if key in documents:
+            return documents[key]  # type: ignore[no-any-return]
+    return record["document"]  # type: ignore[no-any-return]
+
+
+def variable_defaults(record: dict[str, Any], language: str) -> dict[str, Any]:
+    """The starting value of every variable of ``record`` in ``language``."""
+    defaults: dict[str, Any] = {}
+    for variable in record["variables"]:
+        default = variable["default"]
+        defaults[variable["key"]] = (
+            localize(default, language) if isinstance(default, dict) else default
+        )
+    return defaults
 
 
 def summarize(template_id: str, record: dict[str, Any], language: str) -> dict[str, Any]:

@@ -1,0 +1,178 @@
+{
+  "name": {
+    "en": "Wi-Fi guest card",
+    "de": "WLAN-Gästekarte"
+  },
+  "description": {
+    "en": "Guests scan the code and join the network without typing the password.",
+    "de": "Gäste scannen den Code und sind im WLAN, ohne das Passwort zu tippen."
+  },
+  "category": "qr",
+  "tags": [
+    "gast",
+    "guest",
+    "qr",
+    "wifi",
+    "wlan"
+  ],
+  "variables": [
+    {
+      "key": "ssid",
+      "type": "text",
+      "label": {
+        "en": "Network name",
+        "de": "Netzwerkname"
+      },
+      "default": "Guest-WiFi"
+    },
+    {
+      "key": "password",
+      "type": "text",
+      "label": {
+        "en": "Password",
+        "de": "Passwort"
+      },
+      "default": "welcome123"
+    },
+    {
+      "key": "security",
+      "type": "select",
+      "label": {
+        "en": "Security",
+        "de": "Sicherheit"
+      },
+      "default": "WPA",
+      "options": [
+        "WPA",
+        "WEP",
+        "nopass"
+      ]
+    }
+  ],
+  "document": {
+    "frame": {
+      "style": "rounded"
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "📶 Wi-Fi",
+            "font": "display",
+            "size": 48
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "qr",
+        "data": "WIFI:T:{{ vars.security }};S:{{ vars.ssid }};P:{{ vars.password }};;",
+        "size_pct": 78,
+        "align": "center",
+        "level": "Q",
+        "margin_top": 6
+      },
+      {
+        "type": "divider",
+        "style": "dotted",
+        "margin_top": 6
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Network\n",
+            "size": 18
+          },
+          {
+            "text": "{{ vars.ssid }}",
+            "size": 28,
+            "bold": true
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Password\n",
+            "size": 18
+          },
+          {
+            "text": "{{ vars.password }}",
+            "font": "mono",
+            "size": 26
+          }
+        ],
+        "align": "center",
+        "margin_top": 4
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "frame": {
+        "style": "rounded"
+      },
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "📶 WLAN",
+              "font": "display",
+              "size": 48
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "qr",
+          "data": "WIFI:T:{{ vars.security }};S:{{ vars.ssid }};P:{{ vars.password }};;",
+          "size_pct": 78,
+          "align": "center",
+          "level": "Q",
+          "margin_top": 6
+        },
+        {
+          "type": "divider",
+          "style": "dotted",
+          "margin_top": 6
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Netzwerk\n",
+              "size": 18
+            },
+            {
+              "text": "{{ vars.ssid }}",
+              "size": 28,
+              "bold": true
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Passwort\n",
+              "size": 18
+            },
+            {
+              "text": "{{ vars.password }}",
+              "font": "mono",
+              "size": 26
+            }
+          ],
+          "align": "center",
+          "margin_top": 4
+        }
+      ]
+    }
+  }
+}
