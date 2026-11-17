@@ -10,19 +10,19 @@ import pytest
 
 pytest.importorskip("pytest_homeassistant_custom_component")
 
-from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse  # noqa: E402
-from homeassistant.exceptions import HomeAssistantError, ServiceValidationError  # noqa: E402
-from homeassistant.helpers import device_registry as dr  # noqa: E402
-from PIL import Image  # noqa: E402
-from pytest_homeassistant_custom_component.common import (  # noqa: E402
+from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse
+from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
+from homeassistant.helpers import device_registry as dr
+from PIL import Image
+from pytest_homeassistant_custom_component.common import (
     MockConfigEntry,
     async_mock_service,
 )
 
-from custom_components.escpos_designer.const import DOMAIN  # noqa: E402
-from custom_components.escpos_designer.services import bind_todo_list  # noqa: E402
-from custom_components.escpos_designer.storage import MAX_RECENT  # noqa: E402
-from custom_components.escpos_designer.templates import (  # noqa: E402
+from custom_components.escpos_designer.const import DOMAIN
+from custom_components.escpos_designer.services import bind_todo_list
+from custom_components.escpos_designer.storage import MAX_RECENT
+from custom_components.escpos_designer.templates import (
     TemplateError,
     localize,
     normalize_template,
