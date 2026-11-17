@@ -25,8 +25,9 @@ MAX_TEMPLATES = 300
 DEFAULT_LANGUAGE = "en"
 
 _LOCALIZED = vol.Any(
-    vol.All(vol.Coerce(str), vol.Length(max=200)),
-    vol.Schema({vol.Coerce(str): vol.All(vol.Coerce(str), vol.Length(max=200))}),
+    # A dict has to be tried first: ``vol.Coerce(str)`` would turn it into its repr.
+    vol.Schema({vol.Coerce(str): vol.All(str, vol.Length(max=200))}),
+    vol.All(str, vol.Length(max=200)),
 )
 
 _VARIABLE = vol.Schema(
