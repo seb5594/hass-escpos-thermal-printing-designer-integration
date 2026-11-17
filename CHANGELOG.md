@@ -1,9 +1,7 @@
 # Changelog
 
+Versions follow `YYYY.MM.DD.BUILD`.
+
 ## Unreleased
 
-- Requires Home Assistant 2024.4 or newer (`ConfigFlowResult`); real Home Assistant tests and a Compatibility workflow check every release from there.
-
-## 0.1.0
-
-- ✨ Initial version created from the integration template.
+- Project set up: config flow that checks for the ESC/POS Thermal Printer integration and points to HACS when it is missing, Repairs hints, English and German translations.

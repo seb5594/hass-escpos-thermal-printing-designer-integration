@@ -1,0 +1,45 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ESC/POS Thermodrucker Designer",
+        "description": "Gestalte Etiketten, Listen und Belege im Web-Designer und drucke sie auf deinen ESC/POS-Thermodruckern.\n\nIn der Integration ESC/POS Thermal Printer wurden {printer_count} Drucker gefunden. Falls es 0 sind, richte dort zuerst einen Drucker ein - diese Einrichtung kannst du trotzdem abschließen."
+      },
+      "install_printer_integration": {
+        "title": "Integration ESC/POS Thermal Printer erforderlich",
+        "description": "Der Designer druckt über die Integration **ESC/POS Thermal Printer**, die noch nicht installiert ist.\n\n1. [Öffne sie in HACS]({hacs_url}) und lade sie herunter ([Repository]({repository_url}); neu bei HACS? Hier die [HACS-Anleitung]({hacs_docs_url})).\n2. Starte Home Assistant neu.\n3. Kehre zu diesem Dialog zurück und wähle **Absenden**."
+      }
+    },
+    "error": {
+      "printer_integration_missing": "Die Integration ESC/POS Thermal Printer wurde nicht gefunden. Installiere sie zuerst über HACS und starte Home Assistant neu."
+    },
+    "abort": {
+      "single_instance_allowed": "Der Designer ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Designer-Optionen",
+        "data": {
+          "show_in_sidebar": "In der Seitenleiste anzeigen",
+          "require_admin": "Nur Administratoren dürfen den Designer nutzen"
+        },
+        "data_description": {
+          "show_in_sidebar": "Fügt den Designer zur Seitenleiste von Home Assistant hinzu.",
+          "require_admin": "Vorlagen können Entitätszustände auslesen, deshalb ist der Designer standardmäßig auf Administratoren beschränkt. Deaktiviere die Option, damit alle Haushaltsmitglieder gestalten und drucken können."
+        }
+      }
+    }
+  },
+  "issues": {
+    "printer_integration_missing": {
+      "title": "Die Integration ESC/POS Thermal Printer ist nicht installiert",
+      "description": "Der Designer druckt über die Integration ESC/POS Thermal Printer. [Öffne sie in HACS]({hacs_url}), installiere sie und starte Home Assistant neu."
+    },
+    "no_printer_configured": {
+      "title": "Noch kein ESC/POS-Drucker eingerichtet",
+      "description": "Der Designer ist bereit, aber es gibt keinen Drucker zum Drucken. Füge deinen Drucker unter Einstellungen → Geräte & Dienste → ESC/POS Thermal Printer hinzu."
+    }
+  }
+}
