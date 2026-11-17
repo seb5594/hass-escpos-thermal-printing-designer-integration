@@ -1,0 +1,50 @@
+blueprint:
+  name: Print a designer template
+  description: >-
+    Prints any saved design of the ESC/POS Thermal Printer Designer on a printer.
+    Open the designer, hover over a design and copy its id (for example
+    `builtin:wifi_qr`), then fill in the values the design asks for.
+  domain: script
+  author: seb5594
+  homeassistant:
+    min_version: 2025.1.0
+  source_url: https://github.com/seb5594/hass-escpos-thermal-printing-designer-integration/blob/main/blueprints/script/escpos_designer/print_template.yaml
+  input:
+    template_id:
+      name: Template
+      description: The id of the design, for example `builtin:best_before_label`.
+      selector:
+        text:
+    variables:
+      name: Values
+      description: >-
+        The blanks of the design, for example `{"name": "Soup", "days": 5}`.
+        Leave empty to use the design's defaults.
+      default: {}
+      selector:
+        object:
+    printer:
+      name: Printer
+      description: Optional if only one printer is set up.
+      default: []
+      selector:
+        device:
+          integration: escpos_printer
+          multiple: true
+    copies:
+      name: Copies
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 10
+          mode: box
+
+mode: queued
+sequence:
+  - action: escpos_designer.print_template
+    data:
+      template_id: !input template_id
+      variables: !input variables
+      copies: !input copies
+      device_id: !input printer

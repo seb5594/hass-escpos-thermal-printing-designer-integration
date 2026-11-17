@@ -1,0 +1,69 @@
+blueprint:
+  name: Print a good-morning note
+  description: >-
+    Every morning at the time you choose, prints a note with the date, the
+    weather and a thought for the day.
+  domain: automation
+  author: seb5594
+  homeassistant:
+    min_version: 2025.1.0
+  source_url: https://github.com/seb5594/hass-escpos-thermal-printing-designer-integration/blob/main/blueprints/automation/escpos_designer/morning_briefing.yaml
+  input:
+    time:
+      name: Time
+      description: When to print.
+      default: "07:00:00"
+      selector:
+        time:
+    weekdays:
+      name: Days
+      default: [mon, tue, wed, thu, fri, sat, sun]
+      selector:
+        select:
+          multiple: true
+          mode: list
+          options:
+            - mon
+            - tue
+            - wed
+            - thu
+            - fri
+            - sat
+            - sun
+    weather:
+      name: Weather entity
+      selector:
+        entity:
+          domain: weather
+    quote:
+      name: Thought of the day
+      default: ""
+      selector:
+        text:
+          multiline: true
+    printer:
+      name: Printer
+      description: Optional if only one printer is set up.
+      default: []
+      selector:
+        device:
+          integration: escpos_printer
+          multiple: true
+
+mode: single
+variables:
+  weather: !input weather
+  quote: !input quote
+triggers:
+  - trigger: time
+    at: !input time
+conditions:
+  - condition: time
+    weekday: !input weekdays
+actions:
+  - action: escpos_designer.print_template
+    data:
+      template_id: "builtin:morning_briefing"
+      device_id: !input printer
+      # An empty thought keeps the design's own default instead of printing nothing.
+      variables: "{{ {'weather': weather, 'quote': quote} if quote else {'weather': weather} }}"

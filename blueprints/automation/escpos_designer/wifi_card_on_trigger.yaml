@@ -1,0 +1,56 @@
+blueprint:
+  name: Print the Wi-Fi guest card on a button press
+  description: >-
+    Prints the Wi-Fi guest card with a QR code. Guests scan it and are online
+    without typing the password. Trigger it with a wall button, a dashboard
+    button or an NFC tag.
+  domain: automation
+  author: seb5594
+  homeassistant:
+    min_version: 2025.1.0
+  source_url: https://github.com/seb5594/hass-escpos-thermal-printing-designer-integration/blob/main/blueprints/automation/escpos_designer/wifi_card_on_trigger.yaml
+  input:
+    trigger:
+      name: Trigger
+      description: What starts the print, for example a button press.
+      selector:
+        trigger:
+    ssid:
+      name: Network name
+      selector:
+        text:
+    password:
+      name: Password
+      selector:
+        text:
+          type: password
+    printer:
+      name: Printer
+      description: Optional if only one printer is set up.
+      default: []
+      selector:
+        device:
+          integration: escpos_printer
+          multiple: true
+    security:
+      name: Security
+      default: WPA
+      selector:
+        select:
+          options:
+            - WPA
+            - WEP
+            - nopass
+
+mode: single
+max_exceeded: silent
+triggers: !input trigger
+actions:
+  - action: escpos_designer.print_template
+    data:
+      template_id: "builtin:wifi_qr"
+      device_id: !input printer
+      variables:
+        ssid: !input ssid
+        password: !input password
+        security: !input security
