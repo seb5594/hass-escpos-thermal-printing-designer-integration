@@ -8,6 +8,7 @@ ignore = ["PLR2004", "PLR0913", "PLR0917", "RUF001", "RUF003"]
 [lint.per-file-ignores]
 ".github/**" = ["E402", "PLR0915", "E501"]
 "**/calendar_names.py" = ["E501"]
+"frontend/dev/server.py" = ["PLR0911", "PLR0912", "T201"]
 
 [format]
 quote-style = "double"

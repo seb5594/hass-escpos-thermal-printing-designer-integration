@@ -139,6 +139,16 @@ class TestWebsocket:
         assert "markdown" in result["element_types"]
         assert result["version"]
 
+    async def test_builtin_names_follow_the_requested_language(self, client):
+        def name(library):
+            return next(
+                c["name"] for c in library["templates"] if c["id"] == "builtin:shopping_list"
+            )
+
+        assert name((await call(client, "library", language="de"))["result"]) == "Einkaufsliste"
+        assert name((await call(client, "library", language="en"))["result"]) == "Shopping list"
+        assert name((await call(client, "library", language="fr"))["result"]) == "Shopping list"
+
     async def test_library_save_get_delete(self, client):
         saved = (await call(client, "save_template", template=template()))["result"]
         assert saved["name"] == "Greeting" and not saved["builtin"]
@@ -406,3 +416,33 @@ class TestStorage:
         storage.toggle_favorite(saved)
         assert storage.delete(saved) and not storage.delete(saved)
         assert saved not in storage.recent and saved not in storage.favorites
+
+
+class TestPanel:
+    async def test_panel_is_registered_and_removed(self, hass, designer):
+        panels = hass.data["frontend_panels"]
+        panel = panels["escpos-designer"]
+        assert panel.sidebar_title == "Printer Designer"
+        assert panel.sidebar_icon == "mdi:printer-pos-edit"
+        assert panel.require_admin is True
+        assert panel.config["_panel_custom"]["name"] == "escpos-designer-panel"
+        custom = panel.config["_panel_custom"]
+        module = custom.get("module_url") or custom.get("js_url")
+        assert module.startswith("/escpos_designer_static/escpos-designer-panel.js?v=")
+        await hass.config_entries.async_unload(designer.entry_id)
+        assert "escpos-designer" not in panels
+
+    async def test_options_control_sidebar_and_access(self, hass, designer):
+        hass.config_entries.async_update_entry(
+            designer, options={"show_in_sidebar": False, "require_admin": False}
+        )
+        await hass.async_block_till_done()
+        panel = hass.data["frontend_panels"]["escpos-designer"]
+        assert panel.sidebar_title is None and panel.sidebar_icon is None
+        assert panel.require_admin is False
+
+    def test_the_bundle_ships_with_the_integration(self):
+        from custom_components.escpos_designer.panel import FRONTEND_DIR, PANEL_MODULE  # noqa: PLC0415
+
+        bundle = FRONTEND_DIR / PANEL_MODULE
+        assert bundle.is_file() and bundle.stat().st_size > 100_000
