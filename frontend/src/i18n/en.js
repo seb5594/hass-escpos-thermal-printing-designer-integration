@@ -21,6 +21,7 @@ export default {
 
   "toast.saved": "Design saved",
   "toast.deleted": "Design deleted",
+  "toast.id_copied": "Id copied: {id}",
   "toast.printed": "Sent to the printer",
 
   "banner.install.title": "The ESC/POS Thermal Printer integration is missing",
@@ -42,6 +43,7 @@ export default {
   "gallery.edit": "Edit",
   "gallery.print": "Print",
   "gallery.duplicate": "Duplicate",
+  "gallery.copy_id": "Copy id",
   "gallery.copy": "copy",
 
   "new.fab": "New design",

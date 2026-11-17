@@ -5,7 +5,8 @@
 
 It answers the same websocket commands as the integration, keeps templates in
 memory and renders previews with the real engine. Home Assistant templates are
-not available here; ``{{ vars.name }}`` is replaced by a simple substitution.
+not available here; templates run in a plain Jinja environment that knows ``vars``,
+``now()``, ``timedelta`` and stand-ins for ``states()`` and ``state_attr()``.
 Run it with an interpreter that can import Pillow, voluptuous and qrcode.
 """
 
@@ -13,12 +14,13 @@ from __future__ import annotations
 
 import base64
 import json
-import re
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from io import BytesIO
 from pathlib import Path
+
+from jinja2 import Environment, StrictUndefined
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -32,11 +34,13 @@ from custom_components.escpos_designer.designer import (  # noqa: E402
 from custom_components.escpos_designer.templates import (  # noqa: E402
     TemplateError,
     describe,
+    document_for,
     is_builtin,
     load_builtin_templates,
     new_template_id,
     normalize_template,
     summarize,
+    variable_defaults,
 )
 
 PORT = 8765
@@ -84,11 +88,23 @@ def png_b64(image) -> str:
     return base64.b64encode(buffer.getvalue()).decode()
 
 
+JINJA = Environment(undefined=StrictUndefined)
+JINJA.globals.update(
+    now=datetime.now,
+    timedelta=timedelta,
+    states=lambda entity_id: "sunny" if str(entity_id).startswith("weather.") else "unknown",
+    state_attr=lambda entity_id, attribute: 18 if attribute == "temperature" else None,
+)
+
+
 def render(document: dict, variables: dict, language: str):
     values = {**variables}
 
     def fill(text: str) -> str:
-        return re.sub(r"\{\{\s*vars\.(\w+)\s*\}\}", lambda m: str(values.get(m.group(1), "")), text)
+        try:
+            return JINJA.from_string(text).render(vars=values, **values)
+        except Exception as err:  # shown inline, like a template error in Home Assistant
+            return f"[{err}]"
 
     return render_design(
         normalize_document(document),
@@ -162,8 +178,10 @@ def handle(msg: dict) -> dict:
         for tid in msg["template_ids"]:
             record = find(tid)
             if record:
-                defaults = {v["key"]: v["default"] for v in record["variables"]}
-                out[tid] = png_b64(render(record["document"], defaults, language).image)
+                result = render(
+                    document_for(record, language), variable_defaults(record, language), language
+                )
+                out[tid] = png_b64(result.image)
         return out
     if command == "print":
         result = render(msg["document"], msg.get("variables", {}), language)

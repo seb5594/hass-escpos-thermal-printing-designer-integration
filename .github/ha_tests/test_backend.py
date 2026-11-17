@@ -149,6 +149,29 @@ class TestWebsocket:
         assert name((await call(client, "library", language="en"))["result"]) == "Shopping list"
         assert name((await call(client, "library", language="fr"))["result"]) == "Shopping list"
 
+    async def test_builtin_templates_come_in_the_requested_language(self, client):
+        german = (
+            await call(
+                client, "get_template", template_id="builtin:best_before_label", language="de"
+            )
+        )["result"]
+        english = (
+            await call(
+                client, "get_template", template_id="builtin:best_before_label", language="en"
+            )
+        )["result"]
+        assert german["variables"][0]["default"] == "Tomatensauce"
+        assert english["variables"][0]["default"] == "Tomato sauce"
+        assert german["variables"][0]["label"] == "Produkt"
+        assert german["document"] != english["document"]
+        assert german["variables"][1]["default"] == 7  # plain defaults stay as they are
+
+    async def test_thumbnails_follow_the_language(self, client):
+        ids = ["builtin:best_before_label"]
+        german = (await call(client, "thumbnails", template_ids=ids, language="de"))["result"]
+        english = (await call(client, "thumbnails", template_ids=ids, language="en"))["result"]
+        assert german != english
+
     async def test_library_save_get_delete(self, client):
         saved = (await call(client, "save_template", template=template()))["result"]
         assert saved["name"] == "Greeting" and not saved["builtin"]
@@ -446,3 +469,28 @@ class TestPanel:
 
         bundle = FRONTEND_DIR / PANEL_MODULE
         assert bundle.is_file() and bundle.stat().st_size > 100_000
+
+
+class TestDocumentation:
+    def test_the_format_guide_mentions_every_element_type_and_option(self):
+        from pathlib import Path  # noqa: PLC0415
+
+        from custom_components.escpos_designer.designer.schema import (  # noqa: PLC0415
+            ELEMENT_TYPES,
+            FRAME_STYLES,
+        )
+
+        guide = (Path(__file__).resolve().parents[2] / "docs/document-format.md").read_text()
+        for element_type in ELEMENT_TYPES:
+            assert f"`{element_type}`" in guide, element_type
+        for style in FRAME_STYLES:
+            assert f"`{style}`" in guide, style
+
+    def test_the_template_guide_lists_every_built_in_template(self):
+        from pathlib import Path  # noqa: PLC0415
+
+        from custom_components.escpos_designer.templates import load_builtin_templates  # noqa: PLC0415
+
+        guide = (Path(__file__).resolve().parents[2] / "docs/templates.md").read_text()
+        for template_id in load_builtin_templates():
+            assert f"`{template_id}`" in guide, template_id

@@ -9,6 +9,7 @@ export {
   mdiCheck as check,
   mdiCogOutline as settings,
   mdiContentCopy as copy,
+  mdiIdentifier as copyId,
   mdiContentSaveOutline as save,
   mdiDeleteOutline as remove,
   mdiDotsVertical as more,
