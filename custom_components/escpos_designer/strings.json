@@ -1,0 +1,45 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ESC/POS Thermal Printer Designer",
+        "description": "Design labels, lists and receipts in a web designer and print them on your ESC/POS thermal printers.\n\nFound {printer_count} printer(s) in the ESC/POS Thermal Printer integration. If that's 0, add a printer there first - you can still finish this setup."
+      },
+      "install_printer_integration": {
+        "title": "ESC/POS Thermal Printer integration needed",
+        "description": "The designer prints through the **ESC/POS Thermal Printer** integration, which isn't installed yet.\n\n1. [Open it in HACS]({hacs_url}) and download it ([repository]({repository_url}); new to HACS? See the [HACS guide]({hacs_docs_url})).\n2. Restart Home Assistant.\n3. Come back to this dialog and select **Submit**."
+      }
+    },
+    "error": {
+      "printer_integration_missing": "The ESC/POS Thermal Printer integration was not found. Install it through HACS and restart Home Assistant first."
+    },
+    "abort": {
+      "single_instance_allowed": "The designer is already set up."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Designer options",
+        "data": {
+          "show_in_sidebar": "Show in sidebar",
+          "require_admin": "Only administrators can use the designer"
+        },
+        "data_description": {
+          "show_in_sidebar": "Adds the designer to the Home Assistant sidebar.",
+          "require_admin": "Templates can read entity states, so the designer is limited to administrators by default. Turn this off to let every household member design and print."
+        }
+      }
+    }
+  },
+  "issues": {
+    "printer_integration_missing": {
+      "title": "ESC/POS Thermal Printer integration is not installed",
+      "description": "The designer prints through the ESC/POS Thermal Printer integration. [Open it in HACS]({hacs_url}), install it and restart Home Assistant."
+    },
+    "no_printer_configured": {
+      "title": "No ESC/POS printer is set up yet",
+      "description": "The designer is ready, but there is no printer to print on. Add your printer under Settings → Devices & services → ESC/POS Thermal Printer."
+    }
+  }
+}
