@@ -1,0 +1,100 @@
+{
+  "name": {
+    "en": "Shopping list (compact)",
+    "de": "Einkaufsliste (kompakt)"
+  },
+  "description": {
+    "en": "A small, frameless list that saves paper.",
+    "de": "Eine kleine Liste ohne Rahmen, die Papier spart."
+  },
+  "category": "shopping",
+  "tags": [
+    "compact",
+    "einkauf",
+    "list",
+    "todo"
+  ],
+  "variables": [
+    {
+      "key": "list",
+      "type": "todo",
+      "label": {
+        "en": "To-do list",
+        "de": "Todo-Liste"
+      },
+      "default": "todo.shopping_list"
+    }
+  ],
+  "document": {
+    "options": {
+      "margin": 4,
+      "feed": 1
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🛒 Shopping",
+            "font": "display",
+            "size": 34
+          },
+          {
+            "text": " {{ now().strftime('%d.%m.') }}",
+            "size": 18
+          }
+        ],
+        "align": "left"
+      },
+      {
+        "type": "list",
+        "source": {
+          "kind": "todo",
+          "entity_id": "{{ vars.list }}"
+        },
+        "style": "checkbox",
+        "size": 20,
+        "line_spacing": 1.05,
+        "show_notes": false,
+        "empty_text": "–"
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "options": {
+        "margin": 4,
+        "feed": 1
+      },
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🛒 Einkauf",
+              "font": "display",
+              "size": 34
+            },
+            {
+              "text": " {{ now().strftime('%d.%m.') }}",
+              "size": 18
+            }
+          ],
+          "align": "left"
+        },
+        {
+          "type": "list",
+          "source": {
+            "kind": "todo",
+            "entity_id": "{{ vars.list }}"
+          },
+          "style": "checkbox",
+          "size": 20,
+          "line_spacing": 1.05,
+          "show_notes": false,
+          "empty_text": "–"
+        }
+      ]
+    }
+  }
+}

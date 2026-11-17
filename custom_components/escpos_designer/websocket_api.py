@@ -28,7 +28,7 @@ from .designer.schema import ELEMENT_TYPES
 from .printers import DEFAULT_WIDTH, list_printers
 from .printing import async_print_design
 from .runtime import DesignerData, require_admin
-from .templates import TemplateError, is_builtin
+from .templates import TemplateError, document_for, is_builtin, variable_defaults
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
@@ -260,9 +260,10 @@ async def ws_thumbnails(
             continue
         key = (template_id, record.get("updated_at") or "", language)
         if key not in data.thumbnails:
-            defaults = {v["key"]: v["default"] for v in record["variables"]}
             output = await data.renderer.async_render(
-                record["document"], defaults, language=language
+                document_for(record, language),
+                variable_defaults(record, language),
+                language=language,
             )
             data.thumbnails[key] = base64.b64encode(output.to_png()).decode("ascii")
         result[template_id] = data.thumbnails[key]

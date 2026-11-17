@@ -57,6 +57,31 @@ def load_emoji_font(size: int) -> FreeTypeFont:
     return ImageFont.truetype(str(FONT_DIR / EMOJI_FONT_FILE), size)
 
 
+@lru_cache(maxsize=2048)
+def has_glyph(font_id: str, char: str) -> bool:
+    """True if ``font_id`` really draws ``char`` (and doesn't show its "missing glyph" box).
+
+    Plain ASCII and Latin-1 are always covered by the bundled fonts; anything else is
+    compared against the picture the font draws for a code point that has no glyph.
+    """
+    if ord(char) < 0x250 or char.isspace():
+        return True
+    return glyph_is_drawn(load_font(font_id, 32), char)
+
+
+def glyph_is_drawn(font: FreeTypeFont, char: str) -> bool:
+    """True if ``font`` draws ``char`` differently from the code point U+FFFF, which no font has."""
+    return _glyph_picture(font, char) != _glyph_picture(font, "\uffff")
+
+
+def _glyph_picture(font: FreeTypeFont, char: str) -> bytes:
+    from PIL import Image, ImageDraw  # noqa: PLC0415
+
+    picture = Image.new("L", (64, 64), 255)
+    ImageDraw.Draw(picture).text((8, 8), char, font=font, fill=0)
+    return picture.tobytes()
+
+
 def font_catalog() -> list[dict[str, str]]:
     """The fonts as plain dicts for the frontend's font picker."""
     return [{"id": f.id, "label": f.label, "style": f.style} for f in FONT_FAMILIES]

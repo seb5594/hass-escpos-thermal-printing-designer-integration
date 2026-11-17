@@ -1,0 +1,62 @@
+{
+  "name": {
+    "en": "Storage label",
+    "de": "Aufbewahrungs-Etikett"
+  },
+  "description": {
+    "en": "A tidy label with decorative lines for boxes and drawers.",
+    "de": "Ein aufgeräumtes Etikett mit Zierlinien für Kisten und Schubladen."
+  },
+  "category": "label",
+  "tags": [
+    "box",
+    "drawer",
+    "kiste",
+    "schublade",
+    "storage"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Contents",
+        "de": "Inhalt"
+      },
+      "default": {
+        "en": "Garden supplies",
+        "de": "Gartenbedarf"
+      }
+    }
+  ],
+  "document": {
+    "paper": {
+      "width": 384,
+      "height": 192
+    },
+    "elements": [
+      {
+        "type": "divider",
+        "style": "wave",
+        "margin_top": 8
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.name }}",
+            "font": "elegant",
+            "size": 44
+          }
+        ],
+        "align": "center",
+        "margin_top": 4,
+        "margin_bottom": 4
+      },
+      {
+        "type": "divider",
+        "style": "wave"
+      }
+    ]
+  }
+}

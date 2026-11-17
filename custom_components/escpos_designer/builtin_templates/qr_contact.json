@@ -1,0 +1,81 @@
+{
+  "name": {
+    "en": "Contact card",
+    "de": "Kontaktkarte"
+  },
+  "description": {
+    "en": "A QR code with a vCard that saves the contact in the phone, like a business card.",
+    "de": "Ein QR-Code mit vCard, der den Kontakt im Handy speichert, wie eine Visitenkarte."
+  },
+  "category": "qr",
+  "tags": [
+    "business card",
+    "contact",
+    "kontakt",
+    "vcard",
+    "visitenkarte"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": "Name",
+      "default": "Max Mustermann"
+    },
+    {
+      "key": "phone",
+      "type": "text",
+      "label": {
+        "en": "Phone",
+        "de": "Telefon"
+      },
+      "default": "+49 123 456789"
+    },
+    {
+      "key": "email",
+      "type": "text",
+      "label": {
+        "en": "E-mail",
+        "de": "E-Mail"
+      },
+      "default": "max@example.com"
+    }
+  ],
+  "document": {
+    "frame": {
+      "style": "line",
+      "thickness": 2
+    },
+    "elements": [
+      {
+        "type": "qr",
+        "data": "BEGIN:VCARD\nVERSION:3.0\nFN:{{ vars.name }}\nTEL:{{ vars.phone }}\nEMAIL:{{ vars.email }}\nEND:VCARD",
+        "size_pct": 70,
+        "align": "center",
+        "level": "M"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.name }}",
+            "font": "elegant",
+            "size": 30
+          }
+        ],
+        "align": "center",
+        "margin_top": 4
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.phone }}\n{{ vars.email }}",
+            "size": 20
+          }
+        ],
+        "align": "center"
+      }
+    ]
+  }
+}

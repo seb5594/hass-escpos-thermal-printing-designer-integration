@@ -1,0 +1,92 @@
+{
+  "name": {
+    "en": "Medicine label",
+    "de": "Medikamenten-Etikett"
+  },
+  "description": {
+    "en": "Name and dosage for the medicine cabinet, with a pictogram.",
+    "de": "Name und Dosierung für die Hausapotheke, mit Piktogramm."
+  },
+  "category": "label",
+  "tags": [
+    "apotheke",
+    "label",
+    "medicine",
+    "medikament"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Medicine",
+        "de": "Medikament"
+      },
+      "default": "Ibuprofen"
+    },
+    {
+      "key": "dose",
+      "type": "text",
+      "label": {
+        "en": "Dosage",
+        "de": "Dosierung"
+      },
+      "default": {
+        "en": "1 tablet, max. 3× daily",
+        "de": "1 Tablette, max. 3× täglich"
+      }
+    },
+    {
+      "key": "emoji",
+      "type": "text",
+      "label": {
+        "en": "Pictogram",
+        "de": "Piktogramm"
+      },
+      "default": "💊"
+    }
+  ],
+  "document": {
+    "paper": {
+      "width": 384,
+      "height": 192
+    },
+    "frame": {
+      "style": "rounded",
+      "padding": 8
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.emoji }} ",
+            "size": 60
+          },
+          {
+            "text": "{{ vars.name }}",
+            "font": "display",
+            "size": 52
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "dashed",
+        "margin_top": 2,
+        "margin_bottom": 4
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.dose }}",
+            "size": 22
+          }
+        ],
+        "align": "center"
+      }
+    ]
+  }
+}

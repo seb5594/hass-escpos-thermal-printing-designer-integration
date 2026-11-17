@@ -1,0 +1,53 @@
+{
+  "name": {
+    "en": "Bold label",
+    "de": "Plakatives Etikett"
+  },
+  "description": {
+    "en": "White on black with a frame, like a snack-box label.",
+    "de": "Weiß auf Schwarz mit Rahmen, wie ein Etikett für die Snackbox."
+  },
+  "category": "label",
+  "tags": [
+    "bold",
+    "box",
+    "etikett",
+    "label",
+    "snack"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": "Text",
+      "default": "Snacks"
+    }
+  ],
+  "document": {
+    "paper": {
+      "width": 384,
+      "height": 192
+    },
+    "options": {
+      "margin": 4
+    },
+    "frame": {
+      "style": "double",
+      "padding": 4
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": " {{ vars.name }} ",
+            "font": "display",
+            "size": 86,
+            "invert": true
+          }
+        ],
+        "align": "center"
+      }
+    ]
+  }
+}

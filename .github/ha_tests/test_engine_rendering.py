@@ -143,6 +143,20 @@ class TestTextLayout:
         assert len(lines) == 1
         assert [f.emoji for f in lines[0].fragments] == [False, True, False]
 
+    def test_missing_glyphs_come_from_a_fallback_font(self):
+        lines = layout_lines([run("a♥b", font="handwriting")], 380)
+        assert [(f.text, f.style.font) for f in lines[0].fragments] == [
+            ("a", "handwriting"),
+            ("♥", "sans"),
+            ("b", "handwriting"),
+        ]
+
+    def test_glyph_check_knows_what_fonts_cover(self):
+        from custom_components.escpos_designer.designer.fonts import has_glyph  # noqa: PLC0415
+
+        assert has_glyph("handwriting", "ä") and has_glyph("sans", "♥")
+        assert not has_glyph("handwriting", "♥") and not has_glyph("display", "☐")
+
     def test_leading_and_trailing_spaces_are_dropped(self):
         lines = layout_lines([run("  hello  ")], 200)
         assert [f.text for f in lines[0].fragments] == ["hello"]

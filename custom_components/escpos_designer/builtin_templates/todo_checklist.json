@@ -1,0 +1,128 @@
+{
+  "name": {
+    "en": "To-do checklist",
+    "de": "Aufgaben-Checkliste"
+  },
+  "description": {
+    "en": "Any to-do list with a title and a ticket frame.",
+    "de": "Beliebige Todo-Liste mit Titel und Ticket-Rahmen."
+  },
+  "category": "todo",
+  "tags": [
+    "aufgaben",
+    "checklist",
+    "tasks",
+    "todo"
+  ],
+  "variables": [
+    {
+      "key": "list",
+      "type": "todo",
+      "label": {
+        "en": "To-do list",
+        "de": "Todo-Liste"
+      },
+      "default": "todo.chores"
+    },
+    {
+      "key": "title",
+      "type": "text",
+      "label": {
+        "en": "Title",
+        "de": "Titel"
+      },
+      "default": {
+        "en": "To-do",
+        "de": "Aufgaben"
+      }
+    }
+  ],
+  "document": {
+    "frame": {
+      "style": "ticket",
+      "padding": 14
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.title }}",
+            "font": "display",
+            "size": 48
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "double"
+      },
+      {
+        "type": "list",
+        "source": {
+          "kind": "todo",
+          "entity_id": "{{ vars.list }}",
+          "include_completed": true
+        },
+        "style": "checkbox",
+        "size": 24,
+        "empty_text": "Nothing to do ✨",
+        "margin_top": 4,
+        "margin_bottom": 6
+      },
+      {
+        "type": "datetime",
+        "format": "%d.%m.%Y %H:%M",
+        "prefix": "Printed ",
+        "align": "center",
+        "size": 16
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "frame": {
+        "style": "ticket",
+        "padding": 14
+      },
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.title }}",
+              "font": "display",
+              "size": 48
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "double"
+        },
+        {
+          "type": "list",
+          "source": {
+            "kind": "todo",
+            "entity_id": "{{ vars.list }}",
+            "include_completed": true
+          },
+          "style": "checkbox",
+          "size": 24,
+          "empty_text": "Nichts zu tun ✨",
+          "margin_top": 4,
+          "margin_bottom": 6
+        },
+        {
+          "type": "datetime",
+          "format": "%d.%m.%Y %H:%M",
+          "prefix": "Gedruckt ",
+          "align": "center",
+          "size": 16
+        }
+      ]
+    }
+  }
+}

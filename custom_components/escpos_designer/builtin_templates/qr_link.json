@@ -1,0 +1,64 @@
+{
+  "name": {
+    "en": "QR link",
+    "de": "QR-Link"
+  },
+  "description": {
+    "en": "A web address as a QR code with a caption.",
+    "de": "Eine Webadresse als QR-Code mit Beschriftung."
+  },
+  "category": "qr",
+  "tags": [
+    "link",
+    "qr",
+    "url",
+    "web"
+  ],
+  "variables": [
+    {
+      "key": "url",
+      "type": "text",
+      "label": {
+        "en": "Address",
+        "de": "Adresse"
+      },
+      "default": "https://www.home-assistant.io"
+    },
+    {
+      "key": "title",
+      "type": "text",
+      "label": {
+        "en": "Caption",
+        "de": "Beschriftung"
+      },
+      "default": {
+        "en": "Scan me",
+        "de": "Scan mich"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.title }}",
+            "font": "handwriting",
+            "size": 44
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "qr",
+        "data": "{{ vars.url }}",
+        "size_pct": 85,
+        "align": "center",
+        "caption": "{{ vars.url }}",
+        "caption_size": 16,
+        "caption_font": "mono"
+      }
+    ]
+  }
+}

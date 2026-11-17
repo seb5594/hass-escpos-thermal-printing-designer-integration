@@ -151,7 +151,7 @@ class _Resolver:
 
     def _list_items(self, source: dict[str, Any]) -> list[dict[str, Any]]:
         if source["kind"] == "todo":
-            items = list(self._todo_items.get(source["entity_id"], []))
+            items = list(self._todo_items.get(self.text(source["entity_id"]), []))
             if not source["include_completed"]:
                 items = [item for item in items if not item.get("done")]
         else:
