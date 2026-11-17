@@ -345,6 +345,7 @@ export class GalleryView extends LitElement {
                 <md-menu .open=${this._menuFor === card.id} anchor=${menuId} @closed=${() => (this._menuFor = undefined)}>
                   <md-menu-item @click=${() => this._emit("open-template", { id: card.id })}><ed-icon slot="start" .path=${icons.edit}></ed-icon><div slot="headline">${t("gallery.edit")}</div></md-menu-item>
                   <md-menu-item @click=${() => this._emit("print-template", { id: card.id })}><ed-icon slot="start" .path=${icons.printer}></ed-icon><div slot="headline">${t("gallery.print")}</div></md-menu-item>
+                  <md-menu-item @click=${() => this._emit("copy-id", { id: card.id })}><ed-icon slot="start" .path=${icons.copyId}></ed-icon><div slot="headline">${t("gallery.copy_id")}</div></md-menu-item>
                   <md-menu-item @click=${() => this._emit("duplicate-template", { id: card.id })}><ed-icon slot="start" .path=${icons.copy}></ed-icon><div slot="headline">${t("gallery.duplicate")}</div></md-menu-item>
                   ${card.builtin ? nothing : html`<md-menu-item @click=${() => this._emit("delete-template", { id: card.id, name: card.name })}><ed-icon slot="start" .path=${icons.remove}></ed-icon><div slot="headline">${t("common.delete")}</div></md-menu-item>`}
                 </md-menu>

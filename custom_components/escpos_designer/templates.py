@@ -143,14 +143,16 @@ def summarize(template_id: str, record: dict[str, Any], language: str) -> dict[s
 
 
 def describe(template_id: str, record: dict[str, Any], language: str) -> dict[str, Any]:
-    """A template with its document and localized variable labels, ready for the editor."""
+    """A template with its design and localized variables, ready for the editor."""
+    defaults = variable_defaults(record, language)
     variables = [
-        {**v, "label": localize(v["label"], language) or v["key"]} for v in record["variables"]
+        {**v, "label": localize(v["label"], language) or v["key"], "default": defaults[v["key"]]}
+        for v in record["variables"]
     ]
     return {
         **summarize(template_id, record, language),
         "variables": variables,
-        "document": record["document"],
+        "document": document_for(record, language),
     }
 
 

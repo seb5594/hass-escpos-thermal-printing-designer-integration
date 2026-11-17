@@ -225,6 +225,15 @@ export class EscposDesignerPanel extends LitElement {
     }
   }
 
+  async _copyId(id) {
+    try {
+      await navigator.clipboard.writeText(id);
+      this._notify(this.t("toast.id_copied", { id }));
+    } catch {
+      this._notify(id);
+    }
+  }
+
   _toggleMenu() {
     this.dispatchEvent(new CustomEvent("hass-toggle-menu", { bubbles: true, composed: true }));
   }
@@ -261,6 +270,7 @@ export class EscposDesignerPanel extends LitElement {
       @open-template=${(event) => this._open(event.detail.id)}
       @duplicate-template=${(event) => this._open(event.detail.id, { asCopy: true })}
       @print-template=${(event) => this._printFromGallery(event.detail.id)}
+      @copy-id=${(event) => this._copyId(event.detail.id)}
       @new-design=${(event) => this._startNew(event.detail.starter)}
       @toggle-favorite=${(event) => this._toggleFavorite(event.detail.id)}
       @delete-template=${(event) => (this._deleting = event.detail)}

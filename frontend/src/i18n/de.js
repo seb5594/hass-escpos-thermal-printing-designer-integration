@@ -21,6 +21,7 @@ export default {
 
   "toast.saved": "Entwurf gespeichert",
   "toast.deleted": "Entwurf gelöscht",
+  "toast.id_copied": "ID kopiert: {id}",
   "toast.printed": "An den Drucker gesendet",
 
   "banner.install.title": "Die Integration ESC/POS Thermal Printer fehlt",
@@ -42,6 +43,7 @@ export default {
   "gallery.edit": "Bearbeiten",
   "gallery.print": "Drucken",
   "gallery.duplicate": "Duplizieren",
+  "gallery.copy_id": "ID kopieren",
   "gallery.copy": "Kopie",
 
   "new.fab": "Neuer Entwurf",
