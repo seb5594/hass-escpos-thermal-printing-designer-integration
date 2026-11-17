@@ -1,0 +1,66 @@
+blueprint:
+  name: Print a best-before label
+  description: >-
+    Prints a label with the product name, today's date and the best-before date,
+    calculated from how many days the food keeps. Handy for leftovers, jars and
+    freezer boxes. Use it with a dashboard button and a text field, or ask the
+    script for the values each time.
+  domain: script
+  author: seb5594
+  homeassistant:
+    min_version: 2025.1.0
+  source_url: https://github.com/seb5594/hass-escpos-thermal-printing-designer-integration/blob/main/blueprints/script/escpos_designer/best_before_label.yaml
+  input:
+    printer:
+      name: Printer
+      description: Optional if only one printer is set up.
+      default: []
+      selector:
+        device:
+          integration: escpos_printer
+          multiple: true
+    default_days:
+      name: Default shelf life in days
+      description: Used when the script is called without a number of days.
+      default: 3
+      selector:
+        number:
+          min: 1
+          max: 365
+          unit_of_measurement: days
+          mode: box
+    template_id:
+      name: Design
+      description: "`builtin:best_before_label` for a jar label, `builtin:opened_label` for opened packs."
+      default: "builtin:best_before_label"
+      selector:
+        text:
+
+# Call the script with `name` and, optionally, `days`.
+fields:
+  name:
+    name: Product
+    description: What the label is for.
+    example: Tomato soup
+    selector:
+      text:
+  days:
+    name: Keeps for (days)
+    description: Leave empty for the default shelf life.
+    selector:
+      number:
+        min: 1
+        max: 365
+        mode: box
+
+mode: queued
+sequence:
+  - action: escpos_designer.print_template
+    data:
+      template_id: !input template_id
+      device_id: !input printer
+      variables: >-
+        {% set shelf_life = days | default(default_days, true) | int(1) %}
+        {{ {'name': name, 'days': shelf_life} if name is defined and name else {'days': shelf_life} }}
+variables:
+  default_days: !input default_days
