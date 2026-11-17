@@ -1,11 +1,16 @@
-# Vorlage für Home-Assistant-Integrationen
+# ESC/POS Thermodrucker Designer für Home Assistant
 
 [🇬🇧 English](README.md) · **🇩🇪 Deutsch**
 
-Die Vorlage enthält eine Beispielintegration mit Konfigurationsdialog, Tests gegen Home Assistant und einer Pipeline für die Release-ZIPs.
+Gestalte Etiketten, Einkaufslisten, QR-Codes und Liebesbriefe in einem modernen Web-Designer direkt in Home Assistant und drucke sie auf deinen ESC/POS-Thermodruckern.
 
-1. Erstelle ein Repository mit dem Namen `hass-<projekt>-integration`.
-2. Benenne `custom_components/example_integration/` um. Gleiche den Ordnernamen mit `domain` in `manifest.json`, `DOMAIN` in `const.py` und dem ZIP-Namen in `hacs.json` ab. Ersetze die Repository-URLs.
-3. Ersetze den Beispielcode und ergänze Tests unter `.github/tests/`. Tests für den echten Home-Assistant-Core gehören nach `.github/ha_tests/`. Die Untergrenze in `hacs.json` gibt an, welche Version du unterstützt.
-4. Hinterlege `ORCHESTRATION_PAT` für den Zugriff auf die private Workflow-Engine. Mit einem Checkout unter `.engine/` aktualisiert `python .engine/.scripts/readme.py` den Titel und die Badges der englischen README.
-5. Erhöhe für ein Release die Version in `manifest.json` und ergänze den [Changelog](CHANGELOG.md). Auf `main` veröffentlicht die Pipeline die ZIP-Dateien. Eine Version wie `1.0.0b1` kennzeichnet eine Vorabversion.
+## Voraussetzungen
+
+- Home Assistant 2025.1 oder neuer
+- Die Integration [ESC/POS Thermal Printer](https://github.com/cognitivegears/ha-escpos-thermal-printer) mit mindestens einem Drucker. Der Designer erkennt sie selbst; fehlt sie, führt dich der Einrichtungsdialog direkt zu ihrem HACS-Eintrag.
+
+## Installation
+
+1. Öffne dieses Repository in HACS: [![In HACS öffnen](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=seb5594&repository=hass-escpos-thermal-printing-designer-integration&category=integration) und lade es herunter.
+2. Starte Home Assistant neu.
+3. Gehe zu **Einstellungen → Geräte & Dienste → Integration hinzufügen** und wähle **ESC/POS Thermal Printer Designer**.

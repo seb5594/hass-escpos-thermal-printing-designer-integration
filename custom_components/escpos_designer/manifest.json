@@ -1,0 +1,15 @@
+{
+  "domain": "escpos_designer",
+  "name": "ESC/POS Thermal Printer Designer",
+  "after_dependencies": ["escpos_printer", "todo"],
+  "codeowners": ["@seb5594"],
+  "config_flow": true,
+  "dependencies": ["http", "frontend", "panel_custom", "websocket_api"],
+  "documentation": "https://github.com/seb5594/hass-escpos-thermal-printing-designer-integration",
+  "integration_type": "service",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/seb5594/hass-escpos-thermal-printing-designer-integration/issues",
+  "requirements": ["qrcode>=7.4.2,<9"],
+  "single_config_entry": true,
+  "version": "2026.11.17.1"
+}
