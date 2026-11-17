@@ -11,6 +11,6 @@ Gestalte Etiketten, Einkaufslisten, QR-Codes und Liebesbriefe in einem modernen 
 
 ## Installation
 
-1. Öffne dieses Repository in HACS: [![In HACS öffnen](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=seb5594&repository=hass-escpos-thermal-printing-designer-integration&category=integration) und lade es herunter.
+1. Suche in HACS (Home Assistant 2026.10 und älter) oder unter **Einstellungen → Marketplace** (2026.11 und neuer) nach **ESC/POS Thermal Printer Designer**, oder nutze diesen Button: [![In HACS öffnen](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=seb5594&repository=hass-escpos-thermal-printing-designer-integration&category=integration). Findet die Suche es nicht, füge dieses Repository am selben Ort zuerst als benutzerdefiniertes Repository hinzu (Kategorie **Integration**). Lade es dann herunter.
 2. Starte Home Assistant neu.
 3. Gehe zu **Einstellungen → Geräte & Dienste → Integration hinzufügen** und wähle **ESC/POS Thermal Printer Designer**.
