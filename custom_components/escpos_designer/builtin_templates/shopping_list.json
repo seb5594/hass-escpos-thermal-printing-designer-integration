@@ -1,0 +1,19 @@
+{
+  "name": {"en": "Shopping list", "de": "Einkaufsliste"},
+  "description": {"en": "Open items of a todo list as a checklist.", "de": "Offene Einträge einer Todo-Liste als Checkliste."},
+  "category": "shopping",
+  "tags": ["todo", "list"],
+  "variables": [
+    {"key": "list", "type": "todo", "label": {"en": "Todo list", "de": "Todo-Liste"}, "default": "todo.shopping_list"}
+  ],
+  "document": {
+    "name": "Shopping list",
+    "frame": {"style": "rounded"},
+    "elements": [
+      {"type": "text", "align": "center", "runs": [{"text": "Einkaufsliste", "font": "elegant", "size": 40}]},
+      {"type": "datetime", "format": "%A, %d. %B", "align": "center", "size": 20, "margin_bottom": 4},
+      {"type": "divider", "style": "dotted"},
+      {"type": "list", "source": {"kind": "todo", "entity_id": "{{ vars.list }}"}, "style": "checkbox", "size": 26, "empty_text": "Alles besorgt 🎉", "margin_top": 6}
+    ]
+  }
+}

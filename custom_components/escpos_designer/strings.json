@@ -41,5 +41,75 @@
       "title": "No ESC/POS printer is set up yet",
       "description": "The designer is ready, but there is no printer to print on. Add your printer under Settings → Devices & services → ESC/POS Thermal Printer."
     }
+  },
+  "exceptions": {
+    "printer_integration_unavailable": {
+      "message": "The ESC/POS Thermal Printer integration isn't available. Install it through HACS and make sure it is loaded."
+    },
+    "printer_not_selected": {
+      "message": "No printer to print on: {reason}."
+    },
+    "template_error": {
+      "message": "A template in the design failed: {error}"
+    },
+    "not_set_up": {
+      "message": "The ESC/POS Thermal Printer Designer isn't set up."
+    },
+    "template_not_found": {
+      "message": "There is no template with the id {template_id}."
+    },
+    "template_has_no_todo_list": {
+      "message": "This template has no todo list to fill. Pick a template with a todo list element."
+    }
+  },
+  "services": {
+    "print_template": {
+      "name": "Print template",
+      "description": "Print a saved design from the designer.",
+      "fields": {
+        "template_id": {
+          "name": "Template",
+          "description": "The id of the template, shown in the designer's template list (for example `builtin:wifi_qr`)."
+        },
+        "variables": {
+          "name": "Variables",
+          "description": "Values for the blanks of the template, for example the Wi-Fi name. Missing ones use the template's defaults."
+        },
+        "device_id": {
+          "name": "Printer",
+          "description": "The printer to print on. Optional if only one printer is set up."
+        },
+        "copies": {
+          "name": "Copies",
+          "description": "How many copies to print."
+        }
+      }
+    },
+    "print_todo_list": {
+      "name": "Print todo list",
+      "description": "Print the open items of a todo list, for example the shopping list, with a design from the designer.",
+      "fields": {
+        "entity_id": {
+          "name": "Todo list",
+          "description": "The todo list to print."
+        },
+        "template_id": {
+          "name": "Template",
+          "description": "A template with a todo list in it. Defaults to the built-in shopping list."
+        },
+        "include_completed": {
+          "name": "Include completed items",
+          "description": "Also print items that are already checked off."
+        },
+        "device_id": {
+          "name": "Printer",
+          "description": "The printer to print on. Optional if only one printer is set up."
+        },
+        "copies": {
+          "name": "Copies",
+          "description": "How many copies to print."
+        }
+      }
+    }
   }
 }

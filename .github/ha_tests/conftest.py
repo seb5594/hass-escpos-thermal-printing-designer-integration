@@ -28,8 +28,8 @@ def _enable_custom_integrations(enable_custom_integrations):
 def _core_dependencies_loaded(hass):
     """Treat the UI-related core dependencies as set up.
 
-    The designer depends on ``frontend`` and friends, which pull in the large
-    frontend wheel; the tests never render a page, so skip loading them.
+    The designer depends on ``frontend`` and ``panel_custom``, which pull in the
+    large frontend wheel; the tests never render a page, so skip loading them.
     """
-    hass.config.components.update({"http", "frontend", "panel_custom", "websocket_api"})
+    hass.config.components.update({"frontend", "panel_custom"})
     yield
