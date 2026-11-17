@@ -1,0 +1,71 @@
+print_template:
+  name: Print template
+  description: Print a saved design from the designer.
+  fields:
+    template_id:
+      name: Template
+      description: The id of the template, shown in the designer's template list (for example `builtin:wifi_qr`).
+      required: true
+      example: "builtin:wifi_qr"
+      selector:
+        text:
+    variables:
+      name: Variables
+      description: Values for the blanks of the template, for example the Wi-Fi name. Missing ones use the template's defaults.
+      example: '{"ssid": "Guests", "password": "secret"}'
+      selector:
+        object:
+    device_id:
+      name: Printer
+      description: The printer to print on. Optional if only one printer is set up.
+      selector:
+        device:
+          integration: escpos_printer
+    copies:
+      name: Copies
+      description: How many copies to print.
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 10
+          mode: box
+
+print_todo_list:
+  name: Print todo list
+  description: Print the open items of a todo list, for example the shopping list, with a design from the designer.
+  fields:
+    entity_id:
+      name: Todo list
+      description: The todo list to print.
+      required: true
+      selector:
+        entity:
+          domain: todo
+    template_id:
+      name: Template
+      description: A template with a todo list in it. Defaults to the built-in shopping list.
+      default: "builtin:shopping_list"
+      selector:
+        text:
+    include_completed:
+      name: Include completed items
+      description: Also print items that are already checked off.
+      default: false
+      selector:
+        boolean:
+    device_id:
+      name: Printer
+      description: The printer to print on. Optional if only one printer is set up.
+      selector:
+        device:
+          integration: escpos_printer
+    copies:
+      name: Copies
+      description: How many copies to print.
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 10
+          mode: box
