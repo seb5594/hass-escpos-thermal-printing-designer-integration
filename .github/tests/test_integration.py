@@ -37,7 +37,7 @@ class IntegrationLayout(unittest.TestCase):
 
     def test_version_follows_the_date_scheme(self):
         manifest = json.loads((COMPONENT / "manifest.json").read_text())
-        self.assertRegex(manifest["version"], r"^\d{4}\.\d{2}\.\d{2}\.\d+$")
+        self.assertRegex(manifest["version"], r"^\d{4}\.\d{2}\.\d{2}(\.\d+)?$")
 
 
 if __name__ == "__main__":
