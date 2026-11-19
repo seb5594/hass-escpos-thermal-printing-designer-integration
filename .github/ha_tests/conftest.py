@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import pytest
+from homeassistant.setup import async_setup_component
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -25,11 +26,16 @@ def _enable_custom_integrations(enable_custom_integrations):
 
 
 @pytest.fixture(autouse=True)
-def _core_dependencies_loaded(hass):
-    """Treat the UI-related core dependencies as set up.
+async def _core_dependencies_loaded(hass):
+    """Treat the UI-related core dependencies as set up, but keep the web server real.
 
     The designer depends on ``frontend`` and ``panel_custom``, which pull in the
     large frontend wheel; the tests never render a page, so skip loading them.
+    ``http`` and ``websocket_api`` are needed for real: some harnesses mark every
+    core dependency as loaded without setting it up, so undo that when needed.
     """
     hass.config.components.update({"frontend", "panel_custom"})
+    if getattr(hass, "http", None) is None:
+        hass.config.components.difference_update({"http", "websocket_api"})
+        assert await async_setup_component(hass, "http", {})
     yield
