@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Designer panel (dev)</title>
+    <style>
+      /* A few of the variables Home Assistant themes define. */
+      html { height: 100%; font-family: Roboto, "Helvetica Neue", Arial, sans-serif; }
+      body { margin: 0; height: 100%; }
+      body.light { --primary-color: #03a9f4; --text-primary-color: #fff; --primary-text-color: #212121; --secondary-text-color: #727272;
+        --card-background-color: #fff; --primary-background-color: #fafafa; --secondary-background-color: #e5e5e5; --divider-color: rgba(0,0,0,.12); --error-color: #db4437; }
+      body.dark { --primary-color: #03a9f4; --text-primary-color: #fff; --primary-text-color: #e1e1e1; --secondary-text-color: #9b9b9b;
+        --card-background-color: #1c1c1c; --primary-background-color: #111; --secondary-background-color: #2b2b2b; --divider-color: rgba(225,225,225,.12); --error-color: #ef5350; color-scheme: dark; }
+      escpos-designer-panel { display: block; height: 100%; }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      const params = new URLSearchParams(location.search);
+      document.body.className = params.get("theme") === "dark" ? "dark" : "light";
+      await import("/escpos-designer-panel.js");
+      const panel = document.createElement("escpos-designer-panel");
+      panel.narrow = innerWidth < 870;
+      panel.hass = {
+        language: params.get("lang") || "en",
+        states: { "todo.shopping_list": { attributes: { friendly_name: "Shopping list" } }, "todo.chores": { attributes: { friendly_name: "Chores" } } },
+        async callWS(message) {
+          const response = await (await fetch("/ws", { method: "POST", body: JSON.stringify(message) })).json();
+          if (response.error) throw response.error;
+          return response.result;
+        },
+      };
+      document.body.append(panel);
+    </script>
+  </body>
+</html>

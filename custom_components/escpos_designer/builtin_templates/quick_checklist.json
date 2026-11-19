@@ -1,0 +1,52 @@
+{
+  "name": {
+    "en": "Quick checklist",
+    "de": "Schnelle Checkliste"
+  },
+  "description": {
+    "en": "Type your tasks, one per line, and print them with checkboxes.",
+    "de": "Tippe deine Aufgaben, eine pro Zeile, und drucke sie mit Checkboxen."
+  },
+  "category": "todo",
+  "tags": [
+    "checklist",
+    "markdown",
+    "packing",
+    "packliste"
+  ],
+  "variables": [
+    {
+      "key": "title",
+      "type": "text",
+      "label": {
+        "en": "Title",
+        "de": "Titel"
+      },
+      "default": {
+        "en": "Packing list",
+        "de": "Packliste"
+      }
+    },
+    {
+      "key": "tasks",
+      "type": "multiline",
+      "label": {
+        "en": "Tasks (Markdown)",
+        "de": "Aufgaben (Markdown)"
+      },
+      "default": {
+        "en": "- [ ] Passport\n- [ ] Charger\n- [ ] Sunscreen\n- [ ] Snacks 🍫",
+        "de": "- [ ] Reisepass\n- [ ] Ladegerät\n- [ ] Sonnencreme\n- [ ] Snacks 🍫"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "markdown",
+        "source": "<center>\n# {{ vars.title }}\n</center>\n---\n{{ vars.tasks }}\n---",
+        "size": 26
+      }
+    ]
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "name": {
+    "en": "Gift tag",
+    "de": "Geschenkanhänger"
+  },
+  "description": {
+    "en": "A tag for a present with a name and a wish.",
+    "de": "Ein Anhänger für ein Geschenk mit Name und Wunsch."
+  },
+  "category": "fun",
+  "tags": [
+    "birthday",
+    "geburtstag",
+    "geschenk",
+    "gift"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "To",
+        "de": "Für"
+      },
+      "default": "Anna"
+    },
+    {
+      "key": "wish",
+      "type": "text",
+      "label": {
+        "en": "Wish",
+        "de": "Wunsch"
+      },
+      "default": {
+        "en": "Happy Birthday!",
+        "de": "Alles Gute!"
+      }
+    }
+  ],
+  "document": {
+    "paper": {
+      "width": 320,
+      "height": 240
+    },
+    "options": {
+      "margin": 4
+    },
+    "frame": {
+      "style": "ticket",
+      "padding": 6
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🎁 🎉",
+            "size": 40
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.wish }}",
+            "font": "script",
+            "size": 30
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "stars"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "for {{ vars.name }}",
+            "font": "handwriting",
+            "size": 36
+          }
+        ],
+        "align": "center"
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "paper": {
+        "width": 320,
+        "height": 240
+      },
+      "options": {
+        "margin": 4
+      },
+      "frame": {
+        "style": "ticket",
+        "padding": 6
+      },
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🎁 🎉",
+              "size": 40
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.wish }}",
+              "font": "script",
+              "size": 30
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "stars"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "für {{ vars.name }}",
+              "font": "handwriting",
+              "size": 36
+            }
+          ],
+          "align": "center"
+        }
+      ]
+    }
+  }
+}

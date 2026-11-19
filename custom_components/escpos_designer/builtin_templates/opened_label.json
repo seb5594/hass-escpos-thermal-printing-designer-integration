@@ -1,0 +1,161 @@
+{
+  "name": {
+    "en": "Opened on",
+    "de": "Geöffnet am"
+  },
+  "description": {
+    "en": "Mark when a pack was opened and when it should be used up.",
+    "de": "Markiere, wann eine Packung geöffnet wurde und wann sie aufgebraucht sein sollte."
+  },
+  "category": "food",
+  "tags": [
+    "fridge",
+    "geöffnet",
+    "kühlschrank",
+    "label",
+    "opened"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Product",
+        "de": "Produkt"
+      },
+      "default": {
+        "en": "Milk",
+        "de": "Milch"
+      }
+    },
+    {
+      "key": "days",
+      "type": "number",
+      "label": {
+        "en": "Use within (days)",
+        "de": "Verbrauchen in (Tagen)"
+      },
+      "default": 3
+    }
+  ],
+  "document": {
+    "paper": {
+      "width": 320,
+      "height": 240
+    },
+    "frame": {
+      "style": "line"
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.name }}",
+            "font": "display",
+            "size": 46
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "opened ",
+            "size": 18
+          },
+          {
+            "text": "{{ now().strftime('%d.%m.') }}",
+            "size": 26,
+            "bold": true
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "solid",
+        "margin_top": 4,
+        "margin_bottom": 4
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": " use by ",
+            "size": 20,
+            "invert": true
+          },
+          {
+            "text": " {{ (now() + timedelta(days=vars.days | int(0))).strftime('%d.%m.') }}",
+            "size": 34,
+            "bold": true
+          }
+        ],
+        "align": "center"
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "paper": {
+        "width": 320,
+        "height": 240
+      },
+      "frame": {
+        "style": "line"
+      },
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.name }}",
+              "font": "display",
+              "size": 46
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "geöffnet ",
+              "size": 18
+            },
+            {
+              "text": "{{ now().strftime('%d.%m.') }}",
+              "size": 26,
+              "bold": true
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "solid",
+          "margin_top": 4,
+          "margin_bottom": 4
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": " verbrauchen bis ",
+              "size": 20,
+              "invert": true
+            },
+            {
+              "text": " {{ (now() + timedelta(days=vars.days | int(0))).strftime('%d.%m.') }}",
+              "size": 34,
+              "bold": true
+            }
+          ],
+          "align": "center"
+        }
+      ]
+    }
+  }
+}

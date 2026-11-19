@@ -1,0 +1,161 @@
+{
+  "name": {
+    "en": "Best-before label",
+    "de": "Mindesthaltbarkeits-Etikett"
+  },
+  "description": {
+    "en": "Name, date and shelf life for jars and boxes. The best-before date is calculated for you.",
+    "de": "Name, Datum und Haltbarkeit für Gläser und Dosen. Das Haltbarkeitsdatum wird berechnet."
+  },
+  "category": "food",
+  "tags": [
+    "best before",
+    "food",
+    "haltbar",
+    "label",
+    "mhd"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Product",
+        "de": "Produkt"
+      },
+      "default": {
+        "en": "Tomato sauce",
+        "de": "Tomatensauce"
+      }
+    },
+    {
+      "key": "days",
+      "type": "number",
+      "label": {
+        "en": "Keeps for (days)",
+        "de": "Haltbar (Tage)"
+      },
+      "default": 7
+    }
+  ],
+  "document": {
+    "paper": {
+      "width": 320,
+      "height": 240
+    },
+    "frame": {
+      "style": "rounded",
+      "padding": 8
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.name }}",
+            "font": "display",
+            "size": 48
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "dashed"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Best before",
+            "size": 20
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ (now() + timedelta(days=vars.days | int(0))).strftime('%d.%m.%Y') }}",
+            "size": 42,
+            "bold": true
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Made on {{ now().strftime('%d.%m.%Y') }}",
+            "size": 18
+          }
+        ],
+        "align": "center",
+        "margin_top": 2
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "paper": {
+        "width": 320,
+        "height": 240
+      },
+      "frame": {
+        "style": "rounded",
+        "padding": 8
+      },
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.name }}",
+              "font": "display",
+              "size": 48
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "dashed"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Haltbar bis",
+              "size": 20
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ (now() + timedelta(days=vars.days | int(0))).strftime('%d.%m.%Y') }}",
+              "size": 42,
+              "bold": true
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Gemacht am {{ now().strftime('%d.%m.%Y') }}",
+              "size": 18
+            }
+          ],
+          "align": "center",
+          "margin_top": 2
+        }
+      ]
+    }
+  }
+}

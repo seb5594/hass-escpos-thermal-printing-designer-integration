@@ -1,0 +1,203 @@
+{
+  "name": {
+    "en": "Receipt",
+    "de": "Kassenbon"
+  },
+  "description": {
+    "en": "A little shop receipt for games, kitchen helpers or pocket money.",
+    "de": "Ein kleiner Kassenbon für Spiele, Küchenhelfer oder Taschengeld."
+  },
+  "category": "receipt",
+  "tags": [
+    "bon",
+    "kasse",
+    "kaufladen",
+    "receipt",
+    "shop"
+  ],
+  "variables": [
+    {
+      "key": "shop",
+      "type": "text",
+      "label": {
+        "en": "Shop",
+        "de": "Geschäft"
+      },
+      "default": {
+        "en": "Corner Shop",
+        "de": "Tante Emma"
+      }
+    },
+    {
+      "key": "lines",
+      "type": "multiline",
+      "label": {
+        "en": "Items (Markdown)",
+        "de": "Posten (Markdown)"
+      },
+      "default": {
+        "en": "2 × Apples ...... 1,20\n1 × Bread ....... 2,50\n1 × Coffee ...... 4,90",
+        "de": "2 × Äpfel ....... 1,20\n1 × Brot ......... 2,50\n1 × Kaffee ....... 4,90"
+      }
+    },
+    {
+      "key": "total",
+      "type": "text",
+      "label": {
+        "en": "Total",
+        "de": "Summe"
+      },
+      "default": "8,60 €"
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.shop }}",
+            "font": "vintage",
+            "size": 36
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "datetime",
+        "format": "%d.%m.%Y  %H:%M",
+        "align": "center",
+        "font": "mono",
+        "size": 18,
+        "margin_bottom": 4
+      },
+      {
+        "type": "divider",
+        "style": "dashed"
+      },
+      {
+        "type": "markdown",
+        "source": "{{ vars.lines }}",
+        "font": "typewriter",
+        "size": 22
+      },
+      {
+        "type": "divider",
+        "style": "double"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "TOTAL ",
+            "font": "mono",
+            "size": 24
+          },
+          {
+            "text": "{{ vars.total }}",
+            "font": "mono",
+            "size": 30,
+            "bold": true
+          }
+        ],
+        "align": "right"
+      },
+      {
+        "type": "barcode",
+        "kind": "code128",
+        "data": "{{ now().strftime('%Y%m%d%H%M') }}",
+        "height": 60,
+        "align": "center",
+        "margin_top": 8
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Thank you for shopping! ♥",
+            "font": "handwriting",
+            "size": 28
+          }
+        ],
+        "align": "center",
+        "margin_top": 4
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.shop }}",
+              "font": "vintage",
+              "size": 36
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "datetime",
+          "format": "%d.%m.%Y  %H:%M",
+          "align": "center",
+          "font": "mono",
+          "size": 18,
+          "margin_bottom": 4
+        },
+        {
+          "type": "divider",
+          "style": "dashed"
+        },
+        {
+          "type": "markdown",
+          "source": "{{ vars.lines }}",
+          "font": "typewriter",
+          "size": 22
+        },
+        {
+          "type": "divider",
+          "style": "double"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "SUMME ",
+              "font": "mono",
+              "size": 24
+            },
+            {
+              "text": "{{ vars.total }}",
+              "font": "mono",
+              "size": 30,
+              "bold": true
+            }
+          ],
+          "align": "right"
+        },
+        {
+          "type": "barcode",
+          "kind": "code128",
+          "data": "{{ now().strftime('%Y%m%d%H%M') }}",
+          "height": 60,
+          "align": "center",
+          "margin_top": 8
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Danke für deinen Einkauf! ♥",
+              "font": "handwriting",
+              "size": 28
+            }
+          ],
+          "align": "center",
+          "margin_top": 4
+        }
+      ]
+    }
+  }
+}

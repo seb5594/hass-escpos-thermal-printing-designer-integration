@@ -1,0 +1,66 @@
+{
+  "name": {
+    "en": "Pet tag",
+    "de": "Haustier-Etikett"
+  },
+  "description": {
+    "en": "For the food bin, the leash hook or the medicine of your pet.",
+    "de": "Für die Futterbox, den Leinenhaken oder die Medizin deines Haustiers."
+  },
+  "category": "label",
+  "tags": [
+    "cat",
+    "dog",
+    "haustier",
+    "hund",
+    "katze",
+    "pet"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": "Name",
+      "default": "PET"
+    },
+    {
+      "key": "emoji",
+      "type": "text",
+      "label": {
+        "en": "Pictogram",
+        "de": "Piktogramm"
+      },
+      "default": "🐾"
+    }
+  ],
+  "document": {
+    "paper": {
+      "width": 384,
+      "height": 192
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.emoji }} ",
+            "size": 70
+          },
+          {
+            "text": "{{ vars.name }}",
+            "font": "display",
+            "size": 84
+          }
+        ],
+        "align": "center",
+        "margin_top": 10
+      },
+      {
+        "type": "divider",
+        "style": "solid",
+        "thickness": 4,
+        "width_pct": 85
+      }
+    ]
+  }
+}

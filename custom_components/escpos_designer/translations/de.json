@@ -41,5 +41,75 @@
       "title": "Noch kein ESC/POS-Drucker eingerichtet",
       "description": "Der Designer ist bereit, aber es gibt keinen Drucker zum Drucken. Füge deinen Drucker unter Einstellungen → Geräte & Dienste → ESC/POS Thermal Printer hinzu."
     }
+  },
+  "exceptions": {
+    "printer_integration_unavailable": {
+      "message": "Die Integration ESC/POS Thermal Printer ist nicht verfügbar. Installiere sie über HACS und stelle sicher, dass sie geladen ist."
+    },
+    "printer_not_selected": {
+      "message": "Kein Drucker zum Drucken: {reason}."
+    },
+    "template_error": {
+      "message": "Eine Vorlage im Entwurf ist fehlgeschlagen: {error}"
+    },
+    "not_set_up": {
+      "message": "Der ESC/POS Thermodrucker Designer ist nicht eingerichtet."
+    },
+    "template_not_found": {
+      "message": "Es gibt keine Vorlage mit der ID {template_id}."
+    },
+    "template_has_no_todo_list": {
+      "message": "Diese Vorlage enthält keine Todo-Liste zum Befüllen. Wähle eine Vorlage mit einem Todo-Listen-Element."
+    }
+  },
+  "services": {
+    "print_template": {
+      "name": "Vorlage drucken",
+      "description": "Druckt einen gespeicherten Entwurf aus dem Designer.",
+      "fields": {
+        "template_id": {
+          "name": "Vorlage",
+          "description": "Die ID der Vorlage, sichtbar in der Vorlagenliste des Designers (zum Beispiel `builtin:wifi_qr`)."
+        },
+        "variables": {
+          "name": "Variablen",
+          "description": "Werte für die Platzhalter der Vorlage, zum Beispiel den WLAN-Namen. Fehlende Werte nehmen die Standardwerte der Vorlage."
+        },
+        "device_id": {
+          "name": "Drucker",
+          "description": "Der Drucker, auf dem gedruckt wird. Optional, wenn nur ein Drucker eingerichtet ist."
+        },
+        "copies": {
+          "name": "Kopien",
+          "description": "Wie viele Kopien gedruckt werden."
+        }
+      }
+    },
+    "print_todo_list": {
+      "name": "Todo-Liste drucken",
+      "description": "Druckt die offenen Einträge einer Todo-Liste, zum Beispiel der Einkaufsliste, mit einem Entwurf aus dem Designer.",
+      "fields": {
+        "entity_id": {
+          "name": "Todo-Liste",
+          "description": "Die Todo-Liste, die gedruckt wird."
+        },
+        "template_id": {
+          "name": "Vorlage",
+          "description": "Eine Vorlage mit einer Todo-Liste. Standard ist die eingebaute Einkaufsliste."
+        },
+        "include_completed": {
+          "name": "Erledigte Einträge einschließen",
+          "description": "Druckt auch Einträge, die bereits abgehakt sind."
+        },
+        "device_id": {
+          "name": "Drucker",
+          "description": "Der Drucker, auf dem gedruckt wird. Optional, wenn nur ein Drucker eingerichtet ist."
+        },
+        "copies": {
+          "name": "Kopien",
+          "description": "Wie viele Kopien gedruckt werden."
+        }
+      }
+    }
   }
 }

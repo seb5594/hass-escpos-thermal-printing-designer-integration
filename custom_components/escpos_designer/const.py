@@ -22,6 +22,13 @@ PRINTER_HACS_URL: Final = (
 HACS_URL: Final = "https://www.hacs.xyz/docs/use/"
 ADD_PRINTER_URL: Final = "/config/integrations/dashboard/add?domain=escpos_printer"
 
+# The sidebar panel
+PANEL_URL_PATH: Final = "escpos-designer"
+PANEL_ELEMENT: Final = "escpos-designer-panel"
+PANEL_TITLE: Final = "Printer Designer"
+PANEL_ICON: Final = "mdi:printer-pos-edit"
+STATIC_URL_PATH: Final = "/escpos_designer_static"
+
 # Options
 CONF_REQUIRE_ADMIN: Final = "require_admin"
 CONF_SHOW_IN_SIDEBAR: Final = "show_in_sidebar"

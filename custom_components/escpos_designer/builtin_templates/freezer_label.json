@@ -1,0 +1,151 @@
+{
+  "name": {
+    "en": "Freezer label",
+    "de": "Gefrier-Etikett"
+  },
+  "description": {
+    "en": "What is inside, when it went in and how long it keeps.",
+    "de": "Was drin ist, wann es eingefroren wurde und wie lange es hält."
+  },
+  "category": "food",
+  "tags": [
+    "freezer",
+    "gefrier",
+    "label",
+    "tiefkühl"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Contents",
+        "de": "Inhalt"
+      },
+      "default": "Bolognese"
+    },
+    {
+      "key": "months",
+      "type": "number",
+      "label": {
+        "en": "Keeps for (months)",
+        "de": "Haltbar (Monate)"
+      },
+      "default": 3
+    }
+  ],
+  "document": {
+    "paper": {
+      "width": 320,
+      "height": 240
+    },
+    "frame": {
+      "style": "brackets",
+      "padding": 10
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "❄",
+            "size": 40
+          },
+          {
+            "text": " {{ vars.name }}",
+            "font": "display",
+            "size": 44
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "dotted"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "frozen {{ now().strftime('%d.%m.%Y') }}",
+            "size": 20
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "eat by ",
+            "size": 20
+          },
+          {
+            "text": "{{ (now() + timedelta(days=30 * (vars.months | int(0)))).strftime('%m/%Y') }}",
+            "size": 34,
+            "bold": true
+          }
+        ],
+        "align": "center"
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "paper": {
+        "width": 320,
+        "height": 240
+      },
+      "frame": {
+        "style": "brackets",
+        "padding": 10
+      },
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "❄",
+              "size": 40
+            },
+            {
+              "text": " {{ vars.name }}",
+              "font": "display",
+              "size": 44
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "dotted"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "eingefroren {{ now().strftime('%d.%m.%Y') }}",
+              "size": 20
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "essen bis ",
+              "size": 20
+            },
+            {
+              "text": "{{ (now() + timedelta(days=30 * (vars.months | int(0)))).strftime('%m/%Y') }}",
+              "size": 34,
+              "bold": true
+            }
+          ],
+          "align": "center"
+        }
+      ]
+    }
+  }
+}

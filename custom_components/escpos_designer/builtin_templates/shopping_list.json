@@ -1,0 +1,110 @@
+{
+  "name": {
+    "en": "Shopping list",
+    "de": "Einkaufsliste"
+  },
+  "description": {
+    "en": "Open items of a to-do list as a checklist with a date.",
+    "de": "Offene Einträge einer Todo-Liste als Checkliste mit Datum."
+  },
+  "category": "shopping",
+  "tags": [
+    "einkauf",
+    "groceries",
+    "list",
+    "todo"
+  ],
+  "variables": [
+    {
+      "key": "list",
+      "type": "todo",
+      "label": {
+        "en": "To-do list",
+        "de": "Todo-Liste"
+      },
+      "default": "todo.shopping_list"
+    }
+  ],
+  "document": {
+    "frame": {
+      "style": "rounded"
+    },
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Shopping list",
+            "font": "elegant",
+            "size": 40
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "datetime",
+        "format": "%A, %d. %B",
+        "align": "center",
+        "size": 20,
+        "margin_bottom": 4
+      },
+      {
+        "type": "divider",
+        "style": "dotted"
+      },
+      {
+        "type": "list",
+        "source": {
+          "kind": "todo",
+          "entity_id": "{{ vars.list }}"
+        },
+        "style": "checkbox",
+        "size": 26,
+        "empty_text": "Everything bought 🎉",
+        "margin_top": 6
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "frame": {
+        "style": "rounded"
+      },
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Einkaufsliste",
+              "font": "elegant",
+              "size": 40
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "datetime",
+          "format": "%A, %d. %B",
+          "align": "center",
+          "size": 20,
+          "margin_bottom": 4
+        },
+        {
+          "type": "divider",
+          "style": "dotted"
+        },
+        {
+          "type": "list",
+          "source": {
+            "kind": "todo",
+            "entity_id": "{{ vars.list }}"
+          },
+          "style": "checkbox",
+          "size": 26,
+          "empty_text": "Alles besorgt 🎉",
+          "margin_top": 6
+        }
+      ]
+    }
+  }
+}

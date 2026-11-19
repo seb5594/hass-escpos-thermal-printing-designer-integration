@@ -1,0 +1,59 @@
+blueprint:
+  name: Print the shopping list
+  description: >-
+    Prints the open items of a to-do list, for example the shopping list, as a
+    checklist. Call the script from a dashboard button, a voice command or an
+    automation.
+  domain: script
+  author: seb5594
+  homeassistant:
+    min_version: 2025.1.0
+  source_url: https://github.com/seb5594/hass-escpos-thermal-printing-designer-integration/blob/main/blueprints/script/escpos_designer/print_shopping_list.yaml
+  input:
+    todo_list:
+      name: To-do list
+      selector:
+        entity:
+          domain: todo
+    printer:
+      name: Printer
+      description: Optional if only one printer is set up.
+      default: []
+      selector:
+        device:
+          integration: escpos_printer
+          multiple: true
+    options:
+      name: Options
+      icon: mdi:cog-outline
+      collapsed: true
+      input:
+        template_id:
+          name: Design
+          description: A design with a to-do list element. The built-in shopping list is the default.
+          default: "builtin:shopping_list"
+          selector:
+            text:
+        include_completed:
+          name: Include completed items
+          default: false
+          selector:
+            boolean:
+        copies:
+          name: Copies
+          default: 1
+          selector:
+            number:
+              min: 1
+              max: 10
+              mode: box
+
+mode: queued
+sequence:
+  - action: escpos_designer.print_todo_list
+    data:
+      entity_id: !input todo_list
+      template_id: !input template_id
+      include_completed: !input include_completed
+      copies: !input copies
+      device_id: !input printer
