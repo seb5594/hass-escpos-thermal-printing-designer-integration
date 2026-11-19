@@ -206,11 +206,11 @@ export class EscposDesignerPanel extends LitElement {
   }
 
   async _confirmDelete() {
-    const { id } = this._deleting;
+    const ids = this._deleting.ids ?? [this._deleting.id];
     this._deleting = undefined;
     try {
-      await this.api.deleteTemplate(id);
-      this._notify(this.t("toast.deleted"));
+      await Promise.all(ids.map((id) => this.api.deleteTemplate(id)));
+      this._notify(ids.length > 1 ? this.t("toast.deleted_many", { count: ids.length }) : this.t("toast.deleted"));
       await this._refreshLibrary();
     } catch (error) {
       this._notify(errorMessage(error), true);
@@ -273,7 +273,8 @@ export class EscposDesignerPanel extends LitElement {
       @copy-id=${(event) => this._copyId(event.detail.id)}
       @new-design=${(event) => this._startNew(event.detail.starter)}
       @toggle-favorite=${(event) => this._toggleFavorite(event.detail.id)}
-      @delete-template=${(event) => (this._deleting = event.detail)}
+      @delete-template=${(event) => (this._deleting = { ids: [event.detail.id], name: event.detail.name })}
+      @delete-templates=${(event) => (this._deleting = event.detail)}
     ></gallery-view>`;
   }
 
@@ -305,7 +306,11 @@ export class EscposDesignerPanel extends LitElement {
         : nothing}
       <md-dialog .open=${Boolean(this._deleting)} @closed=${(event) => event.target === event.currentTarget && (this._deleting = undefined)}>
         <div slot="headline">${t("delete.title")}</div>
-        <div slot="content">${t("delete.text", { name: this._deleting?.name ?? "" })}</div>
+        <div slot="content">${
+          (this._deleting?.ids?.length ?? 1) > 1
+            ? t("delete.text_many", { count: this._deleting.ids.length })
+            : t("delete.text", { name: this._deleting?.name ?? "" })
+        }</div>
         <div slot="actions">
           <md-text-button @click=${() => (this._deleting = undefined)}>${t("common.cancel")}</md-text-button>
           <md-filled-button @click=${this._confirmDelete}>${t("common.delete")}</md-filled-button>

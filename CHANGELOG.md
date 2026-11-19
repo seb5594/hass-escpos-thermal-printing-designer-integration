@@ -2,6 +2,10 @@
 
 Versions follow `YYYY.MM.DD[.BUILD]`: the first build of a day has no suffix.
 
+## Unreleased
+
+- Your own designs can be selected in the gallery and deleted, one or many at once.
+
 ## 2026.11.19
 
 - First release.
