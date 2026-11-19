@@ -310,4 +310,10 @@ export default {
 
   "delete.title": "Diesen Entwurf löschen?",
   "delete.text": "„{name}“ wird endgültig entfernt.",
+  "gallery.select": "Auswählen",
+  "gallery.selected": "{count} ausgewählt",
+  "gallery.select_all": "Alle auswählen",
+  "gallery.select_hint": "Tippe auf deine eigenen Entwürfe, um sie auszuwählen. Mitgelieferte Entwürfe lassen sich nicht löschen.",
+  "toast.deleted_many": "{count} Entwürfe gelöscht",
+  "delete.text_many": "{count} Entwürfe werden endgültig entfernt.",
 };

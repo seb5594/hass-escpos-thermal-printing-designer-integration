@@ -310,4 +310,10 @@ export default {
 
   "delete.title": "Delete this design?",
   "delete.text": "“{name}” will be removed for good.",
+  "gallery.select": "Select",
+  "gallery.selected": "{count} selected",
+  "gallery.select_all": "Select all",
+  "gallery.select_hint": "Tap your own designs to select them. Built-in designs can't be deleted.",
+  "toast.deleted_many": "{count} designs deleted",
+  "delete.text_many": "{count} designs will be removed for good.",
 };

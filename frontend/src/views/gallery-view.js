@@ -23,7 +23,7 @@ const STARTER_ICONS = { text: icons.text, markdown: icons.markdown, datetime: ic
 /**
  * Home of the designer: search and filter the templates, jump to the last designs,
  * and start something new. Fires `open-template`, `print-template`, `new-design`,
- * `toggle-favorite`, `delete-template` and `duplicate-template`.
+ * `toggle-favorite`, `delete-template`, `delete-templates` and `duplicate-template`.
  */
 export class GalleryView extends LitElement {
   static properties = {
@@ -36,6 +36,8 @@ export class GalleryView extends LitElement {
     _newOpen: { state: true },
     _thumbs: { state: true },
     _menuFor: { state: true },
+    _selecting: { state: true },
+    _selection: { state: true },
   };
 
   constructor() {
@@ -44,6 +46,8 @@ export class GalleryView extends LitElement {
     this._category = "all";
     this._newOpen = false;
     this._thumbs = {};
+    this._selecting = false;
+    this._selection = new Set();
     this._requested = new Set();
   }
 
@@ -134,6 +138,51 @@ export class GalleryView extends LitElement {
       .card:focus-within {
         border-color: var(--ed-primary);
         box-shadow: 0 4px 16px rgb(0 0 0 / 12%);
+      }
+      .card.locked {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .card.chosen {
+        border-color: var(--ed-primary);
+        box-shadow: 0 0 0 2px var(--ed-primary);
+      }
+      .check {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 1;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid var(--ed-primary);
+        background: var(--ed-surface);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chosen .check {
+        background: var(--ed-primary);
+      }
+      .check ed-icon {
+        --ed-icon-size: 18px;
+      }
+      .selbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .selbar.active {
+        padding: 8px 12px;
+        border-radius: 14px;
+        background: var(--md-sys-color-secondary-container);
+      }
+      .selhint {
+        margin: 6px 4px 0;
+        font-size: 0.8125rem;
       }
       .thumb {
         height: 150px;
@@ -306,6 +355,48 @@ export class GalleryView extends LitElement {
     this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
   }
 
+  _toggleSelection(card) {
+    if (card.builtin) return;
+    const next = new Set(this._selection);
+    next.has(card.id) ? next.delete(card.id) : next.add(card.id);
+    this._selection = next;
+  }
+
+  _setSelecting(on) {
+    this._selecting = on;
+    this._selection = new Set();
+  }
+
+  _selectAllVisible() {
+    const mine = this._visible().filter((card) => !card.builtin).map((card) => card.id);
+    const all = mine.length && mine.every((id) => this._selection.has(id));
+    this._selection = new Set(all ? [] : mine);
+  }
+
+  _deleteSelection() {
+    const ids = [...this._selection];
+    const names = this.library.templates.filter((card) => ids.includes(card.id)).map((card) => card.name);
+    this._emit("delete-templates", { ids, name: names.length === 1 ? names[0] : "" });
+    this._setSelecting(false);
+  }
+
+  _selectionBar() {
+    const { t } = this;
+    if (!this._selecting) {
+      const hasMine = this.library.templates.some((card) => !card.builtin);
+      return hasMine
+        ? html`<div class="selbar"><md-text-button @click=${() => this._setSelecting(true)}><ed-icon slot="icon" .path=${icons.check}></ed-icon>${t("gallery.select")}</md-text-button></div>`
+        : nothing;
+    }
+    return html`<div class="selbar active">
+      <span class="grow">${t("gallery.selected", { count: this._selection.size })}</span>
+      <md-text-button @click=${this._selectAllVisible}>${t("gallery.select_all")}</md-text-button>
+      <md-filled-button ?disabled=${!this._selection.size} @click=${this._deleteSelection}><ed-icon slot="icon" .path=${icons.remove}></ed-icon>${t("common.delete")}</md-filled-button>
+      <md-text-button @click=${() => this._setSelecting(false)}>${t("common.cancel")}</md-text-button>
+    </div>
+    <p class="muted selhint">${t("gallery.select_hint")}</p>`;
+  }
+
   _visible() {
     const { library, _query: query, _category: category, t } = this;
     const needle = query.trim().toLowerCase();
@@ -325,8 +416,12 @@ export class GalleryView extends LitElement {
     const favorite = library.favorites.includes(card.id);
     const thumb = this._thumbs[card.id];
     const menuId = `menu-${card.id.replace(/[^a-z0-9]/gi, "-")}`;
-    return html`<div class="card" tabindex="0" @click=${() => this._emit("open-template", { id: card.id })}
-      @keydown=${(event) => event.key === "Enter" && this._emit("open-template", { id: card.id })}>
+    const selectable = this._selecting && !compact;
+    const chosen = selectable && this._selection.has(card.id);
+    const activate = () => (selectable ? this._toggleSelection(card) : this._emit("open-template", { id: card.id }));
+    return html`<div class="card ${selectable && card.builtin ? "locked" : ""} ${chosen ? "chosen" : ""}" tabindex="0" @click=${activate}
+      @keydown=${(event) => event.key === "Enter" && activate()}>
+      ${selectable && !card.builtin ? html`<span class="check" aria-hidden="true">${chosen ? html`<ed-icon .path=${icons.check}></ed-icon>` : nothing}</span>` : nothing}
       <div class="thumb">
         ${thumb ? html`<img alt="" loading="lazy" src="data:image/png;base64,${thumb}" />` : html`<div class="skeleton"></div>`}
       </div>
@@ -438,6 +533,7 @@ export class GalleryView extends LitElement {
       ${showRecent
         ? html`<h2>${t("gallery.recent")}</h2><div class="recent">${recent.map((card) => this._card(card, { compact: true }))}</div>`
         : nothing}
+      ${this._selectionBar()}
       <h2>${t("gallery.templates")}</h2>
       ${visible.length
         ? html`<div class="grid">${visible.map((card) => this._card(card))}</div>`
