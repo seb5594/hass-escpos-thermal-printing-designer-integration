@@ -2117,7 +2117,7 @@ text
                 <md-icon-button id=${M} aria-label=${H("gallery.more")} @click=${()=>this._menuFor=this._menuFor===C.id?void 0:C.id}>
                   <ed-icon .path=${j3}></ed-icon>
                 </md-icon-button>
-                <md-menu .open=${this._menuFor===C.id} anchor=${M} @closed=${()=>this._menuFor=void 0}>
+                <md-menu positioning="popover" .open=${this._menuFor===C.id} anchor=${M} @closed=${()=>this._menuFor=void 0}>
                   <md-menu-item @click=${()=>this._emit("open-template",{id:C.id})}><ed-icon slot="start" .path=${a0}></ed-icon><div slot="headline">${H("gallery.edit")}</div></md-menu-item>
                   <md-menu-item @click=${()=>this._emit("print-template",{id:C.id})}><ed-icon slot="start" .path=${u1}></ed-icon><div slot="headline">${H("gallery.print")}</div></md-menu-item>
                   <md-menu-item @click=${()=>this._emit("copy-id",{id:C.id})}><ed-icon slot="start" .path=${V0}></ed-icon><div slot="headline">${H("gallery.copy_id")}</div></md-menu-item>

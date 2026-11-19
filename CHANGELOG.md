@@ -2,9 +2,10 @@
 
 Versions follow `YYYY.MM.DD[.BUILD]`: the first build of a day has no suffix.
 
-## Unreleased
+## 2026.11.19.1
 
 - Your own designs can be selected in the gallery and deleted, one or many at once.
+- Fixed the card menu being clipped on phones, which made "Delete" unreachable.
 
 ## 2026.11.19
 

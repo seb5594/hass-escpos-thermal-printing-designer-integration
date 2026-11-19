@@ -437,7 +437,7 @@ export class GalleryView extends LitElement {
                 <md-icon-button id=${menuId} aria-label=${t("gallery.more")} @click=${() => (this._menuFor = this._menuFor === card.id ? undefined : card.id)}>
                   <ed-icon .path=${icons.more}></ed-icon>
                 </md-icon-button>
-                <md-menu .open=${this._menuFor === card.id} anchor=${menuId} @closed=${() => (this._menuFor = undefined)}>
+                <md-menu positioning="popover" .open=${this._menuFor === card.id} anchor=${menuId} @closed=${() => (this._menuFor = undefined)}>
                   <md-menu-item @click=${() => this._emit("open-template", { id: card.id })}><ed-icon slot="start" .path=${icons.edit}></ed-icon><div slot="headline">${t("gallery.edit")}</div></md-menu-item>
                   <md-menu-item @click=${() => this._emit("print-template", { id: card.id })}><ed-icon slot="start" .path=${icons.printer}></ed-icon><div slot="headline">${t("gallery.print")}</div></md-menu-item>
                   <md-menu-item @click=${() => this._emit("copy-id", { id: card.id })}><ed-icon slot="start" .path=${icons.copyId}></ed-icon><div slot="headline">${t("gallery.copy_id")}</div></md-menu-item>
