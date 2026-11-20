@@ -4,6 +4,8 @@
 
 <p align="center"><img src="docs/images/gallery.png" alt="Die Vorlagen-Galerie" width="860"></p>
 
+**▶ [Live-Demo ausprobieren](https://seb5594.github.io/hass-escpos-thermal-printing-designer-integration/)** – der echte Designer im Browser, ohne Installation. Gedruckt wird dort nichts; „Drucken“ speichert ein PNG.
+
 Gestalte Etiketten, Einkaufslisten, QR-Codes, Mindesthaltbarkeits-Aufkleber und Liebesbriefe in einem modernen Web-Designer direkt in Home Assistant und drucke sie auf deinen ESC/POS-Thermodruckern.
 
 ## Highlights

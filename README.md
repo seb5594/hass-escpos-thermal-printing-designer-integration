@@ -26,6 +26,8 @@
 
 <p align="center"><img src="docs/images/gallery.png" alt="The template gallery" width="860"></p>
 
+**▶ [Try the live demo](https://seb5594.github.io/hass-escpos-thermal-printing-designer-integration/)** – the real designer in your browser, no installation needed. Nothing is printed there; "Print" saves a PNG.
+
 Design labels, shopping lists, QR codes, best-before stickers and love letters in a modern web designer inside Home Assistant, and print them on your ESC/POS thermal printers.
 
 ## Highlights

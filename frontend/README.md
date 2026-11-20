@@ -19,7 +19,7 @@ npm run build
 python frontend/dev/server.py     # needs Pillow, voluptuous and qrcode
 ```
 
-Open <http://localhost:8765/?lang=de&theme=dark>. Home Assistant templates are not available there; `{{ vars.name }}` works through a simple substitution.
+Open <http://localhost:8765/?lang=de&theme=dark>. The same backend (`frontend/dev/backend.py`) powers the public demo: `python scripts/build_demo.py` assembles it into `_site/`, where the engine runs in the browser through Pyodide and the `.github/workflows/pages.yml` workflow publishes it. Home Assistant templates are not available there; `{{ vars.name }}` works through a simple substitution.
 
 ## Layout
 
