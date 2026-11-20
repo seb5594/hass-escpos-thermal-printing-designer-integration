@@ -1,12 +1,12 @@
 {
   "domain": "escpos_designer",
   "name": "ESC/POS Thermal Printer Designer",
-  "categories": [
-    "computers_network.printers"
-  ],
   "after_dependencies": [
     "escpos_printer",
     "todo"
+  ],
+  "categories": [
+    "computers_network.printers"
   ],
   "codeowners": [
     "@seb5594"
@@ -26,5 +26,5 @@
     "qrcode>=7.4.2,<9"
   ],
   "single_config_entry": true,
-  "version": "2026.11.20"
+  "version": "2026.11.20.1"
 }

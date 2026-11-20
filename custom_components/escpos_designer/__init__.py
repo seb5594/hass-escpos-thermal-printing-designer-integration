@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.loader import async_get_integration
 
@@ -16,6 +17,8 @@ from .services import async_register_services
 from .storage import DesignStorage
 from .templates import load_builtin_templates
 from .websocket_api import async_register_commands
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant

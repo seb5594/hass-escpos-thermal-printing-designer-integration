@@ -6,6 +6,10 @@ Versions follow `YYYY.MM.DD[.BUILD]`: the first build of a day has no suffix.
 
 - A live demo on GitHub Pages runs the real design engine in the browser (no printer; "Print" saves a PNG).
 
+## 2026.11.20.1
+
+- Declare UI-only configuration and sort manifest keys for the HACS Marketplace validation.
+
 ## 2026.11.20
 
 - Fixed the editor on phones: the Preview and Design tabs showed nothing.
