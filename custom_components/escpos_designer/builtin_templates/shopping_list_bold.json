@@ -1,0 +1,106 @@
+{
+  "name": {
+    "en": "Shopping list (bold)",
+    "de": "Einkaufsliste (plakativ)"
+  },
+  "description": {
+    "en": "Large, easy-to-read checkboxes with a bold headline.",
+    "de": "Große, gut lesbare Kästchen mit auffälliger Überschrift."
+  },
+  "category": "shopping",
+  "tags": [
+    "einkauf",
+    "groß",
+    "large",
+    "shopping"
+  ],
+  "variables": [
+    {
+      "key": "list",
+      "type": "todo",
+      "label": {
+        "en": "Shopping list",
+        "de": "Einkaufsliste"
+      },
+      "default": "todo.shopping_list",
+      "hints": [
+        "shopping",
+        "einkauf",
+        "grocer",
+        "supermarkt"
+      ]
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": " SHOPPING ",
+            "font": "display",
+            "size": 64,
+            "invert": true
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "datetime",
+        "format": "%d.%m.%Y",
+        "align": "center",
+        "size": 20,
+        "margin_top": 4
+      },
+      {
+        "type": "list",
+        "source": {
+          "kind": "todo",
+          "entity_id": "{{ vars.list }}"
+        },
+        "style": "checkbox",
+        "size": 32,
+        "line_spacing": 1.35,
+        "empty_text": "All done 🎉",
+        "margin_top": 6
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": " EINKAUF ",
+              "font": "display",
+              "size": 64,
+              "invert": true
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "datetime",
+          "format": "%d.%m.%Y",
+          "align": "center",
+          "size": 20,
+          "margin_top": 4
+        },
+        {
+          "type": "list",
+          "source": {
+            "kind": "todo",
+            "entity_id": "{{ vars.list }}"
+          },
+          "style": "checkbox",
+          "size": 32,
+          "line_spacing": 1.35,
+          "empty_text": "Alles erledigt 🎉",
+          "margin_top": 6
+        }
+      ]
+    }
+  }
+}

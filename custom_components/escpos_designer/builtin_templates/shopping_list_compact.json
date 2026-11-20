@@ -22,7 +22,13 @@
         "en": "To-do list",
         "de": "Todo-Liste"
       },
-      "default": "todo.shopping_list"
+      "default": "todo.shopping_list",
+      "hints": [
+        "shopping",
+        "einkauf",
+        "grocer",
+        "supermarkt"
+      ]
     }
   ],
   "document": {

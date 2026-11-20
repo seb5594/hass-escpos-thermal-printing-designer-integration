@@ -42,6 +42,11 @@ _VARIABLE = vol.Schema(
         ),
         vol.Optional("options", default=list): [vol.All(vol.Coerce(str), vol.Length(max=80))],
         # For ``entity`` variables: only entities of this domain are offered (e.g. ``weather``).
+        # Words that identify the wanted entity (e.g. ``shopping``, ``einkauf``): a
+        # missing default is replaced by the entity whose id or name contains one.
+        vol.Optional("hints", default=list): vol.All(
+            [vol.All(vol.Coerce(str), vol.Length(max=40))], vol.Length(max=8)
+        ),
         vol.Optional("domain", default=""): vol.All(vol.Coerce(str), vol.Match(r"^[a-z_]{0,40}$")),
     },
     extra=vol.REMOVE_EXTRA,

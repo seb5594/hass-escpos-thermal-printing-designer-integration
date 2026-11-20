@@ -1,0 +1,186 @@
+{
+  "name": {
+    "en": "Shopping list with store and budget",
+    "de": "Einkaufsliste mit Laden und Budget"
+  },
+  "description": {
+    "en": "Your list with the store's name and a budget to stick to.",
+    "de": "Deine Liste mit Ladenname und einem Budget, an das du dich hältst."
+  },
+  "category": "shopping",
+  "tags": [
+    "budget",
+    "einkauf",
+    "laden",
+    "shopping",
+    "store"
+  ],
+  "variables": [
+    {
+      "key": "list",
+      "type": "todo",
+      "label": {
+        "en": "Shopping list",
+        "de": "Einkaufsliste"
+      },
+      "default": "todo.shopping_list",
+      "hints": [
+        "shopping",
+        "einkauf",
+        "grocer",
+        "supermarkt"
+      ]
+    },
+    {
+      "key": "store",
+      "type": "text",
+      "label": {
+        "en": "Store",
+        "de": "Laden"
+      },
+      "default": {
+        "en": "Supermarket",
+        "de": "Supermarkt"
+      }
+    },
+    {
+      "key": "budget",
+      "type": "number",
+      "label": {
+        "en": "Budget (€)",
+        "de": "Budget (€)"
+      },
+      "default": "50"
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.store }}",
+            "font": "display",
+            "size": 56
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Budget: {{ vars.budget }} €",
+            "font": "handwriting",
+            "size": 30
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "wave",
+        "margin_top": 2
+      },
+      {
+        "type": "list",
+        "source": {
+          "kind": "todo",
+          "entity_id": "{{ vars.list }}"
+        },
+        "style": "checkbox",
+        "size": 26,
+        "empty_text": "Nothing on the list",
+        "margin_top": 4
+      },
+      {
+        "type": "divider",
+        "style": "solid",
+        "margin_top": 8
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Total: ________ €",
+            "font": "typewriter",
+            "size": 24
+          }
+        ],
+        "align": "right",
+        "margin_top": 4
+      }
+    ],
+    "frame": {
+      "style": "rounded",
+      "thickness": 3,
+      "padding": 10
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.store }}",
+              "font": "display",
+              "size": 56
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Budget: {{ vars.budget }} €",
+              "font": "handwriting",
+              "size": 30
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "wave",
+          "margin_top": 2
+        },
+        {
+          "type": "list",
+          "source": {
+            "kind": "todo",
+            "entity_id": "{{ vars.list }}"
+          },
+          "style": "checkbox",
+          "size": 26,
+          "empty_text": "Die Liste ist leer",
+          "margin_top": 4
+        },
+        {
+          "type": "divider",
+          "style": "solid",
+          "margin_top": 8
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Summe: ________ €",
+              "font": "typewriter",
+              "size": 24
+            }
+          ],
+          "align": "right",
+          "margin_top": 4
+        }
+      ],
+      "frame": {
+        "style": "rounded",
+        "thickness": 3,
+        "padding": 10
+      }
+    }
+  }
+}

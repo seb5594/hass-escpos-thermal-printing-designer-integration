@@ -1,6 +1,6 @@
 # Templates
 
-A template is a design plus the *fill-in values* it asks for before printing. The designer ships 35 of them, in English and German; the language follows Home Assistant. Your own designs live next to them and can ask for values too.
+A template is a design plus the *fill-in values* it asks for before printing. The designer ships 39 of them, in English and German; the language follows Home Assistant. Your own designs live next to them and can ask for values too.
 
 ## The built-in designs
 
@@ -34,7 +34,11 @@ A template is a design plus the *fill-in values* it asks for before printing. Th
 | `builtin:recipe_card` | Recipe card / Rezeptkarte | food | `title`, `servings`, `time`, `ingredients`, `steps` | 384 px roll |
 | `builtin:reward_chart` | Sticker chart / Belohnungskarte | fun | `name`, `goal` | 384 px roll |
 | `builtin:shopping_list` | Shopping list / Einkaufsliste | shopping | `list` | 384 px roll |
+| `builtin:shopping_list_bold` | Shopping list (bold) / Einkaufsliste (plakativ) | shopping | `list` | 384 px roll |
 | `builtin:shopping_list_compact` | Shopping list (compact) / Einkaufsliste (kompakt) | shopping | `list` | 384 px roll |
+| `builtin:shopping_list_extras` | Shopping list + write-in lines / Einkaufsliste + Notizzeilen | shopping | `list` | 384 px roll |
+| `builtin:shopping_list_market` | Shopping list (market) / Einkaufsliste (Markt) | shopping | `list` | 384 px roll |
+| `builtin:shopping_list_store` | Shopping list with store and budget / Einkaufsliste mit Laden und Budget | shopping | `list`, `store`, `budget` | 384 px roll |
 | `builtin:snack_label` | Bold label / Plakatives Etikett | label | `name` | 384×192 px label |
 | `builtin:storage_label` | Storage label / Aufbewahrungs-Etikett | label | `name` | 384×192 px label |
 | `builtin:thank_you_note` | Thank-you note / Dankeschön-Zettel | fun | `to`, `message`, `signature` | 384 px roll |
@@ -67,7 +71,7 @@ Avoid names that collide with Python dictionary methods such as `items`, `keys` 
 
 An *entity* value shows a dropdown with every entity of the chosen domain (for example `weather`) and starts with the first one it finds, so a template written for `weather.home` works on every installation. Use `{{ state_translated(vars.weather) }}` to print the state in your Home Assistant language.
 
-A *to-do list* value shows a list picker when printing. Use it in a list element by choosing **To-do list → Ask when printing**, which fills the list's entity with `{{ vars.<name> }}`.
+A *to-do list* value shows a list picker when printing. Built-in shopping lists look for a list called like "shopping" or "Einkauf" and preselect it; a variable can carry such search words as `hints` in its JSON. Use it in a list element by choosing **To-do list → Ask when printing**, which fills the list's entity with `{{ vars.<name> }}`.
 
 ## Making your own
 

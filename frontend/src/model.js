@@ -133,23 +133,32 @@ export function moveItem(items, from, to) {
   return copy;
 }
 
-/** The entities of one domain as dropdown options, sorted by name. */
-export function entityOptions(hass, domain) {
+const matchesHint = (option, hints) => {
+  const haystack = `${option.value} ${option.label}`.toLowerCase();
+  return hints.some((hint) => haystack.includes(hint.toLowerCase()));
+};
+
+/** The entities of one domain as dropdown options: name matches for `hints` first, then by name. */
+export function entityOptions(hass, domain, hints = []) {
   return Object.entries(hass?.states ?? {})
     .filter(([id]) => id.startsWith(`${domain}.`))
     .map(([id, state]) => ({ value: id, label: state.attributes.friendly_name ?? id }))
-    .sort((a, b) => a.label.localeCompare(b.label));
+    .sort((a, b) => matchesHint(b, hints) - matchesHint(a, hints) || a.label.localeCompare(b.label));
 }
 
 /**
- * The default value of every variable a template declares. An entity variable whose
- * default doesn't exist in this installation starts with the first matching entity.
+ * The default value of every variable a template declares. An entity or to-do variable whose
+ * default doesn't exist in this installation starts with the entity that matches its hints
+ * (a shopping list is found by name); plain entity variables fall back to the first of the domain.
  */
 export function variableDefaults(variables = [], hass) {
   return Object.fromEntries(
-    variables.map(({ key, type, domain, default: value }) => {
-      if (type === "entity" && domain && !hass?.states?.[value]) {
-        return [key, entityOptions(hass, domain)[0]?.value ?? value ?? ""];
+    variables.map(({ key, type, domain, hints = [], default: value }) => {
+      const entityDomain = type === "todo" ? "todo" : type === "entity" ? domain : "";
+      if (entityDomain && !hass?.states?.[value]) {
+        const options = entityOptions(hass, entityDomain, hints);
+        const best = options.find((option) => matchesHint(option, hints)) ?? (type === "entity" ? options[0] : undefined);
+        return [key, best?.value ?? value ?? ""];
       }
       return [key, value ?? ""];
     }),

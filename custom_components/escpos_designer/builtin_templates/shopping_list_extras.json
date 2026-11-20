@@ -1,0 +1,180 @@
+{
+  "name": {
+    "en": "Shopping list + write-in lines",
+    "de": "Einkaufsliste + Notizzeilen"
+  },
+  "description": {
+    "en": "Your list followed by empty boxes for things you think of on the way.",
+    "de": "Deine Liste, gefolgt von leeren Kästchen für Dinge, die dir unterwegs einfallen."
+  },
+  "category": "shopping",
+  "tags": [
+    "einkauf",
+    "notes",
+    "notizen",
+    "shopping"
+  ],
+  "variables": [
+    {
+      "key": "list",
+      "type": "todo",
+      "label": {
+        "en": "Shopping list",
+        "de": "Einkaufsliste"
+      },
+      "default": "todo.shopping_list",
+      "hints": [
+        "shopping",
+        "einkauf",
+        "grocer",
+        "supermarkt"
+      ]
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🛒 Shopping",
+            "font": "elegant",
+            "size": 38
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "dotted"
+      },
+      {
+        "type": "list",
+        "source": {
+          "kind": "todo",
+          "entity_id": "{{ vars.list }}"
+        },
+        "style": "checkbox",
+        "size": 26,
+        "empty_text": "Nothing on the list",
+        "margin_top": 4
+      },
+      {
+        "type": "divider",
+        "style": "dashed",
+        "margin_top": 8
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Also…",
+            "font": "handwriting",
+            "size": 28
+          }
+        ],
+        "align": "left"
+      },
+      {
+        "type": "list",
+        "style": "checkbox",
+        "size": 26,
+        "line_spacing": 1.7,
+        "source": {
+          "kind": "static",
+          "items": [
+            {
+              "text": " "
+            },
+            {
+              "text": " "
+            },
+            {
+              "text": " "
+            },
+            {
+              "text": " "
+            },
+            {
+              "text": " "
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🛒 Einkauf",
+              "font": "elegant",
+              "size": 38
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "dotted"
+        },
+        {
+          "type": "list",
+          "source": {
+            "kind": "todo",
+            "entity_id": "{{ vars.list }}"
+          },
+          "style": "checkbox",
+          "size": 26,
+          "empty_text": "Die Liste ist leer",
+          "margin_top": 4
+        },
+        {
+          "type": "divider",
+          "style": "dashed",
+          "margin_top": 8
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Außerdem …",
+              "font": "handwriting",
+              "size": 28
+            }
+          ],
+          "align": "left"
+        },
+        {
+          "type": "list",
+          "style": "checkbox",
+          "size": 26,
+          "line_spacing": 1.7,
+          "source": {
+            "kind": "static",
+            "items": [
+              {
+                "text": " "
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": " "
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

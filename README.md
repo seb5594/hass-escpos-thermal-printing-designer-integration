@@ -34,7 +34,7 @@ Design labels, shopping lists, QR codes, best-before stickers and love letters i
 - 👀 **WYSIWYG preview.** The preview is rendered by the same engine that prints, so what you see is what comes out of the printer.
 - ✍️ **Rich text per segment.** Every segment of a line has its own font, size, bold, italic, underline, strikethrough or inverted look. Nine bundled fonts from clean to handwriting, and emoji.
 - 📝 **Markdown scripting.** Write a design like a note: headings, checklists, dividers, QR codes and barcodes, with a little HTML for sizes, fonts and alignment.
-- 🧩 **35 ready-made designs** in English and German: shopping and to-do lists, Wi-Fi guest card, contact QR, love letters (one framed with hearts), birthday and thank-you cards, weather, recipes, planners, name badges, best-before, freezer and medicine labels, receipts and more. Each asks only for the blanks, and your last prints are kept so you can repeat or save them.
+- 🧩 **39 ready-made designs** in English and German: shopping and to-do lists, Wi-Fi guest card, contact QR, love letters (one framed with hearts), birthday and thank-you cards, weather, recipes, planners, name badges, best-before, freezer and medicine labels, receipts and more. Each asks only for the blanks, and your last prints are kept so you can repeat or save them.
 - 🛒 **Print a to-do list directly.** Point a design at any `todo` entity, or print one from a script, a dashboard or your voice assistant.
 - 🏷️ **Labels and rolls.** Paper presets for 58 mm and 80 mm rolls and fixed-size labels, frames, rotation, mirroring and inversion.
 - 🕘 **Your last ten creations** are one click away when you start something new. Favorites, duplicates and your own designs are stored in Home Assistant.

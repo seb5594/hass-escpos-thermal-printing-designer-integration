@@ -1,0 +1,124 @@
+{
+  "name": {
+    "en": "Shopping list (market)",
+    "de": "Einkaufsliste (Markt)"
+  },
+  "description": {
+    "en": "A typewriter-style list for the weekly market.",
+    "de": "Eine Liste im Schreibmaschinen-Stil für den Wochenmarkt."
+  },
+  "category": "shopping",
+  "tags": [
+    "einkauf",
+    "market",
+    "markt",
+    "shopping"
+  ],
+  "variables": [
+    {
+      "key": "list",
+      "type": "todo",
+      "label": {
+        "en": "Shopping list",
+        "de": "Einkaufsliste"
+      },
+      "default": "todo.shopping_list",
+      "hints": [
+        "shopping",
+        "einkauf",
+        "grocer",
+        "supermarkt"
+      ]
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "MARKET LIST",
+            "font": "vintage",
+            "size": 36
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "datetime",
+        "format": "%A, %d.%m.",
+        "align": "center",
+        "font": "typewriter",
+        "size": 22
+      },
+      {
+        "type": "divider",
+        "style": "dashed",
+        "margin_top": 2
+      },
+      {
+        "type": "list",
+        "source": {
+          "kind": "todo",
+          "entity_id": "{{ vars.list }}"
+        },
+        "style": "dash",
+        "font": "typewriter",
+        "size": 26,
+        "empty_text": "Nothing to get!",
+        "margin_top": 4
+      }
+    ],
+    "frame": {
+      "style": "dashed",
+      "thickness": 3,
+      "padding": 10
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "MARKTLISTE",
+              "font": "vintage",
+              "size": 36
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "datetime",
+          "format": "%A, %d.%m.",
+          "align": "center",
+          "font": "typewriter",
+          "size": 22
+        },
+        {
+          "type": "divider",
+          "style": "dashed",
+          "margin_top": 2
+        },
+        {
+          "type": "list",
+          "source": {
+            "kind": "todo",
+            "entity_id": "{{ vars.list }}"
+          },
+          "style": "dash",
+          "font": "typewriter",
+          "size": 26,
+          "empty_text": "Nichts zu besorgen!",
+          "margin_top": 4
+        }
+      ],
+      "frame": {
+        "style": "dashed",
+        "thickness": 3,
+        "padding": 10
+      }
+    }
+  }
+}

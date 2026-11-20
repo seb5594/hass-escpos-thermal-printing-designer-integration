@@ -166,9 +166,9 @@ export class EdPrintDialog extends LitElement {
       case "date":
         return textField(label, value, (next) => this._setValue(variable.key, next), { type: "date" });
       case "todo":
-        return selectField(label, value, [{ value: "", label: t("print.choose_list") }, ...entityOptions(this.hass, "todo")], (next) => this._setValue(variable.key, next));
+        return selectField(label, value, [{ value: "", label: t("print.choose_list") }, ...entityOptions(this.hass, "todo", variable.hints)], (next) => this._setValue(variable.key, next));
       case "entity":
-        return selectField(label, value, [{ value: "", label: t("print.choose_entity") }, ...entityOptions(this.hass, variable.domain)], (next) => this._setValue(variable.key, next));
+        return selectField(label, value, [{ value: "", label: t("print.choose_entity") }, ...entityOptions(this.hass, variable.domain, variable.hints)], (next) => this._setValue(variable.key, next));
       default:
         return textField(label, value, (next) => this._setValue(variable.key, next));
     }

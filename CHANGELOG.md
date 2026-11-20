@@ -11,8 +11,9 @@ Versions follow `YYYY.MM.DD[.BUILD]`: the first build of a day has no suffix.
 - Weather texts use `state_translated()` and follow the Home Assistant language.
 - New **Recently printed** filter: the last prints (10 by default, configurable) with their values, to print again or save as a template.
 - New frame styles `hearts` and `stars`.
-- 15 new designs: love letter with hearts, birthday card, thank-you note, invitation, quote card, family note, weather, sticker chart, daily planner, packing list, recipe card, meal plan, name badge, plant tag and parcel label.
+- 19 new designs: love letter with hearts, birthday card, thank-you note, invitation, quote card, family note, weather, sticker chart, daily planner, packing list, recipe card, meal plan, name badge, plant tag and parcel label.
 - Long-text values get a larger input field.
+- Four more shopping lists (market, bold, with write-in lines, with store and budget). Shopping lists preselect the to-do list whose name looks like a shopping list.
 
 ## 2026.11.19.1
 
