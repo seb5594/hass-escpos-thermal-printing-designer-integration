@@ -1,0 +1,176 @@
+{
+  "name": {
+    "en": "Weather today",
+    "de": "Wetter heute"
+  },
+  "description": {
+    "en": "Condition, temperature and humidity of a weather entity.",
+    "de": "Zustand, Temperatur und Luftfeuchte einer Wetter-Entität."
+  },
+  "category": "fun",
+  "tags": [
+    "forecast",
+    "weather",
+    "wetter"
+  ],
+  "variables": [
+    {
+      "key": "weather",
+      "type": "entity",
+      "label": {
+        "en": "Weather entity",
+        "de": "Wetter-Entität"
+      },
+      "default": "weather.home",
+      "domain": "weather"
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ {'sunny':'☀️','clear-night':'🌙','cloudy':'☁️','partlycloudy':'⛅','rainy':'🌧️','pouring':'🌧️','snowy':'❄️','snowy-rainy':'🌨️','fog':'🌫️','windy':'💨','windy-variant':'💨','lightning':'⚡','lightning-rainy':'⛈️','hail':'🌨️','exceptional':'⚠️'}.get(states(vars.weather), '🌡️') }}",
+            "size": 96
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ state_translated(vars.weather) }}",
+            "font": "script",
+            "size": 40
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "wave",
+        "margin_top": 4
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ state_attr(vars.weather, 'temperature') | default('–', true) }}{{ state_attr(vars.weather, 'temperature_unit') or '°' }}",
+            "font": "display",
+            "size": 84
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Humidity: {{ state_attr(vars.weather, 'humidity') | default('–', true) }} %",
+            "size": 24
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Wind: {{ state_attr(vars.weather, 'wind_speed') | default('–', true) }} {{ state_attr(vars.weather, 'wind_speed_unit') or '' }}",
+            "size": 24
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "datetime",
+        "format": "%d.%m.%Y",
+        "align": "center",
+        "size": 18,
+        "margin_top": 8
+      }
+    ],
+    "frame": {
+      "style": "rounded",
+      "thickness": 3,
+      "padding": 10
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ {'sunny':'☀️','clear-night':'🌙','cloudy':'☁️','partlycloudy':'⛅','rainy':'🌧️','pouring':'🌧️','snowy':'❄️','snowy-rainy':'🌨️','fog':'🌫️','windy':'💨','windy-variant':'💨','lightning':'⚡','lightning-rainy':'⛈️','hail':'🌨️','exceptional':'⚠️'}.get(states(vars.weather), '🌡️') }}",
+              "size": 96
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ state_translated(vars.weather) }}",
+              "font": "script",
+              "size": 40
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "wave",
+          "margin_top": 4
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ state_attr(vars.weather, 'temperature') | default('–', true) }}{{ state_attr(vars.weather, 'temperature_unit') or '°' }}",
+              "font": "display",
+              "size": 84
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Luftfeuchte: {{ state_attr(vars.weather, 'humidity') | default('–', true) }} %",
+              "size": 24
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Wind: {{ state_attr(vars.weather, 'wind_speed') | default('–', true) }} {{ state_attr(vars.weather, 'wind_speed_unit') or '' }}",
+              "size": 24
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "datetime",
+          "format": "%d.%m.%Y",
+          "align": "center",
+          "size": 18,
+          "margin_top": 8
+        }
+      ],
+      "frame": {
+        "style": "rounded",
+        "thickness": 3,
+        "padding": 10
+      }
+    }
+  }
+}

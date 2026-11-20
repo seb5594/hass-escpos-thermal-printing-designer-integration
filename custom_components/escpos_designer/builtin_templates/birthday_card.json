@@ -1,0 +1,218 @@
+{
+  "name": {
+    "en": "Birthday card",
+    "de": "Geburtstagskarte"
+  },
+  "description": {
+    "en": "A festive card with the name, the age and a wish.",
+    "de": "Eine festliche Karte mit Name, Alter und Wunsch."
+  },
+  "category": "fun",
+  "tags": [
+    "birthday",
+    "card",
+    "geburtstag",
+    "party"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Name",
+        "de": "Name"
+      },
+      "default": {
+        "en": "Alex",
+        "de": "Alex"
+      }
+    },
+    {
+      "key": "age",
+      "type": "number",
+      "label": {
+        "en": "Age",
+        "de": "Alter"
+      },
+      "default": "30"
+    },
+    {
+      "key": "wish",
+      "type": "multiline",
+      "label": {
+        "en": "Wish",
+        "de": "Wunsch"
+      },
+      "default": {
+        "en": "Stay as wonderful as you are!",
+        "de": "Bleib so wunderbar, wie du bist!"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🎂",
+            "size": 80
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Happy Birthday",
+            "font": "script",
+            "size": 38
+          }
+        ],
+        "align": "center",
+        "margin_top": 4
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.name }}",
+            "font": "display",
+            "size": 72
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "turns {{ vars.age }} today",
+            "font": "elegant",
+            "size": 26
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "stars",
+        "margin_top": 6
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.wish }}",
+            "font": "handwriting",
+            "size": 32
+          }
+        ],
+        "align": "center",
+        "line_spacing": 1.15,
+        "margin_top": 6
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🎈 🎁 🎉",
+            "size": 50
+          }
+        ],
+        "align": "center",
+        "margin_top": 8
+      }
+    ],
+    "frame": {
+      "style": "stars",
+      "thickness": 4,
+      "padding": 12
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🎂",
+              "size": 80
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Alles Gute zum Geburtstag",
+              "font": "script",
+              "size": 38
+            }
+          ],
+          "align": "center",
+          "margin_top": 4
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.name }}",
+              "font": "display",
+              "size": 72
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "wird heute {{ vars.age }}",
+              "font": "elegant",
+              "size": 26
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "stars",
+          "margin_top": 6
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.wish }}",
+              "font": "handwriting",
+              "size": 32
+            }
+          ],
+          "align": "center",
+          "line_spacing": 1.15,
+          "margin_top": 6
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🎈 🎁 🎉",
+              "size": 50
+            }
+          ],
+          "align": "center",
+          "margin_top": 8
+        }
+      ],
+      "frame": {
+        "style": "stars",
+        "thickness": 4,
+        "padding": 12
+      }
+    }
+  }
+}

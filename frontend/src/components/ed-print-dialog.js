@@ -5,7 +5,7 @@ import "@material/web/dialog/dialog.js";
 import "@material/web/progress/linear-progress.js";
 import * as icons from "../icons.js";
 import { errorMessage } from "../api.js";
-import { debounce, variableDefaults } from "../model.js";
+import { debounce, entityOptions, variableDefaults } from "../model.js";
 import { controlStyles, selectField, sliderField, switchField, textField } from "../controls.js";
 import "./ed-icon.js";
 import "./ed-preview.js";
@@ -25,6 +25,7 @@ export class EdPrintDialog extends LitElement {
     document: { attribute: false },
     templateId: { type: String },
     variables: { attribute: false },
+    name: { type: String },
     _values: { state: true },
     _printer: { state: true },
     _copies: { state: true },
@@ -50,7 +51,7 @@ export class EdPrintDialog extends LitElement {
         --md-dialog-container-color: var(--ed-surface);
         width: min(960px, 100vw);
         max-width: 100vw;
-        max-height: 100dvh;
+        max-height: calc(100dvh - 24px - var(--ed-bottom-inset));
       }
       .body {
         display: grid;
@@ -58,9 +59,12 @@ export class EdPrintDialog extends LitElement {
         gap: 20px;
         min-height: 320px;
       }
+      .body > * {
+        min-width: 0;
+      }
       @media (max-width: 720px) {
         .body {
-          grid-template-columns: 1fr;
+          grid-template-columns: minmax(0, 1fr);
         }
         ed-preview {
           min-height: 280px;
@@ -95,7 +99,7 @@ export class EdPrintDialog extends LitElement {
 
   willUpdate(changed) {
     if (changed.has("open") && this.open) {
-      this._values = variableDefaults(this.variables);
+      this._values = variableDefaults(this.variables, this.hass);
       this._printer = this.status?.printers?.[0]?.id ?? "";
       this._copies = 1;
       this._error = "";
@@ -129,6 +133,8 @@ export class EdPrintDialog extends LitElement {
         document: this.document,
         variables: this._values,
         copies: this._copies,
+        name: this.name ?? "",
+        variable_defs: this.variables ?? [],
         ...(this._printer ? { printer: this._printer } : {}),
         ...(this.templateId ? { template_id: this.templateId } : {}),
       });
@@ -146,18 +152,13 @@ export class EdPrintDialog extends LitElement {
     this.dispatchEvent(new CustomEvent("closed", { bubbles: true, composed: true }));
   }
 
-  _todoOptions() {
-    const ids = Object.keys(this.hass?.states ?? {}).filter((id) => id.startsWith("todo."));
-    return ids.map((id) => ({ value: id, label: this.hass.states[id].attributes.friendly_name ?? id }));
-  }
-
   _variableField(variable) {
     const { t } = this;
     const label = variable.label || variable.key;
     const value = this._values?.[variable.key] ?? "";
     switch (variable.type) {
       case "multiline":
-        return textField(label, value, (next) => this._setValue(variable.key, next), { multiline: true, rows: 4 });
+        return textField(label, value, (next) => this._setValue(variable.key, next), { multiline: true, rows: 8 });
       case "number":
         return textField(label, String(value), (next) => this._setValue(variable.key, next === "" ? "" : Number(next)), { type: "number" });
       case "boolean":
@@ -165,7 +166,9 @@ export class EdPrintDialog extends LitElement {
       case "date":
         return textField(label, value, (next) => this._setValue(variable.key, next), { type: "date" });
       case "todo":
-        return selectField(label, value, [{ value: "", label: t("print.choose_list") }, ...this._todoOptions()], (next) => this._setValue(variable.key, next));
+        return selectField(label, value, [{ value: "", label: t("print.choose_list") }, ...entityOptions(this.hass, "todo")], (next) => this._setValue(variable.key, next));
+      case "entity":
+        return selectField(label, value, [{ value: "", label: t("print.choose_entity") }, ...entityOptions(this.hass, variable.domain)], (next) => this._setValue(variable.key, next));
       default:
         return textField(label, value, (next) => this._setValue(variable.key, next));
     }

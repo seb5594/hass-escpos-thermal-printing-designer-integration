@@ -1,0 +1,157 @@
+{
+  "name": {
+    "en": "Family note",
+    "de": "Familien-Notiz"
+  },
+  "description": {
+    "en": "A bold message for the fridge door.",
+    "de": "Eine auffällige Nachricht für die Kühlschranktür."
+  },
+  "category": "fun",
+  "tags": [
+    "familie",
+    "family",
+    "fridge",
+    "kühlschrank",
+    "note",
+    "notiz"
+  ],
+  "variables": [
+    {
+      "key": "title",
+      "type": "text",
+      "label": {
+        "en": "Headline",
+        "de": "Überschrift"
+      },
+      "default": {
+        "en": "Please note",
+        "de": "Bitte beachten"
+      }
+    },
+    {
+      "key": "message",
+      "type": "multiline",
+      "label": {
+        "en": "Message",
+        "de": "Nachricht"
+      },
+      "default": {
+        "en": "Dinner is in the oven – 20 minutes at 180 °.",
+        "de": "Das Essen ist im Ofen – 20 Minuten bei 180 °."
+      }
+    },
+    {
+      "key": "from",
+      "type": "text",
+      "label": {
+        "en": "From",
+        "de": "Von"
+      },
+      "default": {
+        "en": "Mom",
+        "de": "Mama"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": " {{ vars.title }} ",
+            "font": "display",
+            "size": 58,
+            "invert": true
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.message }}",
+            "font": "handwriting",
+            "size": 34
+          }
+        ],
+        "align": "center",
+        "line_spacing": 1.15,
+        "margin_top": 10
+      },
+      {
+        "type": "divider",
+        "style": "dashed",
+        "margin_top": 6
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.from }} · {{ now().strftime('%d.%m. %H:%M') }}",
+            "size": 20
+          }
+        ],
+        "align": "right"
+      }
+    ],
+    "frame": {
+      "style": "dashed",
+      "thickness": 3,
+      "padding": 10
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": " {{ vars.title }} ",
+              "font": "display",
+              "size": 58,
+              "invert": true
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.message }}",
+              "font": "handwriting",
+              "size": 34
+            }
+          ],
+          "align": "center",
+          "line_spacing": 1.15,
+          "margin_top": 10
+        },
+        {
+          "type": "divider",
+          "style": "dashed",
+          "margin_top": 6
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.from }} · {{ now().strftime('%d.%m. %H:%M') }}",
+              "size": 20
+            }
+          ],
+          "align": "right"
+        }
+      ],
+      "frame": {
+        "style": "dashed",
+        "thickness": 3,
+        "padding": 10
+      }
+    }
+  }
+}

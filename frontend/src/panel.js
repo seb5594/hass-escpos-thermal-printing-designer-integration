@@ -81,7 +81,7 @@ export class EscposDesignerPanel extends LitElement {
       .toast {
         position: fixed;
         left: 50%;
-        bottom: 24px;
+        bottom: calc(24px + var(--ed-bottom-inset));
         transform: translateX(-50%);
         z-index: 20;
         max-width: calc(100vw - 32px);
@@ -156,9 +156,14 @@ export class EscposDesignerPanel extends LitElement {
   async _open(id, { asCopy = false } = {}) {
     try {
       const template = await this.api.getTemplate(id);
-      this._template = asCopy
-        ? { ...template, id: undefined, builtin: false, name: `${template.name} (${this.t("gallery.copy")})`, isNew: true }
-        : template;
+      if (template.history) {
+        // A printed design is read-only: editing it starts a new template.
+        this._template = { ...template, id: undefined, builtin: false, isNew: true };
+      } else {
+        this._template = asCopy
+          ? { ...template, id: undefined, builtin: false, name: `${template.name} (${this.t("gallery.copy")})`, isNew: true }
+          : template;
+      }
       this._view = "editor";
     } catch (error) {
       this._notify(errorMessage(error), true);
@@ -217,6 +222,28 @@ export class EscposDesignerPanel extends LitElement {
     }
   }
 
+  async _saveHistoryEntry(id) {
+    try {
+      const entry = await this.api.getTemplate(id);
+      const { name, description, variables, document } = entry;
+      await this.api.saveTemplate({ name, description, category: "custom", tags: [], variables, document });
+      this._notify(this.t("toast.history_saved"));
+      await this._refreshLibrary();
+    } catch (error) {
+      this._notify(errorMessage(error), true);
+    }
+  }
+
+  async _removeHistoryEntry(id) {
+    try {
+      await this.api.deleteTemplate(id);
+      this._notify(this.t("toast.history_removed"));
+      await this._refreshLibrary();
+    } catch (error) {
+      this._notify(errorMessage(error), true);
+    }
+  }
+
   async _printFromGallery(id) {
     try {
       this._printing = await this.api.getTemplate(id);
@@ -267,6 +294,9 @@ export class EscposDesignerPanel extends LitElement {
       .api=${this.api}
       .status=${this._status}
       .library=${this._library}
+      .hass=${this.hass}
+      @save-history=${(event) => this._saveHistoryEntry(event.detail.id)}
+      @delete-history=${(event) => this._removeHistoryEntry(event.detail.id)}
       @open-template=${(event) => this._open(event.detail.id)}
       @duplicate-template=${(event) => this._open(event.detail.id, { asCopy: true })}
       @print-template=${(event) => this._printFromGallery(event.detail.id)}
@@ -289,7 +319,7 @@ export class EscposDesignerPanel extends LitElement {
         <h1>${t("app.title")}</h1>
       </header>
       <main>${this._body()}</main>
-      <ed-footer .t=${t} .version=${this._status?.version}></ed-footer>
+      <ed-footer .t=${t} ?fab=${this._view === "gallery"} .version=${this._status?.version}></ed-footer>
       ${this._printing
         ? html`<ed-print-dialog
             .t=${t}
@@ -298,8 +328,9 @@ export class EscposDesignerPanel extends LitElement {
             .status=${this._status}
             .open=${true}
             .document=${this._printing.document}
-            .templateId=${this._printing.builtin ? "" : this._printing.id}
+            .templateId=${this._printing.builtin || this._printing.history ? "" : this._printing.id}
             .variables=${this._printing.variables}
+            .name=${this._printing.name}
             @closed=${() => (this._printing = undefined)}
             @printed=${() => this._notify(this.t("toast.printed"))}
           ></ed-print-dialog>`

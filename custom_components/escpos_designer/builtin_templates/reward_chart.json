@@ -1,0 +1,214 @@
+{
+  "name": {
+    "en": "Sticker chart",
+    "de": "Belohnungskarte"
+  },
+  "description": {
+    "en": "Ten boxes to tick off on the way to a reward.",
+    "de": "Zehn Kästchen auf dem Weg zu einer Belohnung."
+  },
+  "category": "fun",
+  "tags": [
+    "belohnung",
+    "kids",
+    "kinder",
+    "reward",
+    "sticker"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Name",
+        "de": "Name"
+      },
+      "default": {
+        "en": "Sam",
+        "de": "Sam"
+      }
+    },
+    {
+      "key": "goal",
+      "type": "text",
+      "label": {
+        "en": "Goal",
+        "de": "Ziel"
+      },
+      "default": {
+        "en": "A trip to the zoo",
+        "de": "Ein Ausflug in den Zoo"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "⭐ {{ vars.name }} ⭐",
+            "font": "script",
+            "size": 44
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "stars"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Reward: {{ vars.goal }}",
+            "font": "handwriting",
+            "size": 30
+          }
+        ],
+        "align": "center",
+        "margin_top": 4,
+        "margin_bottom": 6
+      },
+      {
+        "type": "list",
+        "style": "checkbox",
+        "size": 30,
+        "source": {
+          "kind": "static",
+          "items": [
+            {
+              "text": "Day 1"
+            },
+            {
+              "text": "Day 2"
+            },
+            {
+              "text": "Day 3"
+            },
+            {
+              "text": "Day 4"
+            },
+            {
+              "text": "Day 5"
+            },
+            {
+              "text": "Day 6"
+            },
+            {
+              "text": "Day 7"
+            },
+            {
+              "text": "Day 8"
+            },
+            {
+              "text": "Day 9"
+            },
+            {
+              "text": "Day 10"
+            }
+          ]
+        },
+        "line_spacing": 1.5
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🏆",
+            "size": 64
+          }
+        ],
+        "align": "center",
+        "margin_top": 6
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "⭐ {{ vars.name }} ⭐",
+              "font": "script",
+              "size": 44
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "stars"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Belohnung: {{ vars.goal }}",
+              "font": "handwriting",
+              "size": 30
+            }
+          ],
+          "align": "center",
+          "margin_top": 4,
+          "margin_bottom": 6
+        },
+        {
+          "type": "list",
+          "style": "checkbox",
+          "size": 30,
+          "source": {
+            "kind": "static",
+            "items": [
+              {
+                "text": "Tag 1"
+              },
+              {
+                "text": "Tag 2"
+              },
+              {
+                "text": "Tag 3"
+              },
+              {
+                "text": "Tag 4"
+              },
+              {
+                "text": "Tag 5"
+              },
+              {
+                "text": "Tag 6"
+              },
+              {
+                "text": "Tag 7"
+              },
+              {
+                "text": "Tag 8"
+              },
+              {
+                "text": "Tag 9"
+              },
+              {
+                "text": "Tag 10"
+              }
+            ]
+          },
+          "line_spacing": 1.5
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🏆",
+              "size": 64
+            }
+          ],
+          "align": "center",
+          "margin_top": 6
+        }
+      ]
+    }
+  }
+}

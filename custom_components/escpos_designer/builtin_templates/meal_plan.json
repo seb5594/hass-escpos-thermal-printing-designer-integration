@@ -1,0 +1,84 @@
+{
+  "name": {
+    "en": "Meal plan",
+    "de": "Wochenplan Essen"
+  },
+  "description": {
+    "en": "What is cooking this week, one line per day.",
+    "de": "Was diese Woche auf den Tisch kommt, eine Zeile pro Tag."
+  },
+  "category": "food",
+  "tags": [
+    "essen",
+    "meal",
+    "menu",
+    "plan",
+    "woche"
+  ],
+  "variables": [
+    {
+      "key": "plan",
+      "type": "multiline",
+      "label": {
+        "en": "Meals (one per line)",
+        "de": "Gerichte (eins pro Zeile)"
+      },
+      "default": {
+        "en": "Pasta\nSoup\nPizza\nSalad\nCurry\nLeftovers\nBarbecue",
+        "de": "Nudeln\nSuppe\nPizza\nSalat\nCurry\nReste\nGrillen"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🍽️ This week",
+            "font": "elegant",
+            "size": 38
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "dotted"
+      },
+      {
+        "type": "markdown",
+        "source": "{% set days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] %}{% for line in vars.plan.splitlines() if line.strip() %}**{{ days[loop.index0] if loop.index0 < 7 else '' }}** {{ line | trim }}\n{% endfor %}",
+        "size": 28,
+        "line_spacing": 1.0
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🍽️ Diese Woche",
+              "font": "elegant",
+              "size": 38
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "dotted"
+        },
+        {
+          "type": "markdown",
+          "source": "{% set days = ['Mo','Di','Mi','Do','Fr','Sa','So'] %}{% for line in vars.plan.splitlines() if line.strip() %}**{{ days[loop.index0] if loop.index0 < 7 else '' }}** {{ line | trim }}\n{% endfor %}",
+          "size": 28,
+          "line_spacing": 1.0
+        }
+      ]
+    }
+  }
+}

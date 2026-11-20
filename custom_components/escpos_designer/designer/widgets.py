@@ -9,6 +9,7 @@ from __future__ import annotations
 import base64
 import binascii
 import math
+from functools import cache
 from io import BytesIO
 from typing import Any
 
@@ -214,6 +215,18 @@ def _flatten(image: Image.Image) -> Image.Image:
 # --- frames -----------------------------------------------------------------
 
 
+MOTIF_FRAMES = ("hearts", "stars")
+
+
+def frame_extent(style: str, thickness: int) -> int:
+    """How far the frame reaches into the page: its line width, or the size of its motifs."""
+    return motif_size(thickness) if style in MOTIF_FRAMES else thickness
+
+
+def motif_size(thickness: int) -> int:
+    return thickness * 2 + 8
+
+
 def draw_frame(canvas: Image.Image, style: str, thickness: int) -> None:
     """Draw a decorative border along the edge of ``canvas`` (in place)."""
     if style == "none":
@@ -242,6 +255,50 @@ def draw_frame(canvas: Image.Image, style: str, thickness: int) -> None:
     elif style == "ticket":
         draw.rounded_rectangle(box, radius=radius, outline=0, width=thickness)
         _punch_notches(draw, canvas.size, radius // 2 + 2)
+    elif style in MOTIF_FRAMES:
+        _draw_motif_border(canvas, style, motif_size(thickness))
+
+
+@cache
+def _motif_mask(motif: str, size: int) -> Image.Image:
+    """An anti-aliased-then-hard heart or star as a paste mask (255 = ink)."""
+    scale = 6
+    big = size * scale
+    points: list[tuple[float, float]] = []
+    if motif == "hearts":
+        for step in range(72):
+            t = step * math.tau / 72
+            x = 16 * math.sin(t) ** 3
+            y = -(13 * math.cos(t) - 5 * math.cos(2 * t) - 2 * math.cos(3 * t) - math.cos(4 * t))
+            points.append((big / 2 + x * big / 34, big / 2.1 + y * big / 34))
+    else:
+        for step in range(10):
+            radius = big / 2 if step % 2 == 0 else big / 4.4
+            angle = -math.pi / 2 + step * math.pi / 5
+            points.append((big / 2 + radius * math.cos(angle), big / 2 + radius * math.sin(angle)))
+    mask = Image.new("L", (big, big), 0)
+    ImageDraw.Draw(mask).polygon(points, fill=255)
+    return mask.resize((size, size), Image.Resampling.LANCZOS).point(
+        lambda v: 255 if v > 127 else 0
+    )
+
+
+def _draw_motif_border(canvas: Image.Image, motif: str, size: int) -> None:
+    """Line the canvas edge with a closed chain of hearts or stars."""
+    width, height = canvas.size
+    mask = _motif_mask(motif, size)
+    step = size + max(2, size // 6)
+
+    def positions(length: int) -> list[int]:
+        count = max(2, (length - size) // step + 1)
+        return [round(index * (length - size) / (count - 1)) for index in range(count)]
+
+    for x in positions(width):
+        for y in (0, height - size):
+            canvas.paste(0, (x, y), mask)
+    for y in positions(height):
+        for x in (0, width - size):
+            canvas.paste(0, (x, y), mask)
 
 
 def _draw_dashed_box(

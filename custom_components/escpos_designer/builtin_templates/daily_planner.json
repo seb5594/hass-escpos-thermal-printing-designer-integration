@@ -1,0 +1,220 @@
+{
+  "name": {
+    "en": "Daily planner",
+    "de": "Tagesplaner"
+  },
+  "description": {
+    "en": "The date, three priorities and an empty checklist.",
+    "de": "Datum, drei Prioritäten und eine leere Checkliste."
+  },
+  "category": "todo",
+  "tags": [
+    "day",
+    "plan",
+    "planner",
+    "tag",
+    "tagesplan"
+  ],
+  "variables": [
+    {
+      "key": "first",
+      "type": "text",
+      "label": {
+        "en": "Priority 1",
+        "de": "Priorität 1"
+      },
+      "default": {
+        "en": "The most important thing",
+        "de": "Das Wichtigste"
+      }
+    },
+    {
+      "key": "second",
+      "type": "text",
+      "label": {
+        "en": "Priority 2",
+        "de": "Priorität 2"
+      },
+      "default": ""
+    },
+    {
+      "key": "third",
+      "type": "text",
+      "label": {
+        "en": "Priority 3",
+        "de": "Priorität 3"
+      },
+      "default": ""
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "datetime",
+        "format": "%A",
+        "align": "left",
+        "font": "display",
+        "size": 56
+      },
+      {
+        "type": "datetime",
+        "format": "%d. %B %Y",
+        "align": "left",
+        "size": 22,
+        "margin_bottom": 4
+      },
+      {
+        "type": "divider",
+        "style": "solid"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Top 3",
+            "font": "display",
+            "size": 32
+          }
+        ],
+        "align": "left",
+        "margin_top": 4
+      },
+      {
+        "type": "markdown",
+        "source": "1. {{ vars.first }}\n2. {{ vars.second }}\n3. {{ vars.third }}",
+        "size": 26
+      },
+      {
+        "type": "divider",
+        "style": "dotted",
+        "margin_top": 4
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "To do",
+            "font": "display",
+            "size": 32
+          }
+        ],
+        "align": "left"
+      },
+      {
+        "type": "list",
+        "style": "checkbox",
+        "size": 26,
+        "line_spacing": 1.6,
+        "source": {
+          "kind": "static",
+          "items": [
+            {
+              "text": " "
+            },
+            {
+              "text": " "
+            },
+            {
+              "text": " "
+            },
+            {
+              "text": " "
+            },
+            {
+              "text": " "
+            },
+            {
+              "text": " "
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "datetime",
+          "format": "%A",
+          "align": "left",
+          "font": "display",
+          "size": 56
+        },
+        {
+          "type": "datetime",
+          "format": "%d. %B %Y",
+          "align": "left",
+          "size": 22,
+          "margin_bottom": 4
+        },
+        {
+          "type": "divider",
+          "style": "solid"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Top 3",
+              "font": "display",
+              "size": 32
+            }
+          ],
+          "align": "left",
+          "margin_top": 4
+        },
+        {
+          "type": "markdown",
+          "source": "1. {{ vars.first }}\n2. {{ vars.second }}\n3. {{ vars.third }}",
+          "size": 26
+        },
+        {
+          "type": "divider",
+          "style": "dotted",
+          "margin_top": 4
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Zu erledigen",
+              "font": "display",
+              "size": 32
+            }
+          ],
+          "align": "left"
+        },
+        {
+          "type": "list",
+          "style": "checkbox",
+          "size": 26,
+          "line_spacing": 1.6,
+          "source": {
+            "kind": "static",
+            "items": [
+              {
+                "text": " "
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": " "
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

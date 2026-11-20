@@ -1,0 +1,144 @@
+{
+  "name": {
+    "en": "Quote card",
+    "de": "Spruchkarte"
+  },
+  "description": {
+    "en": "A thought for the fridge or the desk.",
+    "de": "Ein Gedanke für Kühlschrank oder Schreibtisch."
+  },
+  "category": "fun",
+  "tags": [
+    "quote",
+    "spruch",
+    "zitat"
+  ],
+  "variables": [
+    {
+      "key": "quote",
+      "type": "multiline",
+      "label": {
+        "en": "Quote",
+        "de": "Spruch"
+      },
+      "default": {
+        "en": "Small steps still move you forward.",
+        "de": "Kleine Schritte bringen dich auch voran."
+      }
+    },
+    {
+      "key": "author",
+      "type": "text",
+      "label": {
+        "en": "Author",
+        "de": "Urheber"
+      },
+      "default": {
+        "en": "Unknown",
+        "de": "Unbekannt"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "“",
+            "font": "elegant",
+            "size": 96
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.quote }}",
+            "font": "elegant",
+            "size": 34
+          }
+        ],
+        "align": "center",
+        "line_spacing": 1.2
+      },
+      {
+        "type": "divider",
+        "style": "dotted",
+        "width_pct": 40,
+        "margin_top": 8
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.author }}",
+            "font": "handwriting",
+            "size": 28
+          }
+        ],
+        "align": "center",
+        "margin_top": 2
+      }
+    ],
+    "frame": {
+      "style": "brackets",
+      "thickness": 3,
+      "padding": 12
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "“",
+              "font": "elegant",
+              "size": 96
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.quote }}",
+              "font": "elegant",
+              "size": 34
+            }
+          ],
+          "align": "center",
+          "line_spacing": 1.2
+        },
+        {
+          "type": "divider",
+          "style": "dotted",
+          "width_pct": 40,
+          "margin_top": 8
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.author }}",
+              "font": "handwriting",
+              "size": 28
+            }
+          ],
+          "align": "center",
+          "margin_top": 2
+        }
+      ],
+      "frame": {
+        "style": "brackets",
+        "thickness": 3,
+        "padding": 12
+      }
+    }
+  }
+}

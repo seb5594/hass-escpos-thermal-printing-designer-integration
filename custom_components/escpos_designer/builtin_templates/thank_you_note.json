@@ -1,0 +1,201 @@
+{
+  "name": {
+    "en": "Thank-you note",
+    "de": "Dankeschön-Zettel"
+  },
+  "description": {
+    "en": "A warm thank-you with room for a few sentences.",
+    "de": "Ein herzliches Dankeschön mit Platz für ein paar Sätze."
+  },
+  "category": "fun",
+  "tags": [
+    "danke",
+    "gratitude",
+    "note",
+    "thanks"
+  ],
+  "variables": [
+    {
+      "key": "to",
+      "type": "text",
+      "label": {
+        "en": "To",
+        "de": "An"
+      },
+      "default": {
+        "en": "you",
+        "de": "dich"
+      }
+    },
+    {
+      "key": "message",
+      "type": "multiline",
+      "label": {
+        "en": "Message",
+        "de": "Nachricht"
+      },
+      "default": {
+        "en": "Thank you so much for your help – it meant the world to me.",
+        "de": "Vielen Dank für deine Hilfe – sie bedeutet mir die Welt."
+      }
+    },
+    {
+      "key": "signature",
+      "type": "text",
+      "label": {
+        "en": "From",
+        "de": "Von"
+      },
+      "default": {
+        "en": "Alex",
+        "de": "Alex"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Thank you",
+            "font": "script",
+            "size": 56
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.to }}",
+            "font": "elegant",
+            "size": 30
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "wave",
+        "margin_top": 4
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.message }}",
+            "font": "handwriting",
+            "size": 32
+          }
+        ],
+        "align": "left",
+        "line_spacing": 1.15,
+        "margin_top": 6
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "– {{ vars.signature }}",
+            "font": "script",
+            "size": 30
+          }
+        ],
+        "align": "right",
+        "margin_top": 8
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🌻",
+            "size": 48
+          }
+        ],
+        "align": "center",
+        "margin_top": 4
+      }
+    ],
+    "frame": {
+      "style": "rounded",
+      "thickness": 3,
+      "padding": 12
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Danke",
+              "font": "script",
+              "size": 56
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.to }}",
+              "font": "elegant",
+              "size": 30
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "wave",
+          "margin_top": 4
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.message }}",
+              "font": "handwriting",
+              "size": 32
+            }
+          ],
+          "align": "left",
+          "line_spacing": 1.15,
+          "margin_top": 6
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "– {{ vars.signature }}",
+              "font": "script",
+              "size": 30
+            }
+          ],
+          "align": "right",
+          "margin_top": 8
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🌻",
+              "size": 48
+            }
+          ],
+          "align": "center",
+          "margin_top": 4
+        }
+      ],
+      "frame": {
+        "style": "rounded",
+        "thickness": 3,
+        "padding": 12
+      }
+    }
+  }
+}

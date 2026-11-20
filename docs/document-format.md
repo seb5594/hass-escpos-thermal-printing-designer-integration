@@ -21,7 +21,7 @@ A design is plain JSON, so it can be stored, versioned and edited by hand. The d
 |-----|--------|---------|
 | `paper.width` | 64–1024 dots (384 is a 58 mm roll, 576 an 80 mm roll) | 384 |
 | `paper.height` | `null` for a continuous roll, or 16–4096 dots for a fixed-size label | `null` |
-| `frame.style` | `none`, `line`, `double`, `rounded`, `dashed`, `dotted`, `brackets`, `ticket` | `none` |
+| `frame.style` | `none`, `line`, `double`, `rounded`, `dashed`, `dotted`, `brackets`, `ticket`, `hearts`, `stars` | `none` |
 | `frame.thickness`, `frame.padding` | 1–12, 0–80 | 3, 10 |
 | `options.cut` | `none`, `partial`, `full` | `partial` |
 | `options.feed` | 0–30 lines after printing | 2 |

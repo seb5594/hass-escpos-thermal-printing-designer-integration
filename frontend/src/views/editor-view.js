@@ -72,7 +72,7 @@ export class EditorView extends LitElement {
         flex-direction: column;
         height: calc(100dvh - var(--ed-header-height, 56px) - var(--ed-footer-peek, 0px));
         min-height: 560px;
-        padding: 0 12px 8px;
+        padding: 0 12px calc(8px + var(--ed-bottom-inset, 0px));
       }
       .bar {
         display: flex;
@@ -129,6 +129,7 @@ export class EditorView extends LitElement {
         overflow: hidden;
       }
       .pane.preview {
+        flex: 1;
         background: transparent;
         border: 0;
       }
@@ -285,7 +286,7 @@ export class EditorView extends LitElement {
     const token = ++this._token;
     this._loading = true;
     try {
-      const result = await this.api.preview(this._document, variableDefaults(this._meta.variables));
+      const result = await this.api.preview(this._document, variableDefaults(this._meta.variables, this.hass));
       if (token !== this._token) return;
       this._preview = result;
       this._previewError = "";
@@ -329,17 +330,13 @@ export class EditorView extends LitElement {
 
   // --- rendering --------------------------------------------------------------------
 
-  _tabs(names) {
+  /** A tab bar over `names`; the chosen tab lives in the state property called `key`. */
+  _tabs(names, key) {
     const { t } = this;
-    const current = names === this._leftNames ? this._leftTab : this._tab;
-    return html`<md-tabs @change=${(event) => this._setTab(names, names[event.target.activeTabIndex])}>
+    const current = this[key];
+    return html`<md-tabs @change=${(event) => (this[key] = names[event.target.activeTabIndex])}>
       ${names.map((name) => html`<md-primary-tab ?active=${current === name}>${t(`editor.tab.${name}`)}</md-primary-tab>`)}
     </md-tabs>`;
-  }
-
-  _setTab(names, name) {
-    if (names === this._leftNames) this._leftTab = name;
-    else this._tab = name;
   }
 
   _elementsPane() {
@@ -399,28 +396,28 @@ export class EditorView extends LitElement {
   }
 
   _workspace() {
-    const wide = this._layout === "wide";
-    const medium = this._layout === "medium";
-    this._leftNames = wide ? ["elements", "settings"] : ["elements", "properties", "settings"];
-    const left = wide ? this._leftTab : this._tab;
-    const pane = (name) => ({ elements: this._elementsPane(), properties: this._propertiesPane(), settings: this._settingsPane() })[name];
+    const panes = () => ({
+      elements: this._elementsPane(),
+      properties: this._propertiesPane(),
+      settings: this._settingsPane(),
+      preview: this._previewPane(),
+    });
 
-    if (wide) {
+    if (this._layout === "wide") {
+      const left = this._leftTab === "settings" ? "settings" : "elements";
+      const selected = this._document.elements[this._selected];
       return html`
-        <div class="pane">${this._tabs(this._leftNames)}${pane(this._leftTab === "settings" ? "settings" : "elements")}</div>
+        <div class="pane">${this._tabs(["elements", "settings"], "_leftTab")}${panes()[left]}</div>
         ${this._previewPane()}
-        <div class="pane"><div class="pane-title">${this.t("editor.tab.properties")}${this._document.elements[this._selected] ? html` · ${this.t(`element.${this._document.elements[this._selected].type}`)}` : nothing}</div>${this._propertiesPane()}</div>`;
+        <div class="pane"><div class="pane-title">${this.t("editor.tab.properties")}${selected ? html` · ${this.t(`element.${selected.type}`)}` : nothing}</div>${this._propertiesPane()}</div>`;
     }
-    if (medium) {
-      const names = this._leftNames;
+    if (this._layout === "medium") {
+      const names = ["elements", "properties", "settings"];
       const shown = names.includes(this._tab) ? this._tab : "elements";
-      return html`<div class="pane">${this._tabs(names)}${pane(shown)}</div>${this._previewPane()}`;
+      return html`<div class="pane">${this._tabs(names, "_tab")}${panes()[shown]}</div>${this._previewPane()}`;
     }
     const names = ["elements", "properties", "preview", "settings"];
-    this._leftNames = names;
-    return html`<div class="pane">
-      ${this._tabs(names)}${this._tab === "preview" ? this._previewPane() : pane(this._tab === "preview" ? "elements" : left)}
-    </div>`;
+    return html`<div class="pane">${this._tabs(names, "_tab")}${panes()[this._tab]}</div>`;
   }
 
   _leaveDialog() {
@@ -466,6 +463,7 @@ export class EditorView extends LitElement {
         .document=${this._document}
         .templateId=${this._meta.builtin ? "" : (this._meta.id ?? "")}
         .variables=${this._meta.variables}
+        .name=${this._meta.name}
         @closed=${() => (this._printOpen = false)}
         @printed=${(event) => this.dispatchEvent(new CustomEvent("printed", { detail: event.detail, bubbles: true, composed: true }))}
       ></ed-print-dialog>

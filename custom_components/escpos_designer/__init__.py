@@ -11,7 +11,7 @@ from .const import DOMAIN
 from .dependency import async_sync_dependency_issues
 from .panel import async_register_panel, async_remove_panel
 from .rendering import DesignRenderer
-from .runtime import DesignerConfigEntry, DesignerData
+from .runtime import DesignerConfigEntry, DesignerData, history_size
 from .services import async_register_services
 from .storage import DesignStorage
 from .templates import load_builtin_templates
@@ -35,7 +35,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: DesignerConfigEntry) -> 
     storage = DesignStorage(hass)
     await storage.async_load()
     builtin = await hass.async_add_executor_job(load_builtin_templates)
-    entry.runtime_data = DesignerData(storage, DesignRenderer(hass), builtin)
+    entry.runtime_data = DesignerData(
+        storage, DesignRenderer(hass), builtin, history_size=history_size(entry)
+    )
 
     integration = await async_get_integration(hass, DOMAIN)
     await async_register_panel(hass, entry, str(integration.version))

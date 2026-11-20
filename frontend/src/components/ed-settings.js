@@ -8,9 +8,9 @@ import "./ed-icon.js";
 import { layoutStyles, themeTokens } from "../theme.js";
 
 const CATEGORIES = ["custom", "shopping", "todo", "qr", "love", "label", "food", "receipt", "fun"];
-const FRAME_STYLES = ["none", "line", "double", "rounded", "dashed", "dotted", "brackets", "ticket"];
+const FRAME_STYLES = ["none", "line", "double", "rounded", "dashed", "dotted", "brackets", "ticket", "hearts", "stars"];
 const CUT_MODES = ["none", "partial", "full"];
-const VARIABLE_TYPES = ["text", "multiline", "number", "boolean", "date", "todo"];
+const VARIABLE_TYPES = ["text", "multiline", "number", "boolean", "date", "todo", "entity"];
 
 /**
  * Settings of the whole design: its name and category, the paper, the frame,
@@ -167,6 +167,9 @@ export class EdSettings extends LitElement {
               ${textField(t("settings.variable.key"), variable.key, (value) => this._setVariable(index, { key: value.toLowerCase().replace(/[^a-z0-9_]/g, "_") }), { supporting: `{{ vars.${variable.key} }}` })}
               ${selectField(t("settings.variable.type"), variable.type, VARIABLE_TYPES.map((type) => ({ value: type, label: t(`variable.${type}`) })), (value) => this._setVariable(index, { type: value }))}
             </div>
+            ${variable.type === "entity"
+              ? textField(t("settings.variable.domain"), variable.domain ?? "", (value) => this._setVariable(index, { domain: value.toLowerCase().replace(/[^a-z_]/g, "") }), { supporting: t("settings.variable.domain_hint") })
+              : nothing}
             ${textField(t("settings.variable.label"), typeof variable.label === "string" ? variable.label : "", (value) => this._setVariable(index, { label: value }))}
             ${textField(t("settings.variable.default"), String(variable.default ?? ""), (value) => this._setVariable(index, { default: value }))}
             <div class="row">

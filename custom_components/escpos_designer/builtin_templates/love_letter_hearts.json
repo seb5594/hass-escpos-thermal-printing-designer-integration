@@ -1,0 +1,215 @@
+{
+  "name": {
+    "en": "Love letter with hearts",
+    "de": "Liebesbrief mit Herzen"
+  },
+  "description": {
+    "en": "A long handwritten letter inside a border of little hearts.",
+    "de": "Ein langer handgeschriebener Brief in einem Rahmen aus kleinen Herzen."
+  },
+  "category": "love",
+  "tags": [
+    "brief",
+    "heart",
+    "herz",
+    "letter",
+    "liebe",
+    "love"
+  ],
+  "variables": [
+    {
+      "key": "to",
+      "type": "text",
+      "label": {
+        "en": "To",
+        "de": "An"
+      },
+      "default": {
+        "en": "my love",
+        "de": "meinen Schatz"
+      }
+    },
+    {
+      "key": "message",
+      "type": "multiline",
+      "label": {
+        "en": "Your letter",
+        "de": "Dein Brief"
+      },
+      "default": {
+        "en": "Every morning I am grateful that you are mine.\n\nThank you for your laughter, your patience and every little moment we share.\n\nI can't wait to see you tonight.",
+        "de": "Jeden Morgen bin ich dankbar, dass du mein bist.\n\nDanke für dein Lachen, deine Geduld und jeden kleinen Moment, den wir teilen.\n\nIch freue mich schon darauf, dich heute Abend zu sehen."
+      }
+    },
+    {
+      "key": "signature",
+      "type": "text",
+      "label": {
+        "en": "From",
+        "de": "Von"
+      },
+      "default": {
+        "en": "Yours forever",
+        "de": "In Liebe, dein"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "💌",
+            "size": 56
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Love letter",
+            "font": "script",
+            "size": 42
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "hearts"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "For {{ vars.to }},",
+            "font": "handwriting",
+            "size": 36
+          }
+        ],
+        "align": "left",
+        "margin_top": 6
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.message }}",
+            "font": "handwriting",
+            "size": 30
+          }
+        ],
+        "align": "left",
+        "line_spacing": 1.2,
+        "margin_top": 6
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.signature }} ❤",
+            "font": "script",
+            "size": 32
+          }
+        ],
+        "align": "right",
+        "margin_top": 10
+      },
+      {
+        "type": "datetime",
+        "format": "%d.%m.%Y",
+        "align": "center",
+        "size": 18,
+        "margin_top": 8
+      }
+    ],
+    "frame": {
+      "style": "hearts",
+      "thickness": 5,
+      "padding": 14
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "💌",
+              "size": 56
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Liebesbrief",
+              "font": "script",
+              "size": 42
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "hearts"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Für {{ vars.to }},",
+              "font": "handwriting",
+              "size": 36
+            }
+          ],
+          "align": "left",
+          "margin_top": 6
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.message }}",
+              "font": "handwriting",
+              "size": 30
+            }
+          ],
+          "align": "left",
+          "line_spacing": 1.2,
+          "margin_top": 6
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.signature }} ❤",
+              "font": "script",
+              "size": 32
+            }
+          ],
+          "align": "right",
+          "margin_top": 10
+        },
+        {
+          "type": "datetime",
+          "format": "%d.%m.%Y",
+          "align": "center",
+          "size": 18,
+          "margin_top": 8
+        }
+      ],
+      "frame": {
+        "style": "hearts",
+        "thickness": 5,
+        "padding": 14
+      }
+    }
+  }
+}

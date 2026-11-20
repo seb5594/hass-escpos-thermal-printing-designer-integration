@@ -11,7 +11,7 @@ export const LINKS = {
 
 /** Credit line, three link buttons and the installed version. */
 export class EdFooter extends LitElement {
-  static properties = { t: { attribute: false }, version: { type: String } };
+  static properties = { t: { attribute: false }, version: { type: String }, fab: { type: Boolean } };
 
   static styles = [
     themeTokens,
@@ -25,9 +25,12 @@ export class EdFooter extends LitElement {
         flex-direction: column;
         align-items: center;
         gap: 12px;
-        padding: 24px 16px 32px;
+        padding: 24px 16px calc(32px + var(--ed-bottom-inset));
         text-align: center;
         font-size: 0.875rem;
+      }
+      :host([fab]) footer {
+        padding-bottom: calc(96px + var(--ed-bottom-inset));
       }
       a.credit {
         color: var(--ed-text-muted);
@@ -53,7 +56,9 @@ export class EdFooter extends LitElement {
   render() {
     const { t } = this;
     return html`<footer>
-      <a class="credit" href=${LINKS.repository} target="_blank" rel="noopener noreferrer">${t("footer.credit")}</a>
+      <a class="credit" href=${LINKS.repository} target="_blank" rel="noopener noreferrer"
+        >${t("footer.credit")}<br />${t("footer.made_with")}</a
+      >
       <div class="links">
         <md-outlined-button href=${LINKS.integrations} target="_blank" rel="noopener noreferrer"
           >${t("footer.integrations")}</md-outlined-button

@@ -1,0 +1,154 @@
+{
+  "name": {
+    "en": "Packing list",
+    "de": "Packliste"
+  },
+  "description": {
+    "en": "A checklist for trips that you can adapt in the editor.",
+    "de": "Eine Checkliste für Reisen, die du im Editor anpassen kannst."
+  },
+  "category": "todo",
+  "tags": [
+    "packen",
+    "packing",
+    "reise",
+    "travel",
+    "urlaub"
+  ],
+  "variables": [
+    {
+      "key": "trip",
+      "type": "text",
+      "label": {
+        "en": "Destination",
+        "de": "Reiseziel"
+      },
+      "default": {
+        "en": "Weekend away",
+        "de": "Wochenendtrip"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🧳 {{ vars.trip }}",
+            "font": "elegant",
+            "size": 38
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "dotted"
+      },
+      {
+        "type": "list",
+        "style": "checkbox",
+        "size": 24,
+        "line_spacing": 1.25,
+        "source": {
+          "kind": "static",
+          "items": [
+            {
+              "text": "ID / passport"
+            },
+            {
+              "text": "Tickets"
+            },
+            {
+              "text": "Wallet"
+            },
+            {
+              "text": "Phone + charger"
+            },
+            {
+              "text": "Toiletries"
+            },
+            {
+              "text": "Medication"
+            },
+            {
+              "text": "Clothes"
+            },
+            {
+              "text": "Underwear + socks"
+            },
+            {
+              "text": "Sunglasses"
+            },
+            {
+              "text": "Book"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🧳 {{ vars.trip }}",
+              "font": "elegant",
+              "size": 38
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "dotted"
+        },
+        {
+          "type": "list",
+          "style": "checkbox",
+          "size": 24,
+          "line_spacing": 1.25,
+          "source": {
+            "kind": "static",
+            "items": [
+              {
+                "text": "Ausweis / Reisepass"
+              },
+              {
+                "text": "Tickets"
+              },
+              {
+                "text": "Geldbeutel"
+              },
+              {
+                "text": "Handy + Ladegerät"
+              },
+              {
+                "text": "Kulturbeutel"
+              },
+              {
+                "text": "Medikamente"
+              },
+              {
+                "text": "Kleidung"
+              },
+              {
+                "text": "Unterwäsche + Socken"
+              },
+              {
+                "text": "Sonnenbrille"
+              },
+              {
+                "text": "Buch"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

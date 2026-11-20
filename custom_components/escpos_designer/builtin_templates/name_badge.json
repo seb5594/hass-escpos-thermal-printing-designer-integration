@@ -1,0 +1,131 @@
+{
+  "name": {
+    "en": "Name badge",
+    "de": "Namensschild"
+  },
+  "description": {
+    "en": "\"Hello, my name is\" for parties and meetings.",
+    "de": "„Hallo, ich heiße“ für Feiern und Treffen."
+  },
+  "category": "label",
+  "tags": [
+    "badge",
+    "hello",
+    "name",
+    "namensschild"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Name",
+        "de": "Name"
+      },
+      "default": {
+        "en": "Alex",
+        "de": "Alex"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": " HELLO ",
+            "font": "display",
+            "size": 36,
+            "invert": true
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "my name is",
+            "font": "handwriting",
+            "size": 22
+          }
+        ],
+        "align": "center",
+        "margin_top": 0
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.name }}",
+            "font": "script",
+            "size": 46
+          }
+        ],
+        "align": "center",
+        "margin_top": 0
+      }
+    ],
+    "paper": {
+      "width": 400,
+      "height": 240
+    },
+    "frame": {
+      "style": "rounded",
+      "thickness": 4,
+      "padding": 6
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": " HALLO ",
+              "font": "display",
+              "size": 36,
+              "invert": true
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "ich heiße",
+              "font": "handwriting",
+              "size": 22
+            }
+          ],
+          "align": "center",
+          "margin_top": 0
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.name }}",
+              "font": "script",
+              "size": 46
+            }
+          ],
+          "align": "center",
+          "margin_top": 0
+        }
+      ],
+      "paper": {
+        "width": 400,
+        "height": 240
+      },
+      "frame": {
+        "style": "rounded",
+        "thickness": 4,
+        "padding": 6
+      }
+    }
+  }
+}

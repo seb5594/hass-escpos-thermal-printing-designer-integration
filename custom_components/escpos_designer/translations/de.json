@@ -23,11 +23,13 @@
         "title": "Designer-Optionen",
         "data": {
           "show_in_sidebar": "In der Seitenleiste anzeigen",
-          "require_admin": "Nur Administratoren dürfen den Designer nutzen"
+          "require_admin": "Nur Administratoren dürfen den Designer nutzen",
+          "history_size": "Gemerkte Ausdrucke"
         },
         "data_description": {
           "show_in_sidebar": "Fügt den Designer zur Seitenleiste von Home Assistant hinzu.",
-          "require_admin": "Vorlagen können Entitätszustände auslesen, deshalb ist der Designer standardmäßig auf Administratoren beschränkt. Deaktiviere die Option, damit alle Haushaltsmitglieder gestalten und drucken können."
+          "require_admin": "Vorlagen können Entitätszustände auslesen, deshalb ist der Designer standardmäßig auf Administratoren beschränkt. Deaktiviere die Option, damit alle Haushaltsmitglieder gestalten und drucken können.",
+          "history_size": "Wie viele der zuletzt gedruckten Entwürfe die Galerie unter „Zuletzt gedruckt“ behält, damit du sie erneut drucken oder speichern kannst. 0 schaltet den Verlauf aus."
         }
       }
     }

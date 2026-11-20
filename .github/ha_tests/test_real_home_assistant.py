@@ -124,7 +124,7 @@ async def test_options_flow_saves_the_choices(hass, printer_integration_installe
     result = await hass.config_entries.options.async_init(entry.entry_id)
     assert result["step_id"] == "init"
     result = await hass.config_entries.options.async_configure(
-        result["flow_id"], {"show_in_sidebar": False, "require_admin": False}
+        result["flow_id"], {"show_in_sidebar": False, "require_admin": False, "history_size": 5}
     )
     assert result["type"] == "create_entry"
-    assert entry.options == {"show_in_sidebar": False, "require_admin": False}
+    assert entry.options == {"show_in_sidebar": False, "require_admin": False, "history_size": 5}

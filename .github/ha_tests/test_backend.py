@@ -427,6 +427,83 @@ class TestServices:
             )
 
 
+class TestPrintHistory:
+    async def _print(self, client, who="you"):
+        defs = [{"key": "who", "default": "world"}]
+        reply = await call(
+            client,
+            "print",
+            document=TEXT_DESIGN,
+            variables={"who": who},
+            name="Greeting",
+            variable_defs=defs,
+        )
+        assert reply["success"], reply
+
+    async def test_prints_are_remembered_with_their_values(self, client, printer):
+        await self._print(client, "Anna")
+        history = (await call(client, "library"))["result"]["history"]
+        assert [entry["name"] for entry in history] == ["Greeting"]
+        assert history[0]["history"] and history[0]["printed_at"]
+
+        opened = (await call(client, "get_template", template_id=history[0]["id"]))["result"]
+        assert opened["variables"][0]["default"] == "Anna"
+
+    async def test_only_the_newest_prints_are_kept(self, designer, client, printer):
+        designer.runtime_data.history_size = 2
+        for who in ("a", "b", "c"):
+            await self._print(client, who)
+        history = (await call(client, "library"))["result"]["history"]
+        assert len(history) == 2
+        newest = (await call(client, "get_template", template_id=history[0]["id"]))["result"]
+        assert newest["variables"][0]["default"] == "c"
+
+    async def test_history_can_be_switched_off(self, designer, client, printer):
+        designer.runtime_data.history_size = 0
+        await self._print(client)
+        assert (await call(client, "library"))["result"]["history"] == []
+
+    async def test_entries_can_be_removed_and_saved_as_templates(self, client, printer):
+        await self._print(client)
+        entry = (await call(client, "library"))["result"]["history"][0]
+        saved = (
+            await call(
+                client,
+                "save_template",
+                template={"name": "Kept", "document": TEXT_DESIGN, "variables": []},
+            )
+        )["result"]
+        assert not saved["builtin"] and not saved["history"]
+        assert "result" in await call(client, "delete_template", template_id=entry["id"])
+        assert (await call(client, "library"))["result"]["history"] == []
+        assert (await call(client, "delete_template", template_id=entry["id"]))["error"]
+
+    async def test_history_thumbnails_render_the_printed_values(self, client, printer):
+        await self._print(client)
+        entry = (await call(client, "library"))["result"]["history"][0]
+        reply = await call(client, "thumbnails", template_ids=[entry["id"]])
+        assert reply["result"][entry["id"]]
+
+    async def test_history_survives_a_reload(self, hass, designer, client, printer):
+        await self._print(client)
+        assert await hass.config_entries.async_reload(designer.entry_id)
+        assert len(designer.runtime_data.storage.history) == 1
+
+
+class TestEntityVariables:
+    def test_a_domain_can_be_given(self):
+        record = normalize_template(
+            template(variables=[{"key": "w", "type": "entity", "domain": "weather"}])
+        )
+        assert record["variables"][0]["domain"] == "weather"
+
+    def test_a_bad_domain_is_rejected(self):
+        with pytest.raises(TemplateError):
+            normalize_template(
+                template(variables=[{"key": "w", "type": "entity", "domain": "Weather!"}])
+            )
+
+
 class TestStorage:
     async def test_templates_survive_a_reload(self, hass, designer):
         saved, _ = designer.runtime_data.storage.save(template("Keep me"))

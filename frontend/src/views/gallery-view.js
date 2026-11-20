@@ -7,8 +7,6 @@ import "@material/web/chips/filter-chip.js";
 import "@material/web/dialog/dialog.js";
 import "@material/web/fab/fab.js";
 import "@material/web/iconbutton/icon-button.js";
-import "@material/web/menu/menu.js";
-import "@material/web/menu/menu-item.js";
 import "@material/web/progress/linear-progress.js";
 import "@material/web/textfield/outlined-text-field.js";
 import * as icons from "../icons.js";
@@ -35,6 +33,7 @@ export class GalleryView extends LitElement {
     _category: { state: true },
     _newOpen: { state: true },
     _thumbs: { state: true },
+    hass: { attribute: false },
     _menuFor: { state: true },
     _selecting: { state: true },
     _selection: { state: true },
@@ -185,24 +184,34 @@ export class GalleryView extends LitElement {
         font-size: 0.8125rem;
       }
       .thumb {
+        position: relative;
         height: 150px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         background: var(--ed-container);
-        padding: 10px;
         overflow: hidden;
       }
       .thumb img {
-        max-width: 100%;
-        max-height: 100%;
-        background: #fff;
-        box-shadow: 0 1px 6px rgb(0 0 0 / 25%);
-        image-rendering: auto;
+        position: absolute;
+        inset: 10px;
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        object-fit: contain;
+      }
+      .thumb .star {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        z-index: 1;
+        --md-icon-button-icon-size: 20px;
+        --md-icon-button-state-layer-height: 36px;
+        --md-icon-button-state-layer-width: 36px;
+        border-radius: 50%;
+        background: color-mix(in srgb, var(--ed-surface) 80%, transparent);
       }
       .thumb .skeleton {
-        width: 60%;
-        height: 80%;
+        position: absolute;
+        inset: 10% 20%;
+        width: auto;
+        height: auto;
         border-radius: 6px;
         background: color-mix(in srgb, var(--ed-text) 8%, transparent);
         animation: pulse 1.4s ease-in-out infinite;
@@ -213,7 +222,7 @@ export class GalleryView extends LitElement {
         }
       }
       .info {
-        padding: 10px 6px 10px 14px;
+        padding: 8px 4px 8px 14px;
         display: flex;
         align-items: center;
         gap: 2px;
@@ -223,11 +232,12 @@ export class GalleryView extends LitElement {
         min-width: 0;
       }
       .title strong {
-        display: block;
-        font-weight: 500;
-        white-space: nowrap;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
         overflow: hidden;
-        text-overflow: ellipsis;
+        font-weight: 500;
+        overflow-wrap: anywhere;
       }
       .title small {
         color: var(--ed-text-muted);
@@ -243,8 +253,31 @@ export class GalleryView extends LitElement {
       md-fab {
         position: fixed;
         right: 24px;
-        bottom: 24px;
+        bottom: calc(24px + var(--ed-bottom-inset, 0px));
         z-index: 1;
+      }
+      .sheet .actions {
+        display: flex;
+        flex-direction: column;
+      }
+      .action {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 8px;
+        border: 0;
+        border-radius: 12px;
+        background: transparent;
+        color: var(--ed-text);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+      .action:hover {
+        background: var(--md-sys-color-secondary-container);
+      }
+      .action.danger {
+        color: var(--md-sys-color-error);
       }
       .empty {
         text-align: center;
@@ -254,6 +287,7 @@ export class GalleryView extends LitElement {
       md-dialog {
         --md-dialog-container-color: var(--ed-surface);
         width: min(640px, 100vw);
+        max-height: calc(100dvh - 48px - var(--ed-bottom-inset, 0px));
       }
       .starters {
         display: grid;
@@ -330,7 +364,7 @@ export class GalleryView extends LitElement {
   }
 
   async _loadThumbnails() {
-    const missing = this.library.templates.map((card) => card.id).filter((id) => !this._requested.has(id));
+    const missing = [...this.library.templates, ...this.library.history].map((card) => card.id).filter((id) => !this._requested.has(id));
     for (let index = 0; index < missing.length; index += THUMBNAIL_BATCH) {
       const batch = missing.slice(index, index + THUMBNAIL_BATCH);
       batch.forEach((id) => this._requested.add(id));
@@ -400,6 +434,7 @@ export class GalleryView extends LitElement {
   _visible() {
     const { library, _query: query, _category: category, t } = this;
     const needle = query.trim().toLowerCase();
+    if (category === "history") return library.history;
     return library.templates
       .filter((card) => {
         if (category === "favorites" && !library.favorites.includes(card.id)) return false;
@@ -424,29 +459,58 @@ export class GalleryView extends LitElement {
       ${selectable && !card.builtin ? html`<span class="check" aria-hidden="true">${chosen ? html`<ed-icon .path=${icons.check}></ed-icon>` : nothing}</span>` : nothing}
       <div class="thumb">
         ${thumb ? html`<img alt="" loading="lazy" src="data:image/png;base64,${thumb}" />` : html`<div class="skeleton"></div>`}
+        ${compact || card.history
+          ? nothing
+          : html`<md-icon-button class="star" aria-label=${t("gallery.favorite")} title=${t("gallery.favorite")}
+              @click=${(event) => { event.stopPropagation(); this._emit("toggle-favorite", { id: card.id }); }}>
+              <ed-icon class=${favorite ? "star-on" : ""} .path=${favorite ? icons.star : icons.starOutline}></ed-icon>
+            </md-icon-button>`}
       </div>
       <div class="info">
-        <div class="title"><strong>${card.name}</strong>${compact ? nothing : html`<small>${t(`category.${card.category}`)}</small>`}</div>
+        <div class="title"><strong>${card.name}</strong><small>${card.history ? this._printedAt(card) : compact ? nothing : t(`category.${card.category}`)}</small></div>
         ${compact
           ? nothing
-          : html`<md-icon-button aria-label=${t("gallery.favorite")} title=${t("gallery.favorite")}
-                @click=${(event) => { event.stopPropagation(); this._emit("toggle-favorite", { id: card.id }); }}>
-                <ed-icon class=${favorite ? "star-on" : ""} .path=${favorite ? icons.star : icons.starOutline}></ed-icon>
-              </md-icon-button>
-              <span style="position:relative" @click=${(event) => event.stopPropagation()}>
-                <md-icon-button id=${menuId} aria-label=${t("gallery.more")} @click=${() => (this._menuFor = this._menuFor === card.id ? undefined : card.id)}>
-                  <ed-icon .path=${icons.more}></ed-icon>
-                </md-icon-button>
-                <md-menu positioning="popover" .open=${this._menuFor === card.id} anchor=${menuId} @closed=${() => (this._menuFor = undefined)}>
-                  <md-menu-item @click=${() => this._emit("open-template", { id: card.id })}><ed-icon slot="start" .path=${icons.edit}></ed-icon><div slot="headline">${t("gallery.edit")}</div></md-menu-item>
-                  <md-menu-item @click=${() => this._emit("print-template", { id: card.id })}><ed-icon slot="start" .path=${icons.printer}></ed-icon><div slot="headline">${t("gallery.print")}</div></md-menu-item>
-                  <md-menu-item @click=${() => this._emit("copy-id", { id: card.id })}><ed-icon slot="start" .path=${icons.copyId}></ed-icon><div slot="headline">${t("gallery.copy_id")}</div></md-menu-item>
-                  <md-menu-item @click=${() => this._emit("duplicate-template", { id: card.id })}><ed-icon slot="start" .path=${icons.copy}></ed-icon><div slot="headline">${t("gallery.duplicate")}</div></md-menu-item>
-                  ${card.builtin ? nothing : html`<md-menu-item @click=${() => this._emit("delete-template", { id: card.id, name: card.name })}><ed-icon slot="start" .path=${icons.remove}></ed-icon><div slot="headline">${t("common.delete")}</div></md-menu-item>`}
-                </md-menu>
-              </span>`}
+          : html`<md-icon-button aria-label=${t("gallery.more")} @click=${(event) => { event.stopPropagation(); this._menuFor = card; }}>
+              <ed-icon .path=${icons.more}></ed-icon>
+            </md-icon-button>`}
       </div>
     </div>`;
+  }
+
+  /** The actions of one card, shown as a dialog so they are never clipped on small screens. */
+  _actionSheet() {
+    const { t } = this;
+    const card = this._menuFor;
+    const close = () => (this._menuFor = undefined);
+    const act = (name, detail = { id: card.id }) => () => {
+      close();
+      this._emit(name, detail);
+    };
+    const row = (icon, label, handler, danger = false) => html`<button class="action ${danger ? "danger" : ""}" @click=${handler}>
+      <ed-icon .path=${icon}></ed-icon><span>${label}</span></button>`;
+    return html`<md-dialog class="sheet" .open=${Boolean(card)} @closed=${(event) => event.target === event.currentTarget && close()}>
+      <div slot="headline">${card?.name ?? ""}</div>
+      <div slot="content" class="actions">
+        ${card
+          ? card.history
+            ? html`${row(icons.printer, t("gallery.print"), act("print-template"))}
+                ${row(icons.save, t("history.save"), act("save-history"))}
+                ${row(icons.edit, t("gallery.edit"), act("open-template"))}
+                ${row(icons.remove, t("history.remove"), act("delete-history", { id: card.id, name: card.name }), true)}`
+            : html`${row(icons.edit, t("gallery.edit"), act("open-template"))}
+                ${row(icons.printer, t("gallery.print"), act("print-template"))}
+                ${row(icons.copyId, t("gallery.copy_id"), act("copy-id"))}
+                ${row(icons.copy, t("gallery.duplicate"), act("duplicate-template"))}
+                ${card.builtin ? nothing : row(icons.remove, t("common.delete"), act("delete-template", { id: card.id, name: card.name }), true)}`
+          : nothing}
+      </div>
+      <div slot="actions"><md-text-button @click=${close}>${t("common.cancel")}</md-text-button></div>
+    </md-dialog>`;
+  }
+
+  _printedAt(card) {
+    const date = new Date(card.printed_at);
+    return Number.isNaN(date.getTime()) ? "" : date.toLocaleString(this.hass?.language, { dateStyle: "short", timeStyle: "short" });
   }
 
   _banner() {
@@ -515,6 +579,7 @@ export class GalleryView extends LitElement {
       { id: "all", label: t("gallery.filter.all") },
       { id: "favorites", label: t("gallery.filter.favorites") },
       { id: "mine", label: t("gallery.filter.mine") },
+      ...(library.history.length ? [{ id: "history", label: t("gallery.filter.history", { count: library.history.length }) }] : []),
       ...CATEGORIES.map((id) => ({ id, label: t(`category.${id}`) })),
     ];
     return html`
@@ -534,14 +599,15 @@ export class GalleryView extends LitElement {
         ? html`<h2>${t("gallery.recent")}</h2><div class="recent">${recent.map((card) => this._card(card, { compact: true }))}</div>`
         : nothing}
       ${this._selectionBar()}
-      <h2>${t("gallery.templates")}</h2>
+      <h2>${t(this._category === "history" ? "gallery.history" : "gallery.templates")}</h2>
+      ${this._category === "history" ? html`<p class="muted selhint">${t("history.hint")}</p>` : nothing}
       ${visible.length
         ? html`<div class="grid">${visible.map((card) => this._card(card))}</div>`
         : html`<div class="empty">${t("gallery.empty")}</div>`}
       <md-fab variant="primary" label=${t("new.fab")} @click=${() => (this._newOpen = true)}>
         <ed-icon slot="icon" .path=${icons.plus}></ed-icon>
       </md-fab>
-      ${this._newDialog()}
+      ${this._newDialog()}${this._actionSheet()}
     `;
   }
 }

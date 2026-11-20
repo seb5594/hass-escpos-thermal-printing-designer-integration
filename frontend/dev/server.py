@@ -35,10 +35,13 @@ from custom_components.escpos_designer.templates import (  # noqa: E402
     TemplateError,
     describe,
     document_for,
+    history_record,
     is_builtin,
+    is_history,
     load_builtin_templates,
     new_template_id,
     normalize_template,
+    normalize_variables,
     summarize,
     variable_defaults,
 )
@@ -76,9 +79,14 @@ builtin = load_builtin_templates()
 stored: dict[str, dict] = {}
 recent: list[str] = []
 favorites: list[str] = []
+history: list[dict] = []
+HISTORY_LIMIT = 10
 
 
 def find(template_id: str) -> dict | None:
+    if is_history(template_id):
+        entry = next((item for item in history if item["id"] == template_id), None)
+        return history_record(entry) if entry else None
     return builtin.get(template_id) or stored.get(template_id)
 
 
@@ -93,6 +101,9 @@ JINJA.globals.update(
     now=datetime.now,
     timedelta=timedelta,
     states=lambda entity_id: "sunny" if str(entity_id).startswith("weather.") else "unknown",
+    state_translated=lambda entity_id: (
+        "Sonnig" if str(entity_id).startswith("weather.") else "unbekannt"
+    ),
     state_attr=lambda entity_id, attribute: 18 if attribute == "temperature" else None,
 )
 
@@ -139,6 +150,7 @@ def handle(msg: dict) -> dict:
             "templates": [summarize(tid, rec, language) for tid, rec in records.items()],
             "recent": [tid for tid in recent if tid in records],
             "favorites": [tid for tid in favorites if tid in records],
+            "history": [summarize(e["id"], history_record(e), language) for e in history],
         }
     if command == "get_template":
         record = find(msg["template_id"])
@@ -157,7 +169,14 @@ def handle(msg: dict) -> dict:
         del recent[10:]
         return describe(template_id, record, language)
     if command == "delete_template":
-        if is_builtin(msg["template_id"]) or stored.pop(msg["template_id"], None) is None:
+        tid = msg["template_id"]
+        if is_history(tid):
+            before = len(history)
+            history[:] = [entry for entry in history if entry["id"] != tid]
+            if len(history) == before:
+                raise LookupError("Template not found.")
+            return {"deleted": tid}
+        if is_builtin(tid) or stored.pop(tid, None) is None:
             raise LookupError("Template not found.")
         return {"deleted": msg["template_id"]}
     if command == "toggle_favorite":
@@ -186,6 +205,18 @@ def handle(msg: dict) -> dict:
     if command == "print":
         result = render(msg["document"], msg.get("variables", {}), language)
         result.image.save("/tmp/escpos_designer_last_print.png")
+        history.insert(
+            0,
+            {
+                "id": f"history:{new_template_id()}",
+                "name": msg.get("name") or "",
+                "printed_at": datetime.now().isoformat(timespec="seconds"),
+                "document": normalize_document(msg["document"]),
+                "variables": normalize_variables(msg.get("variable_defs", [])),
+                "values": msg.get("variables", {}),
+            },
+        )
+        del history[HISTORY_LIMIT:]
         return {
             "printers": ["kitchen"],
             "copies": msg.get("copies", 1),

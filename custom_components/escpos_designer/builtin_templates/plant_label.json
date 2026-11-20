@@ -1,0 +1,174 @@
+{
+  "name": {
+    "en": "Plant care tag",
+    "de": "Pflanzen-Etikett"
+  },
+  "description": {
+    "en": "Name, watering interval and light for a houseplant.",
+    "de": "Name, Gießintervall und Licht für eine Zimmerpflanze."
+  },
+  "category": "label",
+  "tags": [
+    "gießen",
+    "plant",
+    "pflanze",
+    "watering"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Plant",
+        "de": "Pflanze"
+      },
+      "default": {
+        "en": "Monstera",
+        "de": "Monstera"
+      }
+    },
+    {
+      "key": "days",
+      "type": "number",
+      "label": {
+        "en": "Water every (days)",
+        "de": "Gießen alle (Tage)"
+      },
+      "default": "7"
+    },
+    {
+      "key": "light",
+      "type": "text",
+      "label": {
+        "en": "Light",
+        "de": "Licht"
+      },
+      "default": {
+        "en": "bright, no direct sun",
+        "de": "hell, keine pralle Sonne"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🌱 {{ vars.name }}",
+            "font": "elegant",
+            "size": 40
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "dotted"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "💧 every {{ vars.days }} days",
+            "size": 26
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "☀ {{ vars.light }}",
+            "font": "handwriting",
+            "size": 26
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Last watered: {{ now().strftime('%d.%m.') }}",
+            "size": 20
+          }
+        ],
+        "align": "center",
+        "margin_top": 4
+      }
+    ],
+    "paper": {
+      "width": 400,
+      "height": 240
+    },
+    "frame": {
+      "style": "dashed",
+      "thickness": 3,
+      "padding": 6
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🌱 {{ vars.name }}",
+              "font": "elegant",
+              "size": 40
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "dotted"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "💧 alle {{ vars.days }} Tage",
+              "size": 26
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "☀ {{ vars.light }}",
+              "font": "handwriting",
+              "size": 26
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Zuletzt gegossen: {{ now().strftime('%d.%m.') }}",
+              "size": 20
+            }
+          ],
+          "align": "center",
+          "margin_top": 4
+        }
+      ],
+      "paper": {
+        "width": 400,
+        "height": 240
+      },
+      "frame": {
+        "style": "dashed",
+        "thickness": 3,
+        "padding": 6
+      }
+    }
+  }
+}

@@ -23,11 +23,13 @@
         "title": "Designer options",
         "data": {
           "show_in_sidebar": "Show in sidebar",
-          "require_admin": "Only administrators can use the designer"
+          "require_admin": "Only administrators can use the designer",
+          "history_size": "Printed designs to remember"
         },
         "data_description": {
           "show_in_sidebar": "Adds the designer to the Home Assistant sidebar.",
-          "require_admin": "Templates can read entity states, so the designer is limited to administrators by default. Turn this off to let every household member design and print."
+          "require_admin": "Templates can read entity states, so the designer is limited to administrators by default. Turn this off to let every household member design and print.",
+          "history_size": "How many of the last printed designs the gallery keeps under \"Recently printed\" so you can print or save them again. 0 turns the history off."
         }
       }
     }

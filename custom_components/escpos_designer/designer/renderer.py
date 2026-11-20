@@ -14,6 +14,7 @@ from .widgets import (
     draw_divider,
     draw_frame,
     draw_qr,
+    frame_extent,
     load_picture,
 )
 
@@ -44,7 +45,11 @@ def render_document(doc: dict[str, Any], elements: list[dict[str, Any]]) -> Rend
     """Draw ``elements`` onto a canvas shaped by the document's paper, frame and options."""
     paper, frame, options = doc["paper"], doc["frame"], doc["options"]
     width: int = paper["width"]
-    frame_pad = frame["thickness"] + frame["padding"] if frame["style"] != "none" else 0
+    frame_pad = (
+        frame_extent(frame["style"], frame["thickness"]) + frame["padding"]
+        if frame["style"] != "none"
+        else 0
+    )
     inset = options["margin"] + frame_pad
     content_width = max(8, width - 2 * inset)
 

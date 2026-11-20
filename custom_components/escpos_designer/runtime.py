@@ -8,10 +8,12 @@ from typing import TYPE_CHECKING, Any
 from homeassistant.config_entries import ConfigEntry
 
 from .const import (
+    CONF_HISTORY_SIZE,
     CONF_REQUIRE_ADMIN,
+    DEFAULT_HISTORY_SIZE,
     DEFAULT_REQUIRE_ADMIN,
 )
-from .templates import describe, is_builtin, summarize
+from .templates import describe, history_record, is_builtin, is_history, summarize
 
 if TYPE_CHECKING:
     from .rendering import DesignRenderer
@@ -25,10 +27,14 @@ class DesignerData:
     storage: DesignStorage
     renderer: DesignRenderer
     builtin: dict[str, dict[str, Any]]
+    history_size: int = DEFAULT_HISTORY_SIZE
     thumbnails: dict[tuple[str, str, str], str] = field(default_factory=dict)
 
     def find(self, template_id: str) -> dict[str, Any] | None:
-        """A template by id, built-in or stored."""
+        """A template by id: built-in, stored, or an entry of the print history."""
+        if is_history(template_id):
+            entry = self.storage.get_history(template_id)
+            return history_record(entry) if entry else None
         if is_builtin(template_id):
             return self.builtin.get(template_id)
         return self.storage.get(template_id)
@@ -40,6 +46,10 @@ class DesignerData:
             "templates": [summarize(tid, record, language) for tid, record in records.items()],
             "recent": [tid for tid in self.storage.recent if tid in records],
             "favorites": [tid for tid in self.storage.favorites if tid in records],
+            "history": [
+                summarize(entry["id"], history_record(entry), language)
+                for entry in self.storage.history
+            ],
         }
 
     def describe(self, template_id: str, language: str) -> dict[str, Any] | None:
@@ -53,3 +63,8 @@ type DesignerConfigEntry = ConfigEntry[DesignerData]
 def require_admin(entry: ConfigEntry) -> bool:
     """Whether only administrators may use the designer (the default)."""
     return bool(entry.options.get(CONF_REQUIRE_ADMIN, DEFAULT_REQUIRE_ADMIN))
+
+
+def history_size(entry: ConfigEntry) -> int:
+    """How many printed designs to remember (0 turns the history off)."""
+    return int(entry.options.get(CONF_HISTORY_SIZE, DEFAULT_HISTORY_SIZE))

@@ -133,9 +133,27 @@ export function moveItem(items, from, to) {
   return copy;
 }
 
-/** The default value of every variable a template declares. */
-export function variableDefaults(variables = []) {
-  return Object.fromEntries(variables.map((variable) => [variable.key, variable.default ?? ""]));
+/** The entities of one domain as dropdown options, sorted by name. */
+export function entityOptions(hass, domain) {
+  return Object.entries(hass?.states ?? {})
+    .filter(([id]) => id.startsWith(`${domain}.`))
+    .map(([id, state]) => ({ value: id, label: state.attributes.friendly_name ?? id }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+}
+
+/**
+ * The default value of every variable a template declares. An entity variable whose
+ * default doesn't exist in this installation starts with the first matching entity.
+ */
+export function variableDefaults(variables = [], hass) {
+  return Object.fromEntries(
+    variables.map(({ key, type, domain, default: value }) => {
+      if (type === "entity" && domain && !hass?.states?.[value]) {
+        return [key, entityOptions(hass, domain)[0]?.value ?? value ?? ""];
+      }
+      return [key, value ?? ""];
+    }),
+  );
 }
 
 /** Snapshot-based undo/redo. */

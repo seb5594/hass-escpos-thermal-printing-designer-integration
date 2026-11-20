@@ -14,6 +14,7 @@ export const themeTokens = css`
     --ed-text-muted: var(--secondary-text-color, #727272);
     --ed-line: var(--divider-color, #e0e0e0);
     --ed-radius: 16px;
+    --ed-bottom-inset: env(safe-area-inset-bottom, 0px);
 
     --md-sys-color-primary: var(--ed-primary);
     --md-sys-color-on-primary: var(--text-primary-color, #fff);
@@ -40,6 +41,12 @@ export const themeTokens = css`
     --md-ref-typeface-plain: var(--paper-font-body1_-_font-family, Roboto, system-ui, sans-serif);
     color: var(--ed-text);
     font-family: var(--md-ref-typeface-plain);
+  }
+  /* Phones: keep clear of the system navigation bar, which some apps draw over the page. */
+  @media (max-width: 720px) {
+    :host {
+      --ed-bottom-inset: calc(env(safe-area-inset-bottom, 0px) + 28px);
+    }
   }
 `;
 

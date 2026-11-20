@@ -7,7 +7,15 @@ from typing import TYPE_CHECKING, Any
 
 from homeassistant.helpers.storage import Store
 
-from .templates import MAX_TEMPLATES, TemplateError, new_template_id, normalize_template
+from .designer import normalize_document
+from .templates import (
+    HISTORY_PREFIX,
+    MAX_TEMPLATES,
+    TemplateError,
+    new_template_id,
+    normalize_template,
+    normalize_variables,
+)
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -25,12 +33,14 @@ class DesignStorage:
         self._templates: dict[str, dict[str, Any]] = {}
         self._recent: list[str] = []
         self._favorites: list[str] = []
+        self._history: list[dict[str, Any]] = []
 
     async def async_load(self) -> None:
         data = await self._store.async_load() or {}
         self._templates = data.get("templates", {})
         self._recent = data.get("recent", [])
         self._favorites = data.get("favorites", [])
+        self._history = data.get("history", [])
 
     @property
     def templates(self) -> dict[str, dict[str, Any]]:
@@ -44,6 +54,54 @@ class DesignStorage:
     @property
     def favorites(self) -> list[str]:
         return list(self._favorites)
+
+    @property
+    def history(self) -> list[dict[str, Any]]:
+        """The last printed designs, newest first."""
+        return list(self._history)
+
+    def get_history(self, template_id: str) -> dict[str, Any] | None:
+        return next((entry for entry in self._history if entry["id"] == template_id), None)
+
+    def add_history(
+        self,
+        *,
+        name: str,
+        document: dict[str, Any],
+        variables: list[dict[str, Any]],
+        values: dict[str, Any],
+        limit: int,
+    ) -> None:
+        """Remember a print, dropping the oldest ones beyond ``limit`` (0 turns the history off)."""
+        if limit <= 0:
+            self.clear_history()
+            return
+        self._history.insert(
+            0,
+            {
+                "id": f"{HISTORY_PREFIX}{new_template_id()}",
+                "name": name[:80] or document.get("name") or "",
+                "printed_at": _now(),
+                "document": normalize_document(document),
+                "variables": normalize_variables(variables),
+                "values": {str(key): value for key, value in values.items()},
+            },
+        )
+        del self._history[limit:]
+        self._schedule_save()
+
+    def delete_history(self, entry_id: str) -> bool:
+        before = len(self._history)
+        self._history = [entry for entry in self._history if entry["id"] != entry_id]
+        if len(self._history) == before:
+            return False
+        self._schedule_save()
+        return True
+
+    def clear_history(self) -> None:
+        if self._history:
+            self._history.clear()
+            self._schedule_save()
 
     def get(self, template_id: str) -> dict[str, Any] | None:
         return self._templates.get(template_id)
@@ -106,6 +164,7 @@ class DesignStorage:
             "templates": self._templates,
             "recent": self._recent,
             "favorites": self._favorites,
+            "history": self._history,
         }
 
     async def async_flush(self) -> None:

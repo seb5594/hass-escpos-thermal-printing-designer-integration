@@ -28,7 +28,13 @@ from .designer.schema import ELEMENT_TYPES
 from .printers import DEFAULT_WIDTH, list_printers
 from .printing import async_print_design
 from .runtime import DesignerData, require_admin
-from .templates import TemplateError, document_for, is_builtin, variable_defaults
+from .templates import (
+    TemplateError,
+    document_for,
+    is_builtin,
+    is_history,
+    variable_defaults,
+)
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
@@ -193,9 +199,14 @@ async def ws_delete_template(
     msg: dict[str, Any],
     data: DesignerData,
 ) -> None:
-    """Delete one of the user's templates; built-in ones can't be deleted."""
+    """Delete one of the user's templates or history entries; built-in ones stay."""
     template_id = msg["template_id"]
-    if is_builtin(template_id) or not data.storage.delete(template_id):
+    removed = (
+        data.storage.delete_history(template_id)
+        if is_history(template_id)
+        else not is_builtin(template_id) and data.storage.delete(template_id)
+    )
+    if not removed:
         connection.send_error(msg["id"], "not_found", "Template not found.")
         return
     connection.send_result(msg["id"], {"deleted": template_id})
@@ -278,6 +289,9 @@ async def ws_thumbnails(
         vol.Optional("printer"): str,
         vol.Optional("copies", default=1): vol.All(int, vol.Range(min=1, max=10)),
         vol.Optional("template_id"): str,
+        # What the history needs to offer the print again later.
+        vol.Optional("name", default=""): vol.All(str, vol.Length(max=80)),
+        vol.Optional("variable_defs", default=list): list,
     },
 )
 async def ws_print(
@@ -297,4 +311,11 @@ async def ws_print(
     )
     if (template_id := msg.get("template_id")) and data.find(template_id):
         data.storage.touch(template_id)
+    data.storage.add_history(
+        name=msg["name"],
+        document=msg["document"],
+        variables=msg["variable_defs"],
+        values=msg["variables"],
+        limit=data.history_size,
+    )
     connection.send_result(msg["id"], report)

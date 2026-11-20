@@ -19,8 +19,9 @@ from .designer import DocumentError, normalize_document
 
 BUILTIN_DIR = Path(__file__).resolve().parent / "builtin_templates"
 BUILTIN_PREFIX = "builtin:"
+HISTORY_PREFIX = "history:"
 CATEGORIES = ("shopping", "todo", "qr", "love", "label", "food", "receipt", "fun", "custom")
-VARIABLE_TYPES = ("text", "multiline", "number", "boolean", "select", "date", "todo")
+VARIABLE_TYPES = ("text", "multiline", "number", "boolean", "select", "date", "todo", "entity")
 MAX_TEMPLATES = 300
 DEFAULT_LANGUAGE = "en"
 
@@ -40,9 +41,13 @@ _VARIABLE = vol.Schema(
             vol.Schema({vol.Coerce(str): vol.Any(str, int, float, bool)}), str, int, float, bool
         ),
         vol.Optional("options", default=list): [vol.All(vol.Coerce(str), vol.Length(max=80))],
+        # For ``entity`` variables: only entities of this domain are offered (e.g. ``weather``).
+        vol.Optional("domain", default=""): vol.All(vol.Coerce(str), vol.Match(r"^[a-z_]{0,40}$")),
     },
     extra=vol.REMOVE_EXTRA,
 )
+
+_VARIABLES = vol.All([_VARIABLE], vol.Length(max=12))
 
 _TEMPLATE = vol.Schema(
     {
@@ -52,7 +57,7 @@ _TEMPLATE = vol.Schema(
         vol.Optional("tags", default=list): vol.All(
             [vol.All(vol.Coerce(str), vol.Length(max=40))], vol.Length(max=12)
         ),
-        vol.Optional("variables", default=list): vol.All([_VARIABLE], vol.Length(max=12)),
+        vol.Optional("variables", default=list): _VARIABLES,
         vol.Required("document"): dict,
         # Built-in templates ship a document per language; ``document`` is the fallback.
         vol.Optional("documents", default=dict): {vol.Coerce(str): dict},
@@ -84,6 +89,14 @@ def normalize_template(raw: Any) -> dict[str, Any]:
     return record
 
 
+def normalize_variables(raw: Any) -> list[dict[str, Any]]:
+    """Validate a list of variable definitions."""
+    try:
+        return _VARIABLES(raw)  # type: ignore[no-any-return]
+    except vol.Invalid as err:
+        raise TemplateError(f"variables: {err.error_message}") from err
+
+
 def new_template_id() -> str:
     """A fresh id for a user template."""
     return uuid.uuid4().hex[:12]
@@ -91,6 +104,30 @@ def new_template_id() -> str:
 
 def is_builtin(template_id: str) -> bool:
     return template_id.startswith(BUILTIN_PREFIX)
+
+
+def is_history(template_id: str) -> bool:
+    return template_id.startswith(HISTORY_PREFIX)
+
+
+def history_record(entry: dict[str, Any]) -> dict[str, Any]:
+    """Present a printed design as a template whose variables default to what was printed."""
+    values = entry.get("values", {})
+    variables = [
+        {**variable, "default": values.get(variable["key"], variable["default"])}
+        for variable in entry.get("variables", [])
+    ]
+    return {
+        "name": entry["name"],
+        "description": "",
+        "category": "history",
+        "tags": [],
+        "variables": variables,
+        "document": entry["document"],
+        "documents": {},
+        "updated_at": entry["printed_at"],
+        "printed_at": entry["printed_at"],
+    }
 
 
 def localize(value: Any, language: str) -> str:
@@ -132,6 +169,8 @@ def summarize(template_id: str, record: dict[str, Any], language: str) -> dict[s
     return {
         "id": template_id,
         "builtin": is_builtin(template_id),
+        "history": is_history(template_id),
+        "printed_at": record.get("printed_at"),
         "name": localize(record["name"], language),
         "description": localize(record.get("description", ""), language),
         "category": record["category"],

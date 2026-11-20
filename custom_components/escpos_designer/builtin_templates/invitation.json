@@ -1,0 +1,250 @@
+{
+  "name": {
+    "en": "Invitation",
+    "de": "Einladung"
+  },
+  "description": {
+    "en": "Invite someone to an event with date, time and place.",
+    "de": "Lade jemanden mit Datum, Uhrzeit und Ort zu einem Anlass ein."
+  },
+  "category": "fun",
+  "tags": [
+    "einladung",
+    "event",
+    "invitation",
+    "party"
+  ],
+  "variables": [
+    {
+      "key": "event",
+      "type": "text",
+      "label": {
+        "en": "Event",
+        "de": "Anlass"
+      },
+      "default": {
+        "en": "Garden party",
+        "de": "Gartenparty"
+      }
+    },
+    {
+      "key": "date",
+      "type": "date",
+      "label": {
+        "en": "Date",
+        "de": "Datum"
+      },
+      "default": ""
+    },
+    {
+      "key": "time",
+      "type": "text",
+      "label": {
+        "en": "Time",
+        "de": "Uhrzeit"
+      },
+      "default": {
+        "en": "6 pm",
+        "de": "18 Uhr"
+      }
+    },
+    {
+      "key": "place",
+      "type": "text",
+      "label": {
+        "en": "Place",
+        "de": "Ort"
+      },
+      "default": {
+        "en": "Our place",
+        "de": "Bei uns"
+      }
+    },
+    {
+      "key": "note",
+      "type": "multiline",
+      "label": {
+        "en": "Note",
+        "de": "Hinweis"
+      },
+      "default": {
+        "en": "Bring a good mood!",
+        "de": "Bring gute Laune mit!"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "You are invited",
+            "font": "script",
+            "size": 36
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "double",
+        "margin_top": 2
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.event }}",
+            "font": "display",
+            "size": 62
+          }
+        ],
+        "align": "center",
+        "margin_top": 4
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "📅 {{ vars.date or now().strftime('%d.%m.%Y') }}",
+            "size": 28
+          }
+        ],
+        "align": "center",
+        "margin_top": 6
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "🕕 {{ vars.time }}",
+            "size": 28
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "📍 {{ vars.place }}",
+            "size": 28
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "dotted",
+        "margin_top": 6
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.note }}",
+            "font": "handwriting",
+            "size": 30
+          }
+        ],
+        "align": "center",
+        "line_spacing": 1.1,
+        "margin_top": 4
+      }
+    ],
+    "frame": {
+      "style": "double",
+      "thickness": 3,
+      "padding": 12
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Du bist eingeladen",
+              "font": "script",
+              "size": 36
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "double",
+          "margin_top": 2
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.event }}",
+              "font": "display",
+              "size": 62
+            }
+          ],
+          "align": "center",
+          "margin_top": 4
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "📅 {{ vars.date or now().strftime('%d.%m.%Y') }}",
+              "size": 28
+            }
+          ],
+          "align": "center",
+          "margin_top": 6
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "🕕 {{ vars.time }}",
+              "size": 28
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "📍 {{ vars.place }}",
+              "size": 28
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "dotted",
+          "margin_top": 6
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.note }}",
+              "font": "handwriting",
+              "size": 30
+            }
+          ],
+          "align": "center",
+          "line_spacing": 1.1,
+          "margin_top": 4
+        }
+      ],
+      "frame": {
+        "style": "double",
+        "thickness": 3,
+        "padding": 12
+      }
+    }
+  }
+}

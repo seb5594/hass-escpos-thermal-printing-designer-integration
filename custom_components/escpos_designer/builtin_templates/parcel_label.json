@@ -1,0 +1,167 @@
+{
+  "name": {
+    "en": "Parcel label",
+    "de": "Paketaufkleber"
+  },
+  "description": {
+    "en": "Recipient, sender and an optional tracking barcode.",
+    "de": "Empfänger, Absender und ein optionaler Sendungs-Barcode."
+  },
+  "category": "label",
+  "tags": [
+    "address",
+    "adresse",
+    "paket",
+    "parcel",
+    "versand"
+  ],
+  "variables": [
+    {
+      "key": "to",
+      "type": "multiline",
+      "label": {
+        "en": "Recipient (multi-line)",
+        "de": "Empfänger (mehrzeilig)"
+      },
+      "default": {
+        "en": "Alex Example\nExample Street 1\n12345 Sample City",
+        "de": "Alex Beispiel\nBeispielstraße 1\n12345 Musterstadt"
+      }
+    },
+    {
+      "key": "from",
+      "type": "text",
+      "label": {
+        "en": "Sender",
+        "de": "Absender"
+      },
+      "default": {
+        "en": "Home, Example Street 2, 12345 Sample City",
+        "de": "Zuhause, Beispielstraße 2, 12345 Musterstadt"
+      }
+    },
+    {
+      "key": "tracking",
+      "type": "text",
+      "label": {
+        "en": "Tracking number (optional)",
+        "de": "Sendungsnummer (optional)"
+      },
+      "default": ""
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "From: {{ vars.from }}",
+            "size": 18
+          }
+        ],
+        "align": "left"
+      },
+      {
+        "type": "divider",
+        "style": "dashed"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "TO",
+            "font": "display",
+            "size": 30
+          }
+        ],
+        "align": "left"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.to }}",
+            "font": "sans",
+            "size": 30,
+            "bold": true
+          }
+        ],
+        "align": "left",
+        "line_spacing": 1.15
+      },
+      {
+        "type": "markdown",
+        "source": "{% if vars.tracking %}[[barcode:code128:{{ vars.tracking }}]]{% endif %}",
+        "margin_top": 10
+      }
+    ],
+    "paper": {
+      "width": 400,
+      "height": 640
+    },
+    "frame": {
+      "style": "line",
+      "thickness": 3,
+      "padding": 8
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Von: {{ vars.from }}",
+              "size": 18
+            }
+          ],
+          "align": "left"
+        },
+        {
+          "type": "divider",
+          "style": "dashed"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "AN",
+              "font": "display",
+              "size": 30
+            }
+          ],
+          "align": "left"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.to }}",
+              "font": "sans",
+              "size": 30,
+              "bold": true
+            }
+          ],
+          "align": "left",
+          "line_spacing": 1.15
+        },
+        {
+          "type": "markdown",
+          "source": "{% if vars.tracking %}[[barcode:code128:{{ vars.tracking }}]]{% endif %}",
+          "margin_top": 10
+        }
+      ],
+      "paper": {
+        "width": 400,
+        "height": 640
+      },
+      "frame": {
+        "style": "line",
+        "thickness": 3,
+        "padding": 8
+      }
+    }
+  }
+}

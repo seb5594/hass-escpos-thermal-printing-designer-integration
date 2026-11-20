@@ -24,7 +24,7 @@
       panel.narrow = innerWidth < 870;
       panel.hass = {
         language: params.get("lang") || "en",
-        states: { "todo.shopping_list": { attributes: { friendly_name: "Shopping list" } }, "todo.chores": { attributes: { friendly_name: "Chores" } } },
+        states: { "weather.forecast_home": { state: "sunny", attributes: { friendly_name: "Forecast Home" } }, "weather.openweathermap": { state: "rainy", attributes: { friendly_name: "OpenWeatherMap" } }, "todo.shopping_list": { attributes: { friendly_name: "Shopping list" } }, "todo.chores": { attributes: { friendly_name: "Chores" } } },
         async callWS(message) {
           const response = await (await fetch("/ws", { method: "POST", body: JSON.stringify(message) })).json();
           if (response.error) throw response.error;

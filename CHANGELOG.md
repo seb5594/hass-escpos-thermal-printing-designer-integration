@@ -2,6 +2,18 @@
 
 Versions follow `YYYY.MM.DD[.BUILD]`: the first build of a day has no suffix.
 
+## 2026.11.20
+
+- Fixed the editor on phones: the Preview and Design tabs showed nothing.
+- Fixed the gallery on phones: cards keep their full title, the card actions open in a dialog that can't be cut off, and the footer credit breaks into two lines.
+- Dialogs and buttons keep clear of the system navigation bar on phones; the print dialog no longer runs off the screen.
+- New **Entity** value type: the print dialog offers a dropdown of matching entities (for example every weather entity) and preselects the first one.
+- Weather texts use `state_translated()` and follow the Home Assistant language.
+- New **Recently printed** filter: the last prints (10 by default, configurable) with their values, to print again or save as a template.
+- New frame styles `hearts` and `stars`.
+- 15 new designs: love letter with hearts, birthday card, thank-you note, invitation, quote card, family note, weather, sticker chart, daily planner, packing list, recipe card, meal plan, name badge, plant tag and parcel label.
+- Long-text values get a larger input field.
+
 ## 2026.11.19.1
 
 - Your own designs can be selected in the gallery and deleted, one or many at once.

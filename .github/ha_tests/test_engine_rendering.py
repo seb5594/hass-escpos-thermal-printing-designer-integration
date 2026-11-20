@@ -301,10 +301,21 @@ class TestPipeline:
         assert hidden.image.height < visible.image.height
 
     def test_every_frame_style_draws_at_the_edge(self):
-        for style in ("line", "double", "rounded", "dashed", "dotted", "brackets", "ticket"):
+        for style in ("line", "double", "rounded", "dashed", "dotted", "brackets", "ticket", "hearts", "stars"):
             result = render({"type": "spacer", "height": 60}, sections={"frame": {"style": style}})
             assert ink(result.image) > 0, style
             assert bounding_box(result.image)[0] <= 3, style
+
+    def test_motif_frames_keep_the_content_clear_of_their_motifs(self):
+        for style in ("hearts", "stars"):
+            result = render(
+                {"type": "text", "runs": [run("Hi")]},
+                sections={"frame": {"style": style, "thickness": 5, "padding": 6}},
+            )
+            motif = 5 * 2 + 8
+            width, height = result.image.size
+            inner = result.image.crop((motif + 2, motif + 2, width - motif - 2, height - motif - 2))
+            assert ink(result.image) > ink(inner) > 0, style
 
     def test_frame_pushes_content_inwards(self):
         plain = render({"type": "text", "runs": [run("Hi")]})

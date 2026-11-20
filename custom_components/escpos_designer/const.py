@@ -32,8 +32,11 @@ STATIC_URL_PATH: Final = "/escpos_designer_static"
 # Options
 CONF_REQUIRE_ADMIN: Final = "require_admin"
 CONF_SHOW_IN_SIDEBAR: Final = "show_in_sidebar"
+CONF_HISTORY_SIZE: Final = "history_size"
 DEFAULT_REQUIRE_ADMIN: Final = True
 DEFAULT_SHOW_IN_SIDEBAR: Final = True
+DEFAULT_HISTORY_SIZE: Final = 10
+MAX_HISTORY_SIZE: Final = 50
 
 # Repair issue ids
 ISSUE_PRINTER_INTEGRATION_MISSING: Final = "printer_integration_missing"

@@ -38,7 +38,18 @@ MAX_PAPER_HEIGHT = 4096
 DEFAULT_PAPER_WIDTH = 384  # 58 mm paper at 203 dpi
 
 ALIGNMENTS = ("left", "center", "right")
-FRAME_STYLES = ("none", "line", "double", "rounded", "dashed", "dotted", "brackets", "ticket")
+FRAME_STYLES = (
+    "none",
+    "line",
+    "double",
+    "rounded",
+    "dashed",
+    "dotted",
+    "brackets",
+    "ticket",
+    "hearts",
+    "stars",
+)
 DIVIDER_STYLES = ("solid", "dashed", "dotted", "double", "wave", "zigzag", "stars", "hearts")
 LIST_STYLES = ("checkbox", "bullet", "dash", "numbered", "none")
 BARCODE_KINDS = ("code128", "code39", "ean13")

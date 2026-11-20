@@ -1,0 +1,216 @@
+{
+  "name": {
+    "en": "Recipe card",
+    "de": "Rezeptkarte"
+  },
+  "description": {
+    "en": "Ingredients and steps of a recipe, one line per entry.",
+    "de": "Zutaten und Schritte eines Rezepts, eine Zeile pro Eintrag."
+  },
+  "category": "food",
+  "tags": [
+    "kochen",
+    "cooking",
+    "recipe",
+    "rezept"
+  ],
+  "variables": [
+    {
+      "key": "title",
+      "type": "text",
+      "label": {
+        "en": "Dish",
+        "de": "Gericht"
+      },
+      "default": {
+        "en": "Tomato soup",
+        "de": "Tomatensuppe"
+      }
+    },
+    {
+      "key": "servings",
+      "type": "number",
+      "label": {
+        "en": "Servings",
+        "de": "Portionen"
+      },
+      "default": "4"
+    },
+    {
+      "key": "time",
+      "type": "text",
+      "label": {
+        "en": "Time",
+        "de": "Zeit"
+      },
+      "default": {
+        "en": "30 min",
+        "de": "30 Min."
+      }
+    },
+    {
+      "key": "ingredients",
+      "type": "multiline",
+      "label": {
+        "en": "Ingredients (one per line)",
+        "de": "Zutaten (eine pro Zeile)"
+      },
+      "default": {
+        "en": "800 g tomatoes\n1 onion\n1 clove of garlic\n500 ml stock",
+        "de": "800 g Tomaten\n1 Zwiebel\n1 Knoblauchzehe\n500 ml Brühe"
+      }
+    },
+    {
+      "key": "steps",
+      "type": "multiline",
+      "label": {
+        "en": "Steps (one per line)",
+        "de": "Schritte (einer pro Zeile)"
+      },
+      "default": {
+        "en": "Chop everything.\nSauté the onion and garlic.\nAdd tomatoes and stock, simmer 20 minutes.\nPuree and season.",
+        "de": "Alles klein schneiden.\nZwiebel und Knoblauch anbraten.\nTomaten und Brühe zugeben, 20 Minuten köcheln.\nPürieren und abschmecken."
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.title }}",
+            "font": "elegant",
+            "size": 42
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.servings }} servings · {{ vars.time }}",
+            "font": "handwriting",
+            "size": 26
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "divider",
+        "style": "wave",
+        "margin_top": 2
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Ingredients",
+            "font": "display",
+            "size": 34
+          }
+        ],
+        "align": "left"
+      },
+      {
+        "type": "markdown",
+        "source": "{% for line in vars.ingredients.splitlines() if line.strip() %}- {{ line | trim }}\n{% endfor %}",
+        "size": 24
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "Preparation",
+            "font": "display",
+            "size": 34
+          }
+        ],
+        "align": "left",
+        "margin_top": 6
+      },
+      {
+        "type": "markdown",
+        "source": "{% for line in vars.steps.splitlines() if line.strip() %}{{ loop.index }}. {{ line | trim }}\n{% endfor %}",
+        "size": 24
+      }
+    ],
+    "frame": {
+      "style": "rounded",
+      "thickness": 2,
+      "padding": 10
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.title }}",
+              "font": "elegant",
+              "size": 42
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.servings }} Portionen · {{ vars.time }}",
+              "font": "handwriting",
+              "size": 26
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "divider",
+          "style": "wave",
+          "margin_top": 2
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Zutaten",
+              "font": "display",
+              "size": 34
+            }
+          ],
+          "align": "left"
+        },
+        {
+          "type": "markdown",
+          "source": "{% for line in vars.ingredients.splitlines() if line.strip() %}- {{ line | trim }}\n{% endfor %}",
+          "size": 24
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "Zubereitung",
+              "font": "display",
+              "size": 34
+            }
+          ],
+          "align": "left",
+          "margin_top": 6
+        },
+        {
+          "type": "markdown",
+          "source": "{% for line in vars.steps.splitlines() if line.strip() %}{{ loop.index }}. {{ line | trim }}\n{% endfor %}",
+          "size": 24
+        }
+      ],
+      "frame": {
+        "style": "rounded",
+        "thickness": 2,
+        "padding": 10
+      }
+    }
+  }
+}
