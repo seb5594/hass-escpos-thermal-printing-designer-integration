@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+import threading
 from io import BytesIO
 from unittest.mock import patch
 
@@ -42,6 +43,19 @@ def template(name="Greeting", **extra):
         "variables": [{"key": "who", "default": "world"}],
         **extra,
     }
+
+
+@pytest.fixture(autouse=True)
+def png_encoding_uses_executor(monkeypatch):
+    """Preview, gallery and print requests must never encode PNGs on the event loop."""
+    event_loop_thread = threading.get_ident()
+    original = Image.Image.save
+
+    def save(image, *args, **kwargs):
+        assert threading.get_ident() != event_loop_thread, "PNG encoding blocked the event loop"
+        return original(image, *args, **kwargs)
+
+    monkeypatch.setattr(Image.Image, "save", save)
 
 
 @pytest.fixture

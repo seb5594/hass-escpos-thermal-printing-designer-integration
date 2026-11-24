@@ -27,14 +27,14 @@ class RenderOutput:
     """The result of rendering a design."""
 
     image: Image.Image
+    png: bytes
     warnings: list[dict[str, Any]] = field(default_factory=list)
     template_errors: list[str] = field(default_factory=list)
     options: dict[str, Any] = field(default_factory=dict)  # the design's cut/feed/... options
 
     def to_png(self) -> bytes:
-        buffer = BytesIO()
-        self.image.save(buffer, format="PNG", optimize=True)
-        return buffer.getvalue()
+        """Return the PNG already encoded in the rendering executor job."""
+        return self.png
 
     def to_data_uri(self) -> str:
         return "data:image/png;base64," + base64.b64encode(self.to_png()).decode("ascii")
@@ -75,18 +75,25 @@ class DesignRenderer:
         rendered = self._render_templates(doc, {**values, "vars": values}, errors)
         todo_items, todo_warnings = await self._fetch_todo_items(doc, rendered)
 
-        result = await self._hass.async_add_executor_job(
-            lambda: render_design(
+        def render_and_encode() -> RenderOutput:
+            result = render_design(
                 doc,
                 now=dt_util.now().replace(tzinfo=None),
                 language=language,
                 render_template=lambda text: rendered.get(text, text),
                 todo_items=todo_items,
             )
-        )
-        return RenderOutput(
-            result.image, [*result.warnings, *todo_warnings], errors, doc["options"]
-        )
+            buffer = BytesIO()
+            result.image.save(buffer, format="PNG", optimize=True)
+            return RenderOutput(
+                result.image,
+                buffer.getvalue(),
+                [*result.warnings, *todo_warnings],
+                errors,
+                doc["options"],
+            )
+
+        return await self._hass.async_add_executor_job(render_and_encode)
 
     def _render_templates(
         self, doc: dict[str, Any], variables: dict[str, Any], errors: list[str]

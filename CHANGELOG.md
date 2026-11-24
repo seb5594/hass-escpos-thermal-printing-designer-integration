@@ -2,7 +2,9 @@
 
 Versions follow `YYYY.MM.DD[.BUILD]`: the first build of a day has no suffix.
 
-## Unreleased
+## 2026.11.24
+
+- Encode PNG images in the rendering executor for previews, gallery thumbnails, and printing, keeping compression off the Home Assistant event loop.
 
 - A live demo on GitHub Pages runs the real design engine in the browser (no printer; "Print" saves a PNG).
 
