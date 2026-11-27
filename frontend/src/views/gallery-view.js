@@ -10,7 +10,7 @@ import "@material/web/iconbutton/icon-button.js";
 import "@material/web/progress/linear-progress.js";
 import "@material/web/textfield/outlined-text-field.js";
 import * as icons from "../icons.js";
-import { STARTERS } from "../model.js";
+import { STARTERS, fitsPrinter } from "../model.js";
 import "../components/ed-icon.js";
 import { layoutStyles, themeTokens } from "../theme.js";
 
@@ -29,6 +29,8 @@ export class GalleryView extends LitElement {
     api: { attribute: false },
     status: { attribute: false },
     library: { attribute: false },
+    target: { attribute: false },
+    _showAllTargets: { state: true },
     _query: { state: true },
     _category: { state: true },
     _newOpen: { state: true },
@@ -178,6 +180,20 @@ export class GalleryView extends LitElement {
         padding: 8px 12px;
         border-radius: 14px;
         background: var(--md-sys-color-secondary-container);
+      }
+      .target-note {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        padding: 6px 8px 6px 14px;
+        border-radius: 14px;
+        background: var(--md-sys-color-secondary-container);
+        font-size: 0.875rem;
+      }
+      .target-note ed-icon {
+        color: var(--ed-primary);
+        flex: none;
       }
       .selhint {
         margin: 6px 4px 0;
@@ -431,7 +447,8 @@ export class GalleryView extends LitElement {
     <p class="muted selhint">${t("gallery.select_hint")}</p>`;
   }
 
-  _visible() {
+  /** Designs that match the search and filter, whether or not they suit the target printer. */
+  _matching() {
     const { library, _query: query, _category: category, t } = this;
     const needle = query.trim().toLowerCase();
     if (category === "history") return library.history;
@@ -444,6 +461,25 @@ export class GalleryView extends LitElement {
         return [card.name, card.description, t(`category.${card.category}`), ...card.tags].join(" ").toLowerCase().includes(needle);
       })
       .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  /** What the gallery lists: only designs that suit the target printer unless asked for all. */
+  _visible() {
+    const matching = this._matching();
+    if (!this.target || this._showAllTargets || this._category === "history") return matching;
+    return matching.filter((card) => fitsPrinter(card.paper, this.target));
+  }
+
+  _targetNotice(hidden) {
+    const { t, target } = this;
+    if (!target || !(hidden || this._showAllTargets)) return nothing;
+    return html`<div class="target-note">
+      <ed-icon .path=${icons.printer}></ed-icon>
+      <span class="grow">${this._showAllTargets ? t("target.showing_all", { printer: target.name }) : t("target.hidden", { count: hidden, printer: target.name })}</span>
+      <md-text-button @click=${() => (this._showAllTargets = !this._showAllTargets)}>
+        ${this._showAllTargets ? t("target.only_fitting") : t("target.show_all")}
+      </md-text-button>
+    </div>`;
   }
 
   _card(card, { compact = false } = {}) {
@@ -573,6 +609,7 @@ export class GalleryView extends LitElement {
     const { t, library } = this;
     if (!library) return html`<md-linear-progress indeterminate></md-linear-progress>`;
     const visible = this._visible();
+    const hidden = this._matching().length - visible.length;
     const recent = library.recent.map((id) => library.templates.find((card) => card.id === id)).filter(Boolean);
     const showRecent = !this._query && this._category === "all" && recent.length;
     const filters = [
@@ -598,6 +635,7 @@ export class GalleryView extends LitElement {
       ${showRecent
         ? html`<h2>${t("gallery.recent")}</h2><div class="recent">${recent.map((card) => this._card(card, { compact: true }))}</div>`
         : nothing}
+      ${this._targetNotice(hidden)}
       ${this._selectionBar()}
       <h2>${t(this._category === "history" ? "gallery.history" : "gallery.templates")}</h2>
       ${this._category === "history" ? html`<p class="muted selhint">${t("history.hint")}</p>` : nothing}

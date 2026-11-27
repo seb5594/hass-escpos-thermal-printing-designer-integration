@@ -1,0 +1,92 @@
+{
+  "name": {
+    "en": "Name label (small)",
+    "de": "Namensetikett (klein)"
+  },
+  "description": {
+    "en": "One big word on a 30 x 12 mm label.",
+    "de": "Ein großes Wort auf einem Etikett von 30 x 12 mm."
+  },
+  "category": "label",
+  "tags": [
+    "d11",
+    "etikett",
+    "klein",
+    "label",
+    "name"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Text",
+        "de": "Text"
+      },
+      "default": {
+        "en": "Pasta",
+        "de": "Nudeln"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.name }}",
+            "font": "display",
+            "size": 50
+          }
+        ],
+        "align": "center"
+      }
+    ],
+    "paper": {
+      "width": 240,
+      "height": 96
+    },
+    "frame": {
+      "style": "rounded",
+      "thickness": 2,
+      "padding": 4
+    },
+    "options": {
+      "margin": 2,
+      "cut": "none",
+      "feed": 0
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.name }}",
+              "font": "display",
+              "size": 50
+            }
+          ],
+          "align": "center"
+        }
+      ],
+      "paper": {
+        "width": 240,
+        "height": 96
+      },
+      "frame": {
+        "style": "rounded",
+        "thickness": 2,
+        "padding": 4
+      },
+      "options": {
+        "margin": 2,
+        "cut": "none",
+        "feed": 0
+      }
+    }
+  }
+}

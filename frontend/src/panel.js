@@ -10,12 +10,21 @@ import "./components/ed-icon.js";
 import "./components/ed-print-dialog.js";
 import { createTranslator } from "./i18n/index.js";
 import * as icons from "./icons.js";
-import { STARTERS, uid } from "./model.js";
+import { STARTERS, startPaper, uid } from "./model.js";
 import { layoutStyles, themeTokens } from "./theme.js";
 import "./views/editor-view.js";
 import "./views/gallery-view.js";
 
 const TOAST_MS = 3500;
+const TARGET_KEY = "escpos_designer.target_printer";
+
+function readTarget() {
+  try {
+    return localStorage.getItem(TARGET_KEY) ?? "";
+  } catch {
+    return "";
+  }
+}
 
 /** The sidebar panel: header, the gallery or the editor, and the footer. */
 export class EscposDesignerPanel extends LitElement {
@@ -32,11 +41,14 @@ export class EscposDesignerPanel extends LitElement {
     _fatal: { state: true },
     _deleting: { state: true },
     _printing: { state: true },
+    _target: { state: true },
+    _targetOpen: { state: true },
   };
 
   constructor() {
     super();
     this._view = "gallery";
+    this._target = readTarget();
     this.api = new DesignerApi(() => this.hass);
     this._language = "";
     this._t = createTranslator("en");
@@ -77,6 +89,47 @@ export class EscposDesignerPanel extends LitElement {
       }
       header ed-icon.logo {
         color: var(--ed-primary);
+      }
+      header .grow {
+        flex: 1;
+      }
+      header .target {
+        max-width: 46vw;
+        --md-text-button-label-text-color: var(--app-header-text-color, var(--ed-text));
+      }
+      header .target-name {
+        display: inline-block;
+        max-width: 30vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: bottom;
+      }
+      .printers {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .printers button {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 10px;
+        border: 1px solid var(--ed-line);
+        border-radius: 14px;
+        background: transparent;
+        color: var(--ed-text);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+      .printers button.chosen {
+        border-color: var(--ed-primary);
+        background: var(--md-sys-color-secondary-container);
+      }
+      .printers small {
+        display: block;
+        color: var(--ed-text-muted);
       }
       .toast {
         position: fixed;
@@ -170,8 +223,26 @@ export class EscposDesignerPanel extends LitElement {
     }
   }
 
+  /** The printer designs are made for, if one was chosen and still exists. */
+  get _targetPrinter() {
+    return this._status?.printers?.find((printer) => printer.id === this._target);
+  }
+
+  _setTarget(id) {
+    this._target = id;
+    this._targetOpen = false;
+    try {
+      localStorage.setItem(TARGET_KEY, id);
+    } catch {
+      // the choice then only lasts until the panel is closed
+    }
+  }
+
   _startNew(starterId) {
     const starter = STARTERS.find((item) => item.id === starterId) ?? STARTERS[0];
+    const document = starter.build();
+    const paper = startPaper(this._targetPrinter);
+    if (paper) document.paper = { ...document.paper, ...paper };
     this._template = {
       id: undefined,
       builtin: false,
@@ -181,7 +252,7 @@ export class EscposDesignerPanel extends LitElement {
       category: "custom",
       tags: [],
       variables: [],
-      document: starter.build(),
+      document,
     };
     this._view = "editor";
   }
@@ -294,6 +365,7 @@ export class EscposDesignerPanel extends LitElement {
       .api=${this.api}
       .status=${this._status}
       .library=${this._library}
+      .target=${this._targetPrinter}
       .hass=${this.hass}
       @save-history=${(event) => this._saveHistoryEntry(event.detail.id)}
       @delete-history=${(event) => this._removeHistoryEntry(event.detail.id)}
@@ -308,6 +380,29 @@ export class EscposDesignerPanel extends LitElement {
     ></gallery-view>`;
   }
 
+  _targetDialog() {
+    const { t } = this;
+    const option = (id, name, detail, icon) => html`<button class=${this._target === id ? "chosen" : ""} @click=${() => this._setTarget(id)}>
+      <ed-icon .path=${icon}></ed-icon>
+      <span><strong>${name}</strong><small>${detail}</small></span>
+    </button>`;
+    const describe = (printer) =>
+      printer.width
+        ? printer.label_height
+          ? t("target.label", { width: printer.width, height: printer.label_height })
+          : t("target.roll", { width: printer.width })
+        : t("target.unknown");
+    return html`<md-dialog .open=${this._targetOpen} @closed=${(event) => event.target === event.currentTarget && (this._targetOpen = false)}>
+      <div slot="headline">${t("target.title")}</div>
+      <div slot="content" class="printers">
+        <p class="muted">${t("target.hint")}</p>
+        ${option("", t("target.any"), t("target.any_hint"), icons.list)}
+        ${(this._status?.printers ?? []).map((printer) => option(printer.id, printer.name, describe(printer), icons.printer))}
+      </div>
+      <div slot="actions"><md-text-button @click=${() => (this._targetOpen = false)}>${t("common.cancel")}</md-text-button></div>
+    </md-dialog>`;
+  }
+
   render() {
     const { t } = this;
     return html`
@@ -317,6 +412,13 @@ export class EscposDesignerPanel extends LitElement {
           : nothing}
         <ed-icon class="logo" .path=${icons.printer}></ed-icon>
         <h1>${t("app.title")}</h1>
+        <span class="grow"></span>
+        ${this._status?.printers?.length
+          ? html`<md-text-button class="target" title=${t("target.title")} @click=${() => (this._targetOpen = true)}>
+              <ed-icon slot="icon" .path=${icons.printer}></ed-icon>
+              <span class="target-name">${this._targetPrinter?.name ?? t("target.any")}</span>
+            </md-text-button>`
+          : nothing}
       </header>
       <main>${this._body()}</main>
       <ed-footer .t=${t} ?fab=${this._view === "gallery"} .version=${this._status?.version}></ed-footer>
@@ -331,10 +433,12 @@ export class EscposDesignerPanel extends LitElement {
             .templateId=${this._printing.builtin || this._printing.history ? "" : this._printing.id}
             .variables=${this._printing.variables}
             .name=${this._printing.name}
+            .target=${this._target}
             @closed=${() => (this._printing = undefined)}
             @printed=${() => this._notify(this.t("toast.printed"))}
           ></ed-print-dialog>`
         : nothing}
+      ${this._targetDialog()}
       <md-dialog .open=${Boolean(this._deleting)} @closed=${(event) => event.target === event.currentTarget && (this._deleting = undefined)}>
         <div slot="headline">${t("delete.title")}</div>
         <div slot="content">${

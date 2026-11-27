@@ -1,0 +1,111 @@
+{
+  "name": {
+    "en": "Opened on (small)",
+    "de": "Geöffnet am (klein)"
+  },
+  "description": {
+    "en": "Date of opening on a 30 x 12 mm label.",
+    "de": "Öffnungsdatum auf einem Etikett von 30 x 12 mm."
+  },
+  "category": "food",
+  "tags": [
+    "d11",
+    "geöffnet",
+    "label",
+    "opened"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Product",
+        "de": "Produkt"
+      },
+      "default": {
+        "en": "Jam",
+        "de": "Marmelade"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.name }}",
+            "font": "display",
+            "size": 30
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "opened {{ now().strftime('%d.%m.%y') }}",
+            "size": 20
+          }
+        ],
+        "align": "center"
+      }
+    ],
+    "paper": {
+      "width": 240,
+      "height": 96
+    },
+    "frame": {
+      "style": "rounded",
+      "thickness": 2,
+      "padding": 4
+    },
+    "options": {
+      "margin": 2,
+      "cut": "none",
+      "feed": 0
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.name }}",
+              "font": "display",
+              "size": 30
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "geöffnet {{ now().strftime('%d.%m.%y') }}",
+              "size": 20
+            }
+          ],
+          "align": "center"
+        }
+      ],
+      "paper": {
+        "width": 240,
+        "height": 96
+      },
+      "frame": {
+        "style": "rounded",
+        "thickness": 2,
+        "padding": 4
+      },
+      "options": {
+        "margin": 2,
+        "cut": "none",
+        "feed": 0
+      }
+    }
+  }
+}

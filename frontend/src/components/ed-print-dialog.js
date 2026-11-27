@@ -26,6 +26,7 @@ export class EdPrintDialog extends LitElement {
     templateId: { type: String },
     variables: { attribute: false },
     name: { type: String },
+    target: { type: String },
     _values: { state: true },
     _printer: { state: true },
     _fit: { state: true },
@@ -107,7 +108,7 @@ export class EdPrintDialog extends LitElement {
   willUpdate(changed) {
     if (changed.has("open") && this.open) {
       this._values = variableDefaults(this.variables, this.hass);
-      this._printer = this.status?.printers?.[0]?.id ?? "";
+      this._printer = this.status?.printers?.find((item) => item.id === this.target)?.id ?? this.status?.printers?.[0]?.id ?? "";
       this._copies = 1;
       this._fit = true;
       this._error = "";

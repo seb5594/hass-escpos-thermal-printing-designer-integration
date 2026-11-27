@@ -1,6 +1,6 @@
 # Templates
 
-A template is a design plus the *fill-in values* it asks for before printing. The designer ships 39 of them, in English and German; the language follows Home Assistant. Your own designs live next to them and can ask for values too.
+A template is a design plus the *fill-in values* it asks for before printing. The designer ships 44 of them, in English and German; the language follows Home Assistant. Your own designs live next to them and can ask for values too.
 
 ## The built-in designs
 
@@ -9,6 +9,11 @@ A template is a design plus the *fill-in values* it asks for before printing. Th
 | `builtin:best_before_label` | Best-before label / Mindesthaltbarkeits-Etikett | food | `name`, `days` | 320×240 px label |
 | `builtin:birthday_card` | Birthday card / Geburtstagskarte | fun | `name`, `age`, `wish` | 384 px roll |
 | `builtin:chore_card` | Chore card / Aufgabenkarte | todo | `task`, `person`, `days` | 384 px roll |
+| `builtin:d11_best_before` | Best-before (small) / Haltbarkeit (klein) | food | `name`, `days` | 240×96 px label |
+| `builtin:d11_name_label` | Name label (small) / Namensetikett (klein) | label | `name` | 240×96 px label |
+| `builtin:d11_opened` | Opened on (small) / Geöffnet am (klein) | food | `name` | 240×96 px label |
+| `builtin:d11_pill_label` | Medicine (small) / Medikament (klein) | label | `name`, `dose` | 240×96 px label |
+| `builtin:d11_two_lines` | Two lines (small) / Zwei Zeilen (klein) | label | `title`, `detail` | 240×96 px label |
 | `builtin:daily_planner` | Daily planner / Tagesplaner | todo | `first`, `second`, `third` | 384 px roll |
 | `builtin:freezer_label` | Freezer label / Gefrier-Etikett | food | `name`, `months` | 320×240 px label |
 | `builtin:fridge_note` | Family note / Familien-Notiz | fun | `title`, `message`, `from` | 384 px roll |
@@ -99,3 +104,7 @@ Every print from the designer is remembered together with the values you entered
 ## Printer geometry
 
 When you print, the designer asks the ESC/POS Thermal Printer integration for the chosen printer's printhead width and, for label printers, the length of one label (for example 96 × 240 dots for the Fichero D11s). The finished design is scaled down onto that canvas, never up, and turned by 90 degrees if it lies on its side, so a label designed at 384 × 192 px still prints complete on a 12 mm printhead. The print dialog shows a note and a link to print the design in its own size instead. Roll printers only get the width limited. Design directly at the printer's size for the crispest result.
+
+## Target printer
+
+Choose the printer you design for at the top right of the designer. The gallery then lists only designs that print on it without shrinking below half their size, new designs start in the printer's size, and the print dialog starts with it. For a label printer such as the Fichero D11s (96 × 240 dots) that means the labels in its own size, 30 × 12 mm (240 × 96 px), plus other small labels; endless-roll designs are hidden. Choose "All printers" to see everything again, or use "Show all" in the gallery notice.

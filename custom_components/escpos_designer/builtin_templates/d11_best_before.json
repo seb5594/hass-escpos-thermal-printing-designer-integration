@@ -1,0 +1,122 @@
+{
+  "name": {
+    "en": "Best-before (small)",
+    "de": "Haltbarkeit (klein)"
+  },
+  "description": {
+    "en": "Product and best-before date for a 30 x 12 mm label.",
+    "de": "Produkt und Haltbarkeitsdatum für ein Etikett von 30 x 12 mm."
+  },
+  "category": "food",
+  "tags": [
+    "d11",
+    "haltbar",
+    "label",
+    "mhd"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Product",
+        "de": "Produkt"
+      },
+      "default": {
+        "en": "Soup",
+        "de": "Suppe"
+      }
+    },
+    {
+      "key": "days",
+      "type": "number",
+      "label": {
+        "en": "Keeps (days)",
+        "de": "Haltbar (Tage)"
+      },
+      "default": "3"
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.name }}",
+            "font": "display",
+            "size": 30
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "until {{ (now() + timedelta(days=vars.days | int(0))).strftime('%d.%m.%y') }}",
+            "size": 22,
+            "bold": true
+          }
+        ],
+        "align": "center"
+      }
+    ],
+    "paper": {
+      "width": 240,
+      "height": 96
+    },
+    "frame": {
+      "style": "rounded",
+      "thickness": 2,
+      "padding": 4
+    },
+    "options": {
+      "margin": 2,
+      "cut": "none",
+      "feed": 0
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.name }}",
+              "font": "display",
+              "size": 30
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "bis {{ (now() + timedelta(days=vars.days | int(0))).strftime('%d.%m.%y') }}",
+              "size": 22,
+              "bold": true
+            }
+          ],
+          "align": "center"
+        }
+      ],
+      "paper": {
+        "width": 240,
+        "height": 96
+      },
+      "frame": {
+        "style": "rounded",
+        "thickness": 2,
+        "padding": 4
+      },
+      "options": {
+        "margin": 2,
+        "cut": "none",
+        "feed": 0
+      }
+    }
+  }
+}

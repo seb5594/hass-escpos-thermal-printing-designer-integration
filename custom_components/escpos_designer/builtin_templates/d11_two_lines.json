@@ -1,0 +1,125 @@
+{
+  "name": {
+    "en": "Two lines (small)",
+    "de": "Zwei Zeilen (klein)"
+  },
+  "description": {
+    "en": "A headline and a line of detail for a 30 x 12 mm label.",
+    "de": "Überschrift und eine Detailzeile für ein Etikett von 30 x 12 mm."
+  },
+  "category": "label",
+  "tags": [
+    "d11",
+    "label",
+    "zeilen",
+    "zwei"
+  ],
+  "variables": [
+    {
+      "key": "title",
+      "type": "text",
+      "label": {
+        "en": "Headline",
+        "de": "Überschrift"
+      },
+      "default": {
+        "en": "Charger",
+        "de": "Ladegerät"
+      }
+    },
+    {
+      "key": "detail",
+      "type": "text",
+      "label": {
+        "en": "Detail",
+        "de": "Detail"
+      },
+      "default": {
+        "en": "Living room",
+        "de": "Wohnzimmer"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.title }}",
+            "font": "display",
+            "size": 30
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.detail }}",
+            "font": "handwriting",
+            "size": 20
+          }
+        ],
+        "align": "center"
+      }
+    ],
+    "paper": {
+      "width": 240,
+      "height": 96
+    },
+    "frame": {
+      "style": "rounded",
+      "thickness": 2,
+      "padding": 4
+    },
+    "options": {
+      "margin": 2,
+      "cut": "none",
+      "feed": 0
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.title }}",
+              "font": "display",
+              "size": 30
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.detail }}",
+              "font": "handwriting",
+              "size": 20
+            }
+          ],
+          "align": "center"
+        }
+      ],
+      "paper": {
+        "width": 240,
+        "height": 96
+      },
+      "frame": {
+        "style": "rounded",
+        "thickness": 2,
+        "padding": 4
+      },
+      "options": {
+        "margin": 2,
+        "cut": "none",
+        "feed": 0
+      }
+    }
+  }
+}

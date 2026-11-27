@@ -251,3 +251,33 @@ export function fitToPrinter(document, printer) {
   }
   return { fit: { width, height: null }, adapted: Boolean(designWidth) && designWidth > width };
 }
+
+/** Designs smaller than this share of their size are not worth printing on a printer. */
+export const MIN_READABLE_SCALE = 0.5;
+
+/**
+ * How much of its size a design keeps on a printer (1 = unchanged, 0 = does not belong there).
+ * An endless design does not suit a label printer; a label may lie either way round.
+ */
+export function fitScale(paper, printer) {
+  const width = printer?.width;
+  if (!width || !paper) return 1;
+  const label = printer.label_height;
+  if (label) {
+    if (!paper.height) return 0;
+    const upright = Math.min(width / paper.width, label / paper.height);
+    const sideways = Math.min(width / paper.height, label / paper.width);
+    return Math.min(1, Math.max(upright, sideways));
+  }
+  return Math.min(1, width / paper.width);
+}
+
+export const fitsPrinter = (paper, printer) => fitScale(paper, printer) >= MIN_READABLE_SCALE;
+
+/** The paper a new design starts with on `printer` (the label lies on its side), or null. */
+export function startPaper(printer) {
+  if (!printer?.width) return null;
+  return printer.label_height
+    ? { width: printer.label_height, height: printer.width }
+    : { width: printer.width, height: null };
+}

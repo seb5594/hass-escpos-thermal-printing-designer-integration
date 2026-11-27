@@ -1,0 +1,120 @@
+{
+  "name": {
+    "en": "Medicine (small)",
+    "de": "Medikament (klein)"
+  },
+  "description": {
+    "en": "Medicine name with a pictogram for a 30 x 12 mm label.",
+    "de": "Medikamentenname mit Piktogramm für ein Etikett von 30 x 12 mm."
+  },
+  "category": "label",
+  "tags": [
+    "d11",
+    "label",
+    "medikament",
+    "medicine"
+  ],
+  "variables": [
+    {
+      "key": "name",
+      "type": "text",
+      "label": {
+        "en": "Medicine",
+        "de": "Medikament"
+      },
+      "default": "Ibuprofen"
+    },
+    {
+      "key": "dose",
+      "type": "text",
+      "label": {
+        "en": "Dose",
+        "de": "Dosierung"
+      },
+      "default": {
+        "en": "1 tablet",
+        "de": "1 Tablette"
+      }
+    }
+  ],
+  "document": {
+    "elements": [
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "💊 {{ vars.name }}",
+            "font": "display",
+            "size": 34
+          }
+        ],
+        "align": "center"
+      },
+      {
+        "type": "text",
+        "runs": [
+          {
+            "text": "{{ vars.dose }}",
+            "size": 22
+          }
+        ],
+        "align": "center"
+      }
+    ],
+    "paper": {
+      "width": 240,
+      "height": 96
+    },
+    "frame": {
+      "style": "rounded",
+      "thickness": 2,
+      "padding": 4
+    },
+    "options": {
+      "margin": 2,
+      "cut": "none",
+      "feed": 0
+    }
+  },
+  "documents": {
+    "de": {
+      "elements": [
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "💊 {{ vars.name }}",
+              "font": "display",
+              "size": 34
+            }
+          ],
+          "align": "center"
+        },
+        {
+          "type": "text",
+          "runs": [
+            {
+              "text": "{{ vars.dose }}",
+              "size": 22
+            }
+          ],
+          "align": "center"
+        }
+      ],
+      "paper": {
+        "width": 240,
+        "height": 96
+      },
+      "frame": {
+        "style": "rounded",
+        "thickness": 2,
+        "padding": 4
+      },
+      "options": {
+        "margin": 2,
+        "cut": "none",
+        "feed": 0
+      }
+    }
+  }
+}
