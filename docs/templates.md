@@ -95,3 +95,7 @@ The *date and time* element has weekday and month names in English, German, Fren
 ## Recently printed
 
 Every print from the designer is remembered together with the values you entered, by default the last ten (change this under the integration's options; `0` turns it off). They appear under the **Recently printed** filter in the gallery, where you can print one again, **save it as a template**, or remove it. Prints started by services or automations are not recorded.
+
+## Printer geometry
+
+When you print, the designer asks the ESC/POS Thermal Printer integration for the chosen printer's printhead width and, for label printers, the length of one label (for example 96 × 240 dots for the Fichero D11s). The finished design is scaled down onto that canvas, never up, and turned by 90 degrees if it lies on its side, so a label designed at 384 × 192 px still prints complete on a 12 mm printhead. The print dialog shows a note and a link to print the design in its own size instead. Roll printers only get the width limited. Design directly at the printer's size for the crispest result.

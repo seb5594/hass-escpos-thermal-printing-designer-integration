@@ -331,4 +331,8 @@ export default {
   "print.choose_entity": "Entität wählen …",
   "settings.variable.domain": "Entitäts-Domain",
   "settings.variable.domain_hint": "Nur Entitäten dieser Domain werden angeboten, z. B. weather oder sensor.",
+  "print.fit.on": "Auf diesen Drucker angepasst ({size} px).",
+  "print.fit.off": "Das Design wird in seiner eigenen Größe gedruckt.",
+  "print.fit.disable": "Eigene Größe verwenden",
+  "print.fit.enable": "An den Drucker anpassen",
 };

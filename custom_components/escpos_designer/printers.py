@@ -30,6 +30,7 @@ def list_printers(hass: HomeAssistant) -> list[dict[str, Any]]:
                 "device_id": device_id,
                 "name": (devices[0].name_by_user or devices[0].name) if devices else entry.title,
                 "width": _printer_width(hass, entry),
+                "label_height": _label_height(entry),
                 "connection": entry.data.get("connection_type"),
             }
         )
@@ -48,6 +49,20 @@ def _printer_width(hass: HomeAssistant, entry: ConfigEntry) -> int | None:
         _LOGGER.debug("Could not read the paper width of %s: %s", entry.title, err)
         return None
     return int(width) if isinstance(width, int) and width > 0 else None
+
+
+def _label_height(entry: ConfigEntry) -> int | None:
+    """Dots along the feed of one label, for label printers (else ``None``)."""
+    adapter = getattr(getattr(entry, "runtime_data", None), "adapter", None)
+    getter = getattr(adapter, "get_profile_label_height", None)
+    if getter is None:
+        return None
+    try:
+        height = getter()
+    except Exception as err:  # older versions of the printer integration have no such method
+        _LOGGER.debug("Could not read the label height of %s: %s", entry.title, err)
+        return None
+    return int(height) if isinstance(height, int) and height > 0 else None
 
 
 def resolve_device_ids(hass: HomeAssistant, requested: list[str] | None) -> list[str]:

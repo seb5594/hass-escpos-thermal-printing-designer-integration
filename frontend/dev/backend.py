@@ -26,6 +26,7 @@ sys.path.insert(0, str(ROOT))
 
 from custom_components.escpos_designer.designer import (  # noqa: E402
     DocumentError,
+    fit_to_canvas,
     font_catalog,
     normalize_document,
     render_design,
@@ -62,8 +63,17 @@ PRINTERS = [
         "device_id": "kitchen",
         "name": "Demo printer (saves a PNG)",
         "width": 384,
+        "label_height": None,
         "connection": "bluetooth",
-    }
+    },
+    {
+        "id": "labels",
+        "device_id": "labels",
+        "name": "Label printer (D11s)",
+        "width": 96,
+        "label_height": 240,
+        "connection": "bluetooth_le",
+    },
 ]
 PAPER_PRESETS = [
     {"id": "58mm", "width": 384, "height": None},
@@ -107,7 +117,7 @@ JINJA.globals.update(
 )
 
 
-def render(document: dict, variables: dict, language: str):
+def render(document: dict, variables: dict, language: str, fit: dict | None = None):
     values = {**variables}
 
     def fill(text: str) -> str:
@@ -116,13 +126,16 @@ def render(document: dict, variables: dict, language: str):
         except Exception as err:  # shown inline, like a template error in Home Assistant
             return f"[{err}]"
 
-    return render_design(
+    result = render_design(
         normalize_document(document),
         now=datetime.now(),
         language=language,
         render_template=fill,
         todo_items=TODO_ITEMS,
     )
+    if fit:
+        result.image = fit_to_canvas(result.image, fit["width"], fit.get("height"))
+    return result
 
 
 def _status(_msg: dict, language: str) -> dict:
@@ -195,7 +208,7 @@ def _toggle_favorite(msg: dict, _language: str) -> dict:
 
 
 def _preview(msg: dict, language: str) -> dict:
-    result = render(msg["document"], msg.get("variables", {}), language)
+    result = render(msg["document"], msg.get("variables", {}), language, msg.get("fit"))
     return {
         "image": png_b64(result.image),
         "width": result.image.width,
@@ -218,7 +231,7 @@ def _thumbnails(msg: dict, language: str) -> dict:
 
 
 def _print(msg: dict, language: str) -> dict:
-    result = render(msg["document"], msg.get("variables", {}), language)
+    result = render(msg["document"], msg.get("variables", {}), language, msg.get("fit"))
     history.insert(
         0,
         {

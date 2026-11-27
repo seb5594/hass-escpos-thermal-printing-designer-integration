@@ -21,7 +21,8 @@ export class DesignerApi {
     this._call("save_template", { template, ...(templateId ? { template_id: templateId } : {}) });
   deleteTemplate = (templateId) => this._call("delete_template", { template_id: templateId });
   toggleFavorite = (templateId) => this._call("toggle_favorite", { template_id: templateId });
-  preview = (document, variables) => this._call("preview", { document, variables });
+  preview = (document, variables, fit) =>
+    this._call("preview", { document, variables, ...(fit ? { fit } : {}) });
   thumbnails = (templateIds) => this._call("thumbnails", { template_ids: templateIds });
   print = (payload) => this._call("print", payload);
 }

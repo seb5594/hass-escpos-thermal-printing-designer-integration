@@ -230,3 +230,24 @@ export async function pictureToDataUri(file, maxWidth = 576) {
   context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
   return canvas.toDataURL("image/png");
 }
+
+/**
+ * How the finished design is scaled onto the chosen printer, as `{ fit, adapted }`.
+ * A label printer has a fixed canvas (printhead width x label length), a roll printer only a
+ * width. `fit` is sent along with preview and print; the server scales the image down onto it.
+ * `adapted` says whether that changes anything. An unknown printer needs nothing.
+ */
+export function fitToPrinter(document, printer) {
+  const width = printer?.width;
+  if (!width) return { fit: null, adapted: false };
+  const { paper, options = {} } = document;
+  const turned = (options.rotate ?? 0) % 180 !== 0;
+  const designWidth = turned ? paper.height : paper.width;
+  const designHeight = turned ? paper.width : paper.height;
+  const label = printer.label_height;
+  if (label) {
+    const same = [designWidth, designHeight].join() === [width, label].join();
+    return { fit: { width, height: label }, adapted: !same };
+  }
+  return { fit: { width, height: null }, adapted: Boolean(designWidth) && designWidth > width };
+}

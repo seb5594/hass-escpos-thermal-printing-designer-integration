@@ -331,4 +331,8 @@ export default {
   "print.choose_entity": "Choose an entity…",
   "settings.variable.domain": "Entity domain",
   "settings.variable.domain_hint": "Only entities of this domain are offered, e.g. weather or sensor.",
+  "print.fit.on": "Sized for this printer ({size} px).",
+  "print.fit.off": "Printing the design in its own size.",
+  "print.fit.disable": "Use the design's own size",
+  "print.fit.enable": "Fit it to the printer",
 };

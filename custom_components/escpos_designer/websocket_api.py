@@ -23,7 +23,7 @@ from .const import (
     PRINTER_REPOSITORY_URL,
 )
 from .dependency import async_get_printer_integration_status
-from .designer import DocumentError, font_catalog
+from .designer import MAX_FIT_SIZE, DocumentError, font_catalog
 from .designer.schema import ELEMENT_TYPES
 from .printers import DEFAULT_WIDTH, list_printers
 from .printing import async_print_design
@@ -53,6 +53,11 @@ PAPER_PRESETS = (
     {"id": "label_50x80", "width": 400, "height": 640},
 )
 _VARIABLES = vol.Optional("variables", default=dict)
+_SIZE = vol.All(int, vol.Range(min=8, max=MAX_FIT_SIZE))
+# Scale the result onto a printer's canvas: the printhead width and, for labels, their length.
+_FIT_SCHEMA = vol.Any(
+    None, {vol.Required("width"): _SIZE, vol.Optional("height"): vol.Any(None, _SIZE)}
+)
 
 
 def _command(
@@ -228,7 +233,10 @@ async def ws_toggle_favorite(
     )
 
 
-@_command("preview", {vol.Required("document"): dict, _VARIABLES: dict})
+@_command(
+    "preview",
+    {vol.Required("document"): dict, _VARIABLES: dict, vol.Optional("fit"): _FIT_SCHEMA},
+)
 async def ws_preview(
     hass: HomeAssistant,
     connection: websocket_api.ActiveConnection,
@@ -237,7 +245,7 @@ async def ws_preview(
 ) -> None:
     """Render a design exactly as it would print and return it as a PNG."""
     output = await data.renderer.async_render(
-        msg["document"], msg["variables"], language=_language(hass, msg)
+        msg["document"], msg["variables"], language=_language(hass, msg), fit=msg.get("fit")
     )
     import base64  # noqa: PLC0415
 
@@ -286,6 +294,7 @@ async def ws_thumbnails(
     {
         vol.Required("document"): dict,
         _VARIABLES: dict,
+        vol.Optional("fit"): _FIT_SCHEMA,
         vol.Optional("printer"): str,
         vol.Optional("copies", default=1): vol.All(int, vol.Range(min=1, max=10)),
         vol.Optional("template_id"): str,
@@ -308,6 +317,7 @@ async def ws_print(
         variables=msg["variables"],
         device_ids=[msg["printer"]] if msg.get("printer") else None,
         copies=msg["copies"],
+        fit=msg.get("fit"),
     )
     if (template_id := msg.get("template_id")) and data.find(template_id):
         data.storage.touch(template_id)

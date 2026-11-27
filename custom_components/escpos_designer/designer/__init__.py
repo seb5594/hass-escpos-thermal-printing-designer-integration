@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
+from .fit import MAX_FIT_SIZE, fit_to_canvas
 from .fonts import font_catalog
 from .renderer import RenderResult, render_document
 from .resolve import TemplateRenderer, TodoItems, has_template, resolve_elements
@@ -21,8 +22,10 @@ from .schema import (
 )
 
 __all__ = [
+    "MAX_FIT_SIZE",
     "DocumentError",
     "RenderResult",
+    "fit_to_canvas",
     "font_catalog",
     "has_template",
     "normalize_document",

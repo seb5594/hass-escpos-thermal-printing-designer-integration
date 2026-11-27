@@ -12,7 +12,7 @@ from homeassistant.exceptions import HomeAssistantError, TemplateError
 from homeassistant.helpers.template import Template
 from homeassistant.util import dt as dt_util
 
-from .designer import has_template, normalize_document, render_design
+from .designer import fit_to_canvas, has_template, normalize_document, render_design
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -65,8 +65,13 @@ class DesignRenderer:
         variables: dict[str, Any] | None = None,
         *,
         language: str | None = None,
+        fit: dict[str, Any] | None = None,
     ) -> RenderOutput:
-        """Render ``document``; template problems are reported, not raised."""
+        """Render ``document``; template problems are reported, not raised.
+
+        ``fit`` (``{"width": ..., "height": ... | None}``) scales the finished image
+        onto what a printer can print, see :func:`fit_to_canvas`.
+        """
         doc = normalize_document(document)
         language = language or self._hass.config.language
         values = dict(variables or {})
@@ -83,6 +88,8 @@ class DesignRenderer:
                 render_template=lambda text: rendered.get(text, text),
                 todo_items=todo_items,
             )
+            if fit:
+                result.image = fit_to_canvas(result.image, fit["width"], fit.get("height"))
             buffer = BytesIO()
             result.image.save(buffer, format="PNG", optimize=True)
             return RenderOutput(

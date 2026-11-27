@@ -5,7 +5,7 @@ import "@material/web/dialog/dialog.js";
 import "@material/web/progress/linear-progress.js";
 import * as icons from "../icons.js";
 import { errorMessage } from "../api.js";
-import { debounce, entityOptions, variableDefaults } from "../model.js";
+import { debounce, entityOptions, fitToPrinter, variableDefaults } from "../model.js";
 import { controlStyles, selectField, sliderField, switchField, textField } from "../controls.js";
 import "./ed-icon.js";
 import "./ed-preview.js";
@@ -28,6 +28,7 @@ export class EdPrintDialog extends LitElement {
     name: { type: String },
     _values: { state: true },
     _printer: { state: true },
+    _fit: { state: true },
     _copies: { state: true },
     _preview: { state: true },
     _loading: { state: true },
@@ -91,6 +92,12 @@ export class EdPrintDialog extends LitElement {
         color: var(--md-sys-color-error);
         flex: none;
       }
+      .alert.info {
+        background: var(--md-sys-color-secondary-container);
+      }
+      .alert.info ed-icon {
+        color: var(--ed-primary);
+      }
       a {
         color: var(--ed-primary);
       }
@@ -102,16 +109,23 @@ export class EdPrintDialog extends LitElement {
       this._values = variableDefaults(this.variables, this.hass);
       this._printer = this.status?.printers?.[0]?.id ?? "";
       this._copies = 1;
+      this._fit = true;
       this._error = "";
       this._loadPreview();
     }
+  }
+
+  /** The design to preview and print: adapted to the chosen printer unless switched off. */
+  _effective() {
+    const printer = this.status?.printers?.find((item) => item.id === this._printer);
+    return this._fit === false ? { fit: null, adapted: false } : fitToPrinter(this.document, printer);
   }
 
   async _loadPreview() {
     if (!this.open) return;
     this._loading = true;
     try {
-      this._preview = await this.api.preview(this.document, this._values);
+      this._preview = await this.api.preview(this.document, this._values, this._effective().fit);
       this._error = "";
     } catch (error) {
       this._error = errorMessage(error);
@@ -131,6 +145,7 @@ export class EdPrintDialog extends LitElement {
     try {
       await this.api.print({
         document: this.document,
+        ...(this._effective().fit ? { fit: this._effective().fit } : {}),
         variables: this._values,
         copies: this._copies,
         name: this.name ?? "",
@@ -174,6 +189,23 @@ export class EdPrintDialog extends LitElement {
     }
   }
 
+  /** A hint that the design was sized for the printer, with a switch to print it unchanged. */
+  _fitNotice() {
+    const { t } = this;
+    const { adapted, fit } = this._effective();
+    if (!adapted && this._fit !== false) return nothing;
+    const size = fit ? `${fit.width} × ${fit.height ?? "…"}` : "";
+    return html`<div class="alert info">
+      <ed-icon .path=${icons.printer}></ed-icon>
+      <span>
+        ${this._fit === false ? t("print.fit.off") : t("print.fit.on", { size })}
+        <a href="#" @click=${(event) => { event.preventDefault(); this._fit = this._fit === false; this._refresh(); }}>
+          ${this._fit === false ? t("print.fit.enable") : t("print.fit.disable")}
+        </a>
+      </span>
+    </div>`;
+  }
+
   render() {
     const { t, status } = this;
     const printers = status?.printers ?? [];
@@ -190,8 +222,12 @@ export class EdPrintDialog extends LitElement {
                 t("print.printer"),
                 this._printer,
                 printers.map((printer) => ({ value: printer.id, label: printer.name })),
-                (value) => (this._printer = value),
+                (value) => {
+                  this._printer = value;
+                  this._refresh();
+                },
               )}
+          ${this._fitNotice()}
           ${(this.variables ?? []).map((variable) => this._variableField(variable))}
           ${sliderField(t("print.copies"), this._copies, { min: 1, max: 5 }, (value) => (this._copies = value))}
           ${this._error ? html`<div class="alert"><ed-icon .path=${icons.alert}></ed-icon><span>${this._error}</span></div>` : nothing}

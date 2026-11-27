@@ -26,6 +26,7 @@ async def async_print_design(
     variables: dict[str, Any] | None = None,
     device_ids: list[str] | None = None,
     copies: int = 1,
+    fit: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Render ``document`` and print it ``copies`` times; returns a short report."""
     if not hass.services.has_service(PRINTER_DOMAIN, PRINT_SERVICE):
@@ -41,7 +42,7 @@ async def async_print_design(
             translation_placeholders={"reason": str(err)},
         ) from err
 
-    output = await renderer.async_render(document, variables)
+    output = await renderer.async_render(document, variables, fit=fit)
     if output.template_errors:
         raise HomeAssistantError(
             translation_domain=DOMAIN,

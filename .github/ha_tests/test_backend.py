@@ -153,6 +153,25 @@ class TestWebsocket:
         assert "markdown" in result["element_types"]
         assert result["version"]
 
+    async def test_printers_report_their_geometry(self, hass, client, printer):
+        """A label printer's width and label length reach the panel; roll printers have none."""
+        from types import SimpleNamespace  # noqa: PLC0415
+
+        (entry,) = hass.config_entries.async_entries("escpos_printer")
+        entry.runtime_data = SimpleNamespace(
+            adapter=SimpleNamespace(
+                get_profile_pixel_width=lambda _hass: 96, get_profile_label_height=lambda: 240
+            )
+        )
+        (listed,) = (await call(client, "status"))["result"]["printers"]
+        assert (listed["width"], listed["label_height"]) == (96, 240)
+
+        entry.runtime_data = SimpleNamespace(
+            adapter=SimpleNamespace(get_profile_pixel_width=lambda _hass: 384)
+        )
+        (listed,) = (await call(client, "status"))["result"]["printers"]
+        assert (listed["width"], listed["label_height"]) == (384, None)
+
     async def test_builtin_names_follow_the_requested_language(self, client):
         def name(library):
             return next(
@@ -585,3 +604,29 @@ class TestDocumentation:
         guide = (Path(__file__).resolve().parents[2] / "docs/templates.md").read_text()
         for template_id in load_builtin_templates():
             assert f"`{template_id}`" in guide, template_id
+
+
+class TestFit:
+    async def test_the_preview_is_scaled_onto_the_printer_canvas(self, client):
+        reply = await call(
+            client, "preview", document=TEXT_DESIGN, fit={"width": 96, "height": 240}
+        )
+        assert (reply["result"]["width"], reply["result"]["height"]) == (96, 240)
+
+    async def test_printing_sends_the_fitted_image(self, client, printer):
+        device, calls = printer
+        assert (
+            await call(
+                client,
+                "print",
+                document=TEXT_DESIGN,
+                printer=device.id,
+                fit={"width": 96, "height": 240},
+            )
+        )["success"]
+        sent = Image.open(BytesIO(base64.b64decode(calls[0].data["image"].split(",", 1)[1])))
+        assert sent.size == (96, 240)
+
+    async def test_an_absurd_fit_is_refused(self, client):
+        reply = await call(client, "preview", document=TEXT_DESIGN, fit={"width": 100000})
+        assert "error" in reply

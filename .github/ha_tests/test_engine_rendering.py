@@ -301,7 +301,17 @@ class TestPipeline:
         assert hidden.image.height < visible.image.height
 
     def test_every_frame_style_draws_at_the_edge(self):
-        for style in ("line", "double", "rounded", "dashed", "dotted", "brackets", "ticket", "hearts", "stars"):
+        for style in (
+            "line",
+            "double",
+            "rounded",
+            "dashed",
+            "dotted",
+            "brackets",
+            "ticket",
+            "hearts",
+            "stars",
+        ):
             result = render({"type": "spacer", "height": 60}, sections={"frame": {"style": style}})
             assert ink(result.image) > 0, style
             assert bounding_box(result.image)[0] <= 3, style
@@ -452,3 +462,38 @@ class TestResolving:
     def test_sticker_is_a_big_emoji(self):
         result = render({"type": "sticker", "emoji": "🎉", "size": 120})
         assert result.image.height > 100 and ink(result.image) > 500
+
+
+class TestFitToCanvas:
+    def _image(self, width, height):
+        from PIL import Image  # noqa: PLC0415
+
+        return Image.new("1", (width, height), 0)
+
+    def test_a_design_lying_on_its_side_is_turned_onto_a_label(self):
+        from custom_components.escpos_designer.designer import fit_to_canvas  # noqa: PLC0415
+
+        fitted = fit_to_canvas(self._image(384, 192), 96, 240)
+        assert fitted.size == (96, 240)
+        assert fitted.mode == "1"
+
+    def test_it_is_scaled_down_and_centred_with_its_aspect_ratio(self):
+        from custom_components.escpos_designer.designer import fit_to_canvas  # noqa: PLC0415
+
+        fitted = fit_to_canvas(self._image(384, 192), 96, 240)  # turned: 192 x 384, scale 0.5
+        pixels = fitted.convert("L")
+        assert pixels.getpixel((48, 120)) == 0  # ink in the middle
+        assert pixels.getpixel((0, 0)) == 255  # white margin in the corner
+
+    def test_nothing_is_scaled_up(self):
+        from custom_components.escpos_designer.designer import fit_to_canvas  # noqa: PLC0415
+
+        fitted = fit_to_canvas(self._image(48, 24), 96, 240)
+        assert fitted.size == (96, 240)
+        assert fitted.convert("L").getbbox() is not None
+
+    def test_a_roll_only_limits_the_width(self):
+        from custom_components.escpos_designer.designer import fit_to_canvas  # noqa: PLC0415
+
+        assert fit_to_canvas(self._image(576, 300), 384, None).size == (384, 200)
+        assert fit_to_canvas(self._image(240, 300), 384, None).size == (240, 300)
