@@ -1,4 +1,5 @@
 {
-  "tests": 4,
+  "bundle_size": 456425,
+  "tests": 17,
   "zip_size": 2516751
 }
