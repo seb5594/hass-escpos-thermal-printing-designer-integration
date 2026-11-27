@@ -2,7 +2,7 @@
 
 Versions follow `YYYY.MM.DD[.BUILD]`: the first build of a day has no suffix.
 
-## Unreleased
+## 2026.11.27.1
 
 - Choose the target printer at the top right: the gallery then shows only designs that fit it (a "Show all" link reveals the rest), new designs start in its size and the print dialog starts with it. The choice is remembered per browser.
 - Five labels in the size of the Fichero D11s (30 x 12 mm): name, best-before, opened on, two lines and medicine.
