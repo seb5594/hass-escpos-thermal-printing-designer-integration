@@ -2,6 +2,10 @@
 
 Versions follow `YYYY.MM.DD[.BUILD]`: the first build of a day has no suffix.
 
+## 2026.11.27
+
+- Printing adapts to the chosen printer: the print dialog asks the printer integration for the printhead width and, for label printers such as the Fichero D11s, the label length, and scales the finished design onto that canvas (turned onto the label if needed). A note in the dialog says so and lets you print the design in its own size instead. Roll printers only get the width limited. Label printers need a printer integration version that reports the label length (2026.11.27b4 or newer); older versions keep working with the width alone.
+
 ## 2026.11.24
 
 - Encode PNG images in the rendering executor for previews, gallery thumbnails, and printing, keeping compression off the Home Assistant event loop.
