@@ -346,4 +346,5 @@ export default {
   "target.showing_all": "Showing all designs, including those that don't fit {printer}.",
   "target.show_all": "Show all",
   "target.only_fitting": "Only fitting",
+  "settings.for_printer": "For {name}",
 };

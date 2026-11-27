@@ -86,6 +86,12 @@ export class EscposDesignerPanel extends LitElement {
         margin: 0;
         font-size: 1.25rem;
         font-weight: 400;
+        white-space: nowrap;
+      }
+      @media (max-width: 520px) {
+        header h1 {
+          font-size: 1.05rem;
+        }
       }
       header ed-icon.logo {
         color: var(--ed-primary);
@@ -94,12 +100,12 @@ export class EscposDesignerPanel extends LitElement {
         flex: 1;
       }
       header .target {
-        max-width: 46vw;
+        max-width: 38vw;
         --md-text-button-label-text-color: var(--app-header-text-color, var(--ed-text));
       }
       header .target-name {
         display: inline-block;
-        max-width: 30vw;
+        max-width: 22vw;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -176,6 +182,11 @@ export class EscposDesignerPanel extends LitElement {
 
   firstUpdated() {
     this._bootstrap();
+  }
+
+  updated(changed) {
+    // The panel scrolls as a whole: opening a design from far down the gallery must not start at the bottom.
+    if (changed.has("_view")) this.scrollTop = 0;
   }
 
   async _bootstrap() {

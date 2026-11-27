@@ -2,7 +2,7 @@ import { LitElement, css, html, nothing } from "lit";
 import "@material/web/button/filled-tonal-button.js";
 import "@material/web/iconbutton/icon-button.js";
 import * as icons from "../icons.js";
-import { PAPER_FALLBACK } from "../model.js";
+import { PAPER_FALLBACK, startPaper } from "../model.js";
 import { choiceChips, controlStyles, selectField, sliderField, switchField, textField } from "../controls.js";
 import "./ed-icon.js";
 import { layoutStyles, themeTokens } from "../theme.js";
@@ -84,26 +84,29 @@ export class EdSettings extends LitElement {
   _paper() {
     const { t, document: doc, status } = this;
     const presets = status?.paper_presets ?? PAPER_FALLBACK;
-    const current = presets.find((preset) => preset.width === doc.paper.width && (preset.height ?? null) === (doc.paper.height ?? null));
-    const options = [...presets.map((preset) => ({ value: preset.id, label: t(`paper.${preset.id}`) })), { value: "custom", label: t("paper.custom") }];
+    const same = (paper) => paper && paper.width === doc.paper.width && (paper.height ?? null) === (doc.paper.height ?? null);
+    const printers = (status?.printers ?? []).filter((printer) => printer.width);
+    const options = [
+      ...presets.map((preset) => ({ value: preset.id, label: t(`paper.${preset.id}`) })),
+      ...printers.map((printer) => ({ value: `printer:${printer.id}`, label: t("settings.for_printer", { name: printer.name }) })),
+      { value: "custom", label: t("paper.custom") },
+    ];
+    const current =
+      printers.find((printer) => same(startPaper(printer))) ? `printer:${printers.find((printer) => same(startPaper(printer))).id}` : presets.find(same)?.id;
     return html`<section>
       <h3>${t("settings.paper")}</h3>
-      ${choiceChips(options, current?.id ?? "custom", (value) => {
+      ${choiceChips(options, current ?? "custom", (value) => {
+        const printer = printers.find((item) => `printer:${item.id}` === value);
         const preset = presets.find((item) => item.id === value);
-        if (preset) this._doc("paper", { width: preset.width, height: preset.height });
+        if (printer) this._doc("paper", startPaper(printer));
+        else if (preset) this._doc("paper", { width: preset.width, height: preset.height });
         else this._doc("paper", { height: doc.paper.height ?? 240 });
       })}
       <div class="field-pair">
         ${textField(t("settings.width"), String(doc.paper.width), (value) => this._doc("paper", { width: Number(value) || 384 }), { type: "number", suffix: "px" })}
-        ${textField(t("settings.height"), doc.paper.height ? String(doc.paper.height) : "", (value) => this._doc("paper", { height: Number(value) || null }), {
-          type: "number",
-          suffix: "px",
-          supporting: t("settings.height_hint"),
-        })}
+        ${textField(t("settings.height"), doc.paper.height ? String(doc.paper.height) : "", (value) => this._doc("paper", { height: Number(value) || null }), { type: "number", suffix: "px" })}
       </div>
-      ${(status?.printers ?? []).some((printer) => printer.width)
-        ? html`<p class="hint">${t("settings.printer_widths")}: ${status.printers.filter((printer) => printer.width).map((printer) => `${printer.name} ${printer.width}px`).join(", ")}</p>`
-        : nothing}
+      <p class="hint">${t("settings.height_hint")}</p>
       ${sliderField(t("settings.margin"), doc.options.margin, { min: 0, max: 40, step: 2, suffix: " px" }, (value) => this._doc("options", { margin: value }))}
     </section>`;
   }

@@ -2,6 +2,11 @@
 
 Versions follow `YYYY.MM.DD[.BUILD]`: the first build of a day has no suffix.
 
+## Unreleased
+
+- Fixed the paper fields of the Design tab: width and height line up, and every printer gets a "For <printer>" button that sets the paper to its size.
+- Opening a design no longer starts at the bottom of the page when the gallery was scrolled down.
+
 ## 2026.11.27.1
 
 - Choose the target printer at the top right: the gallery then shows only designs that fit it (a "Show all" link reveals the rest), new designs start in its size and the print dialog starts with it. The choice is remembered per browser.
